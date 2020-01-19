@@ -1,0 +1,6 @@
+struct,SamplerDescriptor,lodMin,int,MINMAX:0:16,0,3:0
+struct,SamplerDescriptor,lodMax,int,L:16,0,7:4
+struct,SamplerDescriptor,reserved,int,,0,31:8
+struct,SamplerDescriptor,filterMode,FilterMode,,1,31:0
+struct,SamplerDescriptor,conversionDescriptor,GpuAddress,NOTNULL,2,63:0
+struct,SamplerDescriptor,maxAniso,int,MINMAX:0:16,4,31:0

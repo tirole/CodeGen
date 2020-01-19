@@ -1,0 +1,5 @@
+struct,TextureDescriptor,width,int,MINMAX:0:16,0,3:0
+struct,TextureDescriptor,height,int,L:16,0,7:4
+struct,TextureDescriptor,reserved,int,,0,31:8
+struct,TextureDescriptor,size,size_t,LE:4294967295,1,31:0
+struct,TextureDescriptor,samplerDescriptor,GpuAddress,NOTNULL,2,63:0

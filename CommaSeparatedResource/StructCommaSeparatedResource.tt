@@ -1,0 +1,47 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ output extension=".h" #>
+<#
+    string path = @"D:\prj\software\codegeneration\CommaSeparatedResource\Resource\TextureDescriptor.txt";
+    StreamReader sr = new StreamReader(path);
+
+    List<string[]> lines = new List<string[]>();
+    while (sr.Peek() != -1)
+    {
+        var line = sr.ReadLine();
+        lines.Add(line.Split(','));
+    }
+
+    sr.Close();
+
+    string structName = lines[0][1];
+#>
+<# // 構造体定義 #>
+<#=lines[0][0] #> <#=structName #>
+{
+<#  foreach (var line in lines) { #>
+    <#=line[3]#> <#=line[2]#>;
+<#  } #>
+}
+
+<# // セッター・ゲッター定義 #>
+<#  foreach (var line in lines) { #>
+inline
+void Set<#=char.ToUpper(line[2][0]) + line[2].Substring(1) #>(<#=structName#>* pDesc, <#=line[3]#> <#=line[2]#>)
+{
+
+}
+
+<#  } #>
+
+<#  foreach (var line in lines) { #>
+inline
+<#=line[3] #> Get<#=char.ToUpper(line[2][0]) + line[2].Substring(1) #>(const <#=structName#>* pDesc)
+{
+}
+
+<#  } #>

@@ -1,0 +1,92 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ assembly name="$(SolutionDir)$(OutDir)CommaSeparatedResource.dll" #>
+<#@ import namespace="CommaSeparatedResource" #>
+<#@ output extension=".h" #>
+<#@ include file="Common.tt" #><##>
+<#
+    string srcDir = @"D:\prj\software\codegeneration\CommaSeparatedResource\Resource";
+    string outputDir = @"D:\prj\software\codegeneration\CommaSeparatedResource\Output";
+
+    string[] filePaths = Directory.GetFiles(srcDir);
+    List<string> files = new List<string>();
+    foreach(var file in filePaths)
+    {
+        files.Add(file);
+    }
+    CommaSeparatedStructureResourceReader reader = new CommaSeparatedStructureResourceReader();
+    reader.Initialize(files);
+#>
+<# // 構造体定義 #>
+<#  foreach(var structure in reader.Structures) { #>
+/*
+    Copyright
+*/
+#pragma once
+#include <DummySdkDefinitions.h>
+
+struct <#=structure.Name#>
+{
+<#
+    int memberArrayLength = 0;
+    {
+        var lastMember = structure.Members[structure.Members.Count - 1];
+        memberArrayLength = lastMember.OffsetIn4ByteUnit + 1;
+        if((lastMember.BitEnd - lastMember.BitBegin) == 63)
+        {
+            ++memberArrayLength;
+        }
+    }
+#>
+    int data[<#=memberArrayLength #>];
+};
+
+<# // セッター・ゲッター定義 #>
+<#  foreach(var member in structure.Members) { #>
+inline
+void Set<#=structure.Name #><#=char.ToUpper(member.Name[0]) + member.Name.Substring(1) #>(<#=structure.Name#>* pDesc, <#=member.Type#> <#=member.Name#>)
+{
+    <#=member.Requirement.GetString(member.Name) #>
+<#if((member.BitEnd - member.BitBegin) == 63) { #>
+    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
+    auto pOut = reinterpret_cast<<#=member.Type #>*>(&pDesc->data[uint32ArrayIndex]);
+    *pOut = <#=member.Name #>;
+<#} else { #>
+    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
+    constexpr int bitOffset = <#=member.BitBegin #>;
+    constexpr int bitLength = (<#=member.BitEnd #> - bitOffset) + 1;
+    constexpr int mask = static_cast<int>(~(static_cast<int64_t>(-1) << bitLength ));
+    int inputVal = static_cast<int>(<#=member.Name #>);
+    pDesc->data[uint32ArrayIndex] |= (inputVal & mask) << bitOffset;
+<#} #>
+}
+
+inline
+<#=member.Type #> Get<#=structure.Name #><#=char.ToUpper(member.Name[0]) + member.Name.Substring(1) #>(const <#=structure.Name #>* pDesc)
+{
+<#if((member.BitEnd - member.BitBegin) == 63) { #>
+    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
+    auto pOut = reinterpret_cast<const <#=member.Type #>*>(&pDesc->data[uint32ArrayIndex]);
+    return *pOut;
+<#} else { #>
+    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
+    constexpr int bitOffset = <#=member.BitBegin #>;
+    constexpr int bitLength = (<#=member.BitEnd #> - bitOffset) + 1;
+    constexpr int mask = static_cast<int>(~(static_cast<int64_t>(-1) << bitLength )) << bitOffset;
+    <#=member.Type #> outputVal = static_cast<<#=member.Type #>>((pDesc->data[uint32ArrayIndex] & mask) >> bitOffset);
+    return outputVal;
+<#} #>
+}
+
+<#  } #>
+<#// ファイル出力 #>
+<# 
+SaveFile(outputDir, structure.Name + ".h", this.GenerationEnvironment.ToString()); 
+this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
+#>
+
+<#  } #>
