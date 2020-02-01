@@ -1,0 +1,17 @@
+{
+    "doxyBrief": "The enumulation for something.",
+    "definitionType": "enum",
+    "underlyingType": "int8_t",
+    "enums": [
+        {
+            "name": "Linear",
+            "value": "1",
+            "doxyBrief": "Linear format"
+        },
+        {
+            "name": "Block",
+            "value": "2",
+            "doxyBrief": "Block format"
+        }
+    ]
+}

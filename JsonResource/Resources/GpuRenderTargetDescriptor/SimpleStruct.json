@@ -1,0 +1,26 @@
+{
+    "doxyBrief": "This is simple structure.",
+    "definitionType": "struct",
+    "memberVariables": [
+        {
+            "name": "intVal",
+            "doxyBrief": "int value",
+            "type": "int32_t",
+            "defaultValue": "",
+            "requirements": [
+                "MINMAX:0:7",
+                "NOTNULL"
+            ]
+        },
+        {
+            "name": "floatVal",
+            "doxyBrief": "float value",
+            "type": "float",
+            "defaultValue": "",
+            "requirements": [
+                "MINMAX:0:7",
+                "NOTNULL"
+            ]
+        }
+    ]
+}

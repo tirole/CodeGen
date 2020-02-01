@@ -1,0 +1,33 @@
+{
+    "doxyBrief": "This is RenderTargetDescriptor.",
+    "definitionType": "struct",
+    "memberVariables": [
+        {
+            "name": "srcBufOsset",
+            "doxyBrief": "This is srcBufOsset.",
+            "type": "ptrdiff_t",
+            "defaultValue": "",
+            "requirements": "",
+            "wordOffset": "0",
+            "bitRange": "15:0"
+        },
+        {
+            "name": "srcBufOsset2",
+            "doxyBrief": "This is srcBufOsset2.",
+            "type": "ptrdiff_t",
+            "defaultValue": "",
+            "requirements": "",
+            "wordOffset": "0",
+            "bitRange": "31:16"
+        },
+        {
+            "name": "clearColors",
+            "doxyBrief": "This is clear colors.",
+            "type": "uint32_t",
+            "defaultValue": "",
+            "requirements": "",
+            "wordOffset": "1",
+            "bitRange": "127:0"
+        }
+    ]
+}

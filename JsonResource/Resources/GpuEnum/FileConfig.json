@@ -1,0 +1,12 @@
+{
+    "fileName": "my_Enum.h",
+    "copyright": "../copyright.txt",
+    "includeFiles": [
+        "<stdint.h>"
+    ],
+    "namespace": "my::detail",
+    "definitions": [
+        "Definitions/CompressionMode.json",
+        "Definitions/Format.json"
+    ]
+}
