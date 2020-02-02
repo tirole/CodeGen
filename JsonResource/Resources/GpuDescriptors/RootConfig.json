@@ -1,0 +1,29 @@
+{
+    "commonFileConfig": {
+        "copyright": "../copyright.txt",
+        "includeFiles": [
+            "<stdint.h>"
+        ],
+        "namespace": "my::detail"
+    },
+    "fileConfigs": [
+        {
+            "outputFileName": "my_RenderTargetDescriptor",
+            "definitions": [
+                "Definitions/RenderTargetDescriptor.json"
+            ]
+        },
+        {
+            "outputFileName": "my_SamplerDescriptor",
+            "definitions": [
+                "Definitions/SamplerDescriptor.json"
+            ]
+        },
+        {
+            "outputFileName": "my_TextureDescriptor",
+            "definitions": [
+                "Definitions/TextureDescriptor.json"
+            ]
+        }
+    ]
+}

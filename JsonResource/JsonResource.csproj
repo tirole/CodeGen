@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configs\General\EnumConfig.cs" />
-    <Compile Include="Configs\General\FileConfig.cs" />
+    <Compile Include="Configs\General\RootConfig.cs" />
     <Compile Include="Configs\GpuDescriptor\DescriptorConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

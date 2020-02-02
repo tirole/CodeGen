@@ -13,11 +13,11 @@ namespace JsonResource
         static void Main(string[] args)
         {
             StreamReader sr =
-                new StreamReader(@"D:\prj\software\codegeneration\JsonResource\Resources\GpuEnum\FileConfig.json");
+                new StreamReader(@"D:\prj\software\codegeneration\JsonResource\Resources\GpuEnum\RootConfig.json");
 
-            var serializer = new DataContractJsonSerializer(typeof(FileConfig));
+            var serializer = new DataContractJsonSerializer(typeof(RootConfig));
 
-            var deserialized = (FileConfig)serializer.ReadObject(sr.BaseStream);
+            var deserialized = (RootConfig)serializer.ReadObject(sr.BaseStream);
 
             sr.Close();
 
@@ -32,22 +32,33 @@ namespace JsonResource
 
             {
                 sr =
-                     new StreamReader(@"D:\prj\software\codegeneration\JsonResource\Resources\GpuRenderTargetDescriptor\SimpleStruct.json");
+                     new StreamReader(@"D:\prj\software\codegeneration\JsonResource\Resources\SimpleStruct\SimpleStruct.json");
 
-                var simpleStructSerializer = new DataContractJsonSerializer(typeof(StructConfig));
+                var tempSerializer = new DataContractJsonSerializer(typeof(StructConfig));
 
-                var simpleStructDeserialized = (StructConfig)simpleStructSerializer.ReadObject(sr.BaseStream);
+                var tempDeserialized = (StructConfig)tempSerializer.ReadObject(sr.BaseStream);
 
                 sr.Close();
             }
 
             {
                 sr =
-                     new StreamReader(@"D:\prj\software\codegeneration\JsonResource\Resources\GpuRenderTargetDescriptor\RenderTargetDescriptor.json");
+                     new StreamReader(@"D:\prj\software\codegeneration\JsonResource\Resources\GpuDescriptors\Definitions\RenderTargetDescriptor.json");
 
-                var simpleStructSerializer = new DataContractJsonSerializer(typeof(DescriptorConfig));
+                var tempSerializer = new DataContractJsonSerializer(typeof(DescriptorConfig));
 
-                var simpleStructDeserialized = (DescriptorConfig)simpleStructSerializer.ReadObject(sr.BaseStream);
+                var tempDeserialized = (DescriptorConfig)tempSerializer.ReadObject(sr.BaseStream);
+
+                sr.Close();
+            }
+
+            {
+                sr =
+                     new StreamReader(@"D:\prj\software\codegeneration\JsonResource\Resources\GpuDescriptors\RootConfig.json");
+
+                var tempSerializer = new DataContractJsonSerializer(typeof(RootConfig));
+
+                var tempDeserialized = (RootConfig)tempSerializer.ReadObject(sr.BaseStream);
 
                 sr.Close();
             }

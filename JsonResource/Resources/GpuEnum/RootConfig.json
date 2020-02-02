@@ -1,0 +1,18 @@
+{
+    "commonFileConfig": {
+        "copyright": "../copyright.txt",
+        "includeFiles": [
+            "<stdint.h>"
+        ],
+        "namespace": "my::detail"
+    },
+    "fileConfigs": [
+        {
+            "outputFileName": "my_Enum.h",
+            "definitions": [
+                "Definitions/CompressionMode.json",
+                "Definitions/Format.json"
+            ]
+        }
+    ]
+}
