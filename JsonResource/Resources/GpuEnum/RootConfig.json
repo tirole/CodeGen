@@ -10,8 +10,14 @@
         {
             "outputFileName": "my_Enum.h",
             "definitions": [
-                "Definitions/CompressionMode.json",
-                "Definitions/Format.json"
+                {
+                    "definitionName":"",
+                    "path":"Definitions/CompressionMode.json"
+                },
+                {
+                    "definitionName":"",
+                    "path":"Definitions/Format.json"
+                }
             ]
         }
     ]

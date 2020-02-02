@@ -28,7 +28,20 @@ namespace JsonResource
 
         [DataMember(Name = "namespace")]
         public string Namespace;
+
+        [DataMember(Name = "customDeserializerConfigs")]
+        public CustomDeserializerConfig[] CustomDeserializerConfigs;
     }
+
+    [DataContract]
+    public partial class CustomDeserializerConfig
+    {
+        [DataMember(Name = "definitionName", IsRequired = true)]
+        public string DefinitionName;
+        [DataMember(Name = "deserializerType", IsRequired = true)]
+        public string DeserializerType;
+    }
+
     [DataContract]
     public partial class FileConfig
     {
@@ -42,6 +55,15 @@ namespace JsonResource
         public string Namespace;
 
         [DataMember(Name = "definitions")]
-        public string[] Definitions;
+        public DefinitionConfig[] DefinitionConfigs;
+    }
+
+    [DataContract]
+    public partial class DefinitionConfig
+    {
+        [DataMember(Name = "definitionName", IsRequired = true)]
+        public string DefinitionName;
+        [DataMember(Name = "path", IsRequired = true)]
+        public string Path;
     }
 }

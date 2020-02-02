@@ -4,25 +4,40 @@
         "includeFiles": [
             "<stdint.h>"
         ],
-        "namespace": "my::detail"
+        "namespace": "my::detail",
+        "customDeserializerConfigs": [
+            {
+                "definitionName": "gpuDescriptorStruct",
+                "deserializerType": "DescriptorConfig"
+            }
+        ]
     },
     "fileConfigs": [
         {
             "outputFileName": "my_RenderTargetDescriptor",
             "definitions": [
-                "Definitions/RenderTargetDescriptor.json"
+                {
+                    "definitionName": "gpuDescriptorStruct",
+                    "path" : "Definitions/RenderTargetDescriptor.json"
+                }
             ]
         },
         {
             "outputFileName": "my_SamplerDescriptor",
             "definitions": [
-                "Definitions/SamplerDescriptor.json"
+                {
+                    "definitionName": "gpuDescriptorStruct",
+                    "path" : "Definitions/SamplerDescriptor.json"
+                }
             ]
         },
         {
             "outputFileName": "my_TextureDescriptor",
             "definitions": [
-                "Definitions/TextureDescriptor.json"
+                {
+                    "definitionName": "gpuDescriptorStruct",
+                    "path" : "Definitions/TextureDescriptor.json"
+                }
             ]
         }
     ]
