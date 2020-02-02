@@ -11,13 +11,13 @@ namespace JsonResource
     public partial class VariableConfig
     {
 
-        [DataMember(Name = "name")]
+        [DataMember(Name = "name", IsRequired = true)]
         public string Name;
 
         [DataMember(Name = "doxyBrief")]
         public string DoxyBrief;
 
-        [DataMember(Name = "type")]
+        [DataMember(Name = "type", IsRequired = true)]
         public string Type;
 
         [DataMember(Name = "defaultValue")]

@@ -62,6 +62,22 @@ namespace JsonResource
 
                 sr.Close();
             }
+
+            {
+                var info = new Generator.StructGenerationInfo();
+                info.Name = "Test";
+                var memberVariable = new Generator.VariableInfo();
+                memberVariable.Name = "baseAddress";
+                memberVariable.Type = "ptrdiff_t";
+                info.MemberVariableInfos.Add(memberVariable);
+                var memberVariable2 = new Generator.VariableInfo();
+                memberVariable2.Name = "mipCount";
+                memberVariable2.Type = "int";
+                info.MemberVariableInfos.Add(memberVariable2);
+                var structGenerator = new Generator.StructGenerator(info);
+                var line = structGenerator.TransformText();
+                Console.WriteLine(line);
+            }
         }
     }
 }

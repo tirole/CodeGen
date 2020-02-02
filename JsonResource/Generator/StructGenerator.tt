@@ -1,0 +1,11 @@
+﻿<#@ template language="C#" linePragmas="false" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+struct <#=Info.Name#>
+{
+<#  foreach(var memberVariableInfo in Info.MemberVariableInfos) { #>
+    <#=memberVariableInfo.Type#> <#=memberVariableInfo.Name#>;
+<#  } #>
+};
