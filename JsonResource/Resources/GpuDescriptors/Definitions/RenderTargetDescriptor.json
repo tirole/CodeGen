@@ -8,7 +8,9 @@
             "doxyBrief": "This is srcBufOsset.",
             "type": "ptrdiff_t",
             "defaultValue": "",
-            "requirements": "",
+            "requirements": [
+                ""
+            ],
             "wordOffset": "0",
             "bitRange": "15:0"
         },
@@ -17,7 +19,9 @@
             "doxyBrief": "This is srcBufOsset2.",
             "type": "ptrdiff_t",
             "defaultValue": "",
-            "requirements": "MINMAX:0:32",
+            "requirements": [
+                "MINMAX:0:32"
+            ],
             "wordOffset": "0",
             "bitRange": "31:16"
         },
@@ -26,7 +30,9 @@
             "doxyBrief": "This is srcBufOsset2.",
             "type": "../../GpuEnum/Definitions/CompressionMode.json",
             "defaultValue": "",
-            "requirements": "",
+            "requirements": [
+                ""
+            ],
             "wordOffset": "1",
             "bitRange": "31:0"
         },
@@ -35,7 +41,9 @@
             "doxyBrief": "This is clear colors.",
             "type": "int32_t[4]",
             "defaultValue": "",
-            "requirements": "",
+            "requirements": [
+                ""
+            ],
             "wordOffset": "2",
             "bitRange": "127:0"
         }
