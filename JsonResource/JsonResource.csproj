@@ -47,6 +47,12 @@
     <Compile Include="Configs\General\EnumConfig.cs" />
     <Compile Include="Configs\General\RootConfig.cs" />
     <Compile Include="Configs\GpuDescriptor\DescriptorConfig.cs" />
+    <Compile Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator.cs" />
+    <Compile Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GpuDescriptorAccessorGenerator.tt</DependentUpon>
+    </Compile>
     <Compile Include="Generator\RequirementSdkGenerator.cs" />
     <Compile Include="Generator\StructGenerator.cs" />
     <Compile Include="Generator\StructGenerator1.cs">
@@ -66,6 +72,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>GpuDescriptorAccessorGenerator1.cs</LastGenOutput>
+    </Content>
     <Content Include="Generator\StructGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>StructGenerator1.cs</LastGenOutput>

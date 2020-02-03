@@ -1,0 +1,46 @@
+﻿<#@ template language="C#" linePragmas="false" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<# // セッター・ゲッター定義 #>
+<#  foreach(var member in Info.MemberVariableInfos) { #>
+inline
+void Set<#=Info.Name #><#=char.ToUpper(member.Name[0]) + member.Name.Substring(1) #>(<#=Info.Name#>* pDesc, <#=member.Type#> <#=member.Name#>)
+{
+    <#if(member.RequirementInfos != null) { #>
+    <#=member.RequirementInfos[0].GetString(member.Name) #>
+    <#} #>
+    
+<#if((member.BitEnd - member.BitBegin) == 63) { #>
+    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
+    auto pOut = reinterpret_cast<<#=member.Type #>*>(&pDesc->data[uint32ArrayIndex]);
+    *pOut = <#=member.Name #>;
+<#} else { #>
+    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
+    constexpr int bitOffset = <#=member.BitBegin #>;
+    constexpr int bitLength = (<#=member.BitEnd #> - bitOffset) + 1;
+    constexpr int mask = static_cast<int>(~(static_cast<int64_t>(-1) << bitLength ));
+    int inputVal = static_cast<int>(<#=member.Name #>);
+    pDesc->data[uint32ArrayIndex] |= (inputVal & mask) << bitOffset;
+<#} #>
+}
+
+inline
+<#=member.Type #> Get<#=Info.Name #><#=char.ToUpper(member.Name[0]) + member.Name.Substring(1) #>(const <#=Info.Name #>* pDesc)
+{
+<#if((member.BitEnd - member.BitBegin) == 63) { #>
+    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
+    auto pOut = reinterpret_cast<const <#=member.Type #>*>(&pDesc->data[uint32ArrayIndex]);
+    return *pOut;
+<#} else { #>
+    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
+    constexpr int bitOffset = <#=member.BitBegin #>;
+    constexpr int bitLength = (<#=member.BitEnd #> - bitOffset) + 1;
+    constexpr int mask = static_cast<int>(~(static_cast<int64_t>(-1) << bitLength )) << bitOffset;
+    <#=member.Type #> outputVal = static_cast<<#=member.Type #>>((pDesc->data[uint32ArrayIndex] & mask) >> bitOffset);
+    return outputVal;
+<#} #>
+}
+
+<#  } #>
