@@ -11,13 +11,12 @@ namespace JsonResource
     [DataContract]
     public partial class StructConfig
     {
-
         [DataMember(Name = "doxyBrief")]
         public string DoxyBrief;
-
-        [DataMember(Name = "definitionType")]
+        [DataMember(Name = "definitionType", IsRequired = true)]
         public string DefinitionType;
-
+        [DataMember(Name = "definitionName", IsRequired = true)]
+        public string DefinitionName;
         [DataMember(Name = "memberVariables")]
         public VariableConfig[] MemberVariables;
     }

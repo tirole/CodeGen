@@ -1,6 +1,7 @@
 {
     "doxyBrief": "The enumulation for something.",
     "definitionType": "enum",
+    "definitionName": "CompressionMode",
     "underlyingType": "int8_t",
     "enums": [
         {

@@ -7,7 +7,7 @@
         "namespace": "my::detail",
         "customDeserializerConfigs": [
             {
-                "definitionName": "gpuDescriptorStruct",
+                "definitionConfigName": "gpuDescriptorStruct",
                 "deserializerType": "DescriptorConfig"
             }
         ]
@@ -17,7 +17,7 @@
             "outputFileName": "my_RenderTargetDescriptor",
             "definitions": [
                 {
-                    "definitionName": "gpuDescriptorStruct",
+                    "name": "gpuDescriptorStruct",
                     "path" : "Definitions/RenderTargetDescriptor.json"
                 }
             ]
@@ -26,7 +26,7 @@
             "outputFileName": "my_SamplerDescriptor",
             "definitions": [
                 {
-                    "definitionName": "gpuDescriptorStruct",
+                    "name": "gpuDescriptorStruct",
                     "path" : "Definitions/SamplerDescriptor.json"
                 }
             ]
@@ -35,7 +35,7 @@
             "outputFileName": "my_TextureDescriptor",
             "definitions": [
                 {
-                    "definitionName": "gpuDescriptorStruct",
+                    "name": "gpuDescriptorStruct",
                     "path" : "Definitions/TextureDescriptor.json"
                 }
             ]

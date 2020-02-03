@@ -36,7 +36,7 @@ namespace JsonResource
     [DataContract]
     public partial class CustomDeserializerConfig
     {
-        [DataMember(Name = "definitionName", IsRequired = true)]
+        [DataMember(Name = "definitionConfigName", IsRequired = true)]
         public string DefinitionName;
         [DataMember(Name = "deserializerType", IsRequired = true)]
         public string DeserializerType;
@@ -61,7 +61,7 @@ namespace JsonResource
     [DataContract]
     public partial class DefinitionConfig
     {
-        [DataMember(Name = "definitionName", IsRequired = true)]
+        [DataMember(Name = "name", IsRequired = true)]
         public string DefinitionName;
         [DataMember(Name = "path", IsRequired = true)]
         public string Path;

@@ -1,6 +1,7 @@
 {
     "doxyBrief": "This is RenderTargetDescriptor.",
     "definitionType": "struct",
+    "definitionName": "RendeerTargetDescriptor",
     "memberVariables": [
         {
             "name": "srcBufOsset",
@@ -16,17 +17,26 @@
             "doxyBrief": "This is srcBufOsset2.",
             "type": "ptrdiff_t",
             "defaultValue": "",
-            "requirements": "",
+            "requirements": "MINMAX:0:32",
             "wordOffset": "0",
             "bitRange": "31:16"
         },
         {
-            "name": "clearColors",
-            "doxyBrief": "This is clear colors.",
-            "type": "uint32_t",
+            "name": "srcBufOsset2",
+            "doxyBrief": "This is srcBufOsset2.",
+            "type": "../../GpuEnum/Definitions/CompressionMode.json",
             "defaultValue": "",
             "requirements": "",
             "wordOffset": "1",
+            "bitRange": "31:0"
+        },
+        {
+            "name": "clearColors",
+            "doxyBrief": "This is clear colors.",
+            "type": "int32_t[4]",
+            "defaultValue": "",
+            "requirements": "",
+            "wordOffset": "2",
             "bitRange": "127:0"
         }
     ]

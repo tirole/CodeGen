@@ -13,11 +13,11 @@ namespace JsonResource
 
         [DataMember(Name = "doxyBrief")]
         public string DoxyBrief;
-
-        [DataMember(Name = "definitionType")]
+        [DataMember(Name = "definitionType", IsRequired = true)]
         public string DefinitionType;
-
-        [DataMember(Name = "underlyingType")]
+        [DataMember(Name = "definitionName", IsRequired = true)]
+        public string DefinitionName;
+        [DataMember(Name = "underlyingType", IsRequired = true)]
         public string UnderlyingType;
 
         [DataMember(Name = "enums")]

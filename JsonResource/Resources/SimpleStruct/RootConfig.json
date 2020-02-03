@@ -10,7 +10,10 @@
         {
             "outputFileName": "my_SimpleStruct.h",
             "definitions": [
-                "SimpleStruct.json"
+                {
+                    "name":"",
+                    "path":"SimpleStruct.json"
+                }
             ]
         }
     ]
