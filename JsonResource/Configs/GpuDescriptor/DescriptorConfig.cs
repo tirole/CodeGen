@@ -8,14 +8,8 @@ using System.Threading.Tasks;
 namespace JsonResource
 {
     [DataContract]
-    public partial class DescriptorConfig
+    public partial class DescriptorConfig : DeclarationConfig
     {
-        [DataMember(Name = "doxyBrief")]
-        public string DoxyBrief;
-        [DataMember(Name = "definitionType", IsRequired = true)]
-        public string DefinitionType;
-        [DataMember(Name = "definitionName", IsRequired = true)]
-        public string DefinitionName;
         [DataMember(Name = "memberVariables")]
         public DescriptorVariableConfig[] memberVariables;
     }

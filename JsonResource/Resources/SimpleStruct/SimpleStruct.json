@@ -1,7 +1,9 @@
 {
-    "doxyBrief": "This is simple structure.",
-    "definitionType": "struct",
-    "definitionName": "SimpleStruct",
+    "declaration": {
+        "doxyBrief": "This is simple structure.",
+        "definitionType": "struct",
+        "definitionName": "SimpleStruct"
+    },
     "memberVariables": [
         {
             "name": "intVal",

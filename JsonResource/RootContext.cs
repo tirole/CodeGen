@@ -14,8 +14,13 @@ namespace JsonResource
         {
             FileConfig = new FileConfig();
             DescriptorConfigs = new List<DescriptorConfig>();
+            StructConfigs = new List<StructConfig>();
+            EnumConfigs = new List<EnumConfig>();
         }
         public FileConfig FileConfig;
+
+        public List<StructConfig> StructConfigs;
+        public List<EnumConfig> EnumConfigs;
         public List<DescriptorConfig> DescriptorConfigs;
     }
     class RootContext
@@ -49,21 +54,68 @@ namespace JsonResource
                     fileContext.FileConfig = fileConfig;
                     foreach (var definitionConfig in fileConfig.DefinitionConfigs)
                     {
-                        string definitionConfigFilePath = RootConfigDirectoryName + "/" + definitionConfig;
-                        var sr = new StreamReader(definitionConfigFilePath);
-                        var descriptorSerializer = new DataContractJsonSerializer(typeof(DescriptorConfig));
-                        var descriptorConfig = (DescriptorConfig)descriptorSerializer.ReadObject(sr.BaseStream);
-                        fileContext.DescriptorConfigs.Add(descriptorConfig);
+                        string jsonFilePath = RootConfigDirectoryName + "/" + definitionConfig;
+                        var descriptorConfig = Deserialize<DeclarationConfig>(jsonFilePath);
+
+                        Type configType = null;
+
+                        // search custom deserializer
+                        foreach(var customDeserializerConfig in RootConfig.CommonFileConfig.CustomDeserializerConfigs)
+                        {
+                            if(customDeserializerConfig.DefinitionName == definitionConfig.DefinitionName)
+                            {
+                                configType = GetCustomDeserializerType(customDeserializerConfig.DeserializerType);
+                                break;
+                            }
+                        }
+
+                        // search general deserializer
+                        if(configType == null)
+                        {
+                            var declarationConfig = Deserialize<DeclarationConfig>(jsonFilePath);
+                            configType = GetGenericDeserializerType(declarationConfig.Declaration.DefinitionType);
+                        }
+                        
+
+                        if (configType == typeof(EnumConfig))
+                        {
+                            var config = Deserialize<EnumConfig>(jsonFilePath);
+                            fileContext.EnumConfigs.Add(config);
+                        }
+                        else if (configType == typeof(StructConfig))
+                        {
+                            var config = Deserialize<StructConfig>(jsonFilePath);
+                            fileContext.StructConfigs.Add(config);
+                        }
+                        else if(configType == typeof(DescriptorConfig))
+                        {
+                            var config = Deserialize<DescriptorConfig>(jsonFilePath);
+                            fileContext.DescriptorConfigs.Add(config);
+                        }
+                        else
+                        {
+                            throw new System.InvalidOperationException("Couldn't find proper deserializer type.");
+                        }
                     }
                     this.FileContexts.Add(fileContext);
                 }
             }
         }
+        public static T Deserialize<T>(string jsonFIiePath)
+        {
+            var deserializer = new DataContractJsonSerializer(typeof(T));
+            using (var stream = new StreamReader(jsonFIiePath))
+            {
+                T result = (T)deserializer.ReadObject(stream.BaseStream);
+                return result;
+            }
+        }
+
         public Type GetGenericDeserializerType(string definitionType)
         {
             Tuple<string, Type>[] deserializerTypes =    
             { 
-                new Tuple<string, Type>("enum", typeof(EnumConfig)) ,
+                new Tuple<string, Type>("enum class", typeof(EnumConfig)) ,
                 new Tuple<string, Type>("struct", typeof(StructConfig)),
             };
             foreach (var deserializerType in deserializerTypes)

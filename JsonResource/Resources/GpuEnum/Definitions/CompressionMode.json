@@ -1,7 +1,9 @@
 {
-    "doxyBrief": "The enumulation for something.",
-    "definitionType": "enum",
-    "definitionName": "CompressionMode",
+    "declaration": {
+        "doxyBrief": "The enumulation for something.",
+        "definitionType": "enum class",
+        "definitionName": "CompressionMode"
+    },
     "underlyingType": "int8_t",
     "enums": [
         {

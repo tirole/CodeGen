@@ -1,7 +1,9 @@
 {
-    "doxyBrief": "This is RenderTargetDescriptor.",
-    "definitionType": "struct",
-    "definitionName": "RendeerTargetDescriptor",
+    "declaration": {
+        "doxyBrief": "This is RenderTargetDescriptor.",
+        "definitionType": "struct",
+        "definitionName": "RendeerTargetDescriptor"
+    },
     "memberVariables": [
         {
             "name": "srcBufOsset",

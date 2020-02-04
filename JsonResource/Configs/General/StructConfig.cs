@@ -9,14 +9,8 @@ namespace JsonResource
 {
     // Type created for JSON at <<root>>
     [DataContract]
-    public partial class StructConfig
+    public partial class StructConfig : DeclarationConfig
     {
-        [DataMember(Name = "doxyBrief")]
-        public string DoxyBrief;
-        [DataMember(Name = "definitionType", IsRequired = true)]
-        public string DefinitionType;
-        [DataMember(Name = "definitionName", IsRequired = true)]
-        public string DefinitionName;
         [DataMember(Name = "memberVariables")]
         public VariableConfig[] MemberVariables;
     }

@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configs\General\DeclarationCommonConfig.cs" />
     <Compile Include="Configs\General\EnumConfig.cs" />
     <Compile Include="Configs\General\RootConfig.cs" />
     <Compile Include="Configs\GpuDescriptor\DescriptorConfig.cs" />
