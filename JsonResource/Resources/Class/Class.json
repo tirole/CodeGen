@@ -1,0 +1,73 @@
+{
+    "declaration": {
+        "doxyBrief": "This is simple class.",
+        "definitionType": "class",
+        "definitionName": "SimpleClass"
+    },
+    "isDefineAccessor" : "true",
+    "publicMemberFunctions": [
+        {
+            "functionName": "DoSomething",
+            "definitionPlace": "cpp",
+            "doxyBrief": "何かします。",
+            "returnType": "void",
+            "arguments": [
+                {
+                    "nameAlias": "GPU アドレス",
+                    "variableName": "gpuAddr",
+                    "doxyBrief": "GPU アドレスです。",
+                    "type": "GpuAddress",
+                    "defaultValue": "",
+                    "requirements": [
+                        "MINMAX:0:7",
+                        "NOTNULL"
+                    ]
+                }
+            ]
+        },
+        {
+            "functionName": "DoNothing",
+            "definitionPlace": "h",
+            "doxyBrief": "何もしません。",
+            "returnType": "void",
+            "defaultValue": "",
+            "arguments": [
+                {
+                    "nameAlias": "オフセット",
+                    "variableName": "offset",
+                    "doxyBrief": "オフセットです。",
+                    "type": "ptrdiff_t",
+                    "defaultValue": "",
+                    "requirements": [
+                        "MINMAX:0:7",
+                        "NOTNULL"
+                    ]
+                }
+            ]
+        }
+    ],
+    "privateMemberVariables": [
+        {
+            "nameAlias": "GPU アドレス",
+            "variableName": "m_GpuAddress",
+            "doxyBrief": "GPU アドレスです。",
+            "type": "GpuAddress",
+            "defaultValue": "",
+            "requirements": [
+                "MINMAX:0:7",
+                "NOTNULL"
+            ]
+        },
+        {
+            "nameAlias": "オフセット",
+            "variableName": "m_Offset",
+            "doxyBrief": "GPU アドレスです。",
+            "type": "ptrdiff_t",
+            "defaultValue": "",
+            "requirements": [
+                "MINMAX:0:7",
+                "NOTNULL"
+            ]
+        }
+    ]
+}

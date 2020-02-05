@@ -1,0 +1,20 @@
+{
+    "commonFileConfig": {
+        "copyright": "../copyright.txt",
+        "includeFiles": [
+            "<stdint.h>"
+        ],
+        "namespace": "my::detail"
+    },
+    "fileConfigs": [
+        {
+            "outputFileName": "my_SimpleStruct",
+            "definitions": [
+                {
+                    "name":"",
+                    "path":"Class.json"
+                }
+            ]
+        }
+    ]
+}
