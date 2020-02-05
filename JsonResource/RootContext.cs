@@ -13,15 +13,14 @@ namespace JsonResource
         public FileContext()
         {
             FileConfig = new FileConfig();
-            DescriptorConfigs = new List<DescriptorConfig>();
+            DescriptorConfigs = new List<Tuple<DescriptorConfig, Type>>();
             StructConfigs = new List<StructConfig>();
             EnumConfigs = new List<EnumConfig>();
         }
         public FileConfig FileConfig;
-
         public List<StructConfig> StructConfigs;
         public List<EnumConfig> EnumConfigs;
-        public List<DescriptorConfig> DescriptorConfigs;
+        public List<Tuple<DescriptorConfig,Type>> DescriptorConfigs;
     }
     class RootContext
     {
@@ -58,13 +57,15 @@ namespace JsonResource
                         var descriptorConfig = Deserialize<DeclarationConfig>(jsonFilePath);
 
                         Type configType = null;
+                        Type generatorType = null;
 
                         // search custom deserializer
-                        foreach(var customDeserializerConfig in RootConfig.CommonFileConfig.CustomDeserializerConfigs)
+                        foreach (var customDeserializerConfig in RootConfig.CommonFileConfig.CustomDeserializerConfigs)
                         {
                             if(customDeserializerConfig.DefinitionName == definitionConfig.DefinitionName)
                             {
                                 configType = GetCustomDeserializerType(customDeserializerConfig.DeserializerType);
+                                generatorType = GetCustomGeneratorType(customDeserializerConfig.GeneratorType);
                                 break;
                             }
                         }
@@ -75,6 +76,8 @@ namespace JsonResource
                             var declarationConfig = Deserialize<DeclarationConfig>(jsonFilePath);
                             configType = GetGenericDeserializerType(declarationConfig.Declaration.DefinitionType);
                         }
+
+                        // generator は desrializer から決まるので変更が無い場合は何もしない。
                         
 
                         if (configType == typeof(EnumConfig))
@@ -90,7 +93,7 @@ namespace JsonResource
                         else if(configType == typeof(DescriptorConfig))
                         {
                             var config = Deserialize<DescriptorConfig>(jsonFilePath);
-                            fileContext.DescriptorConfigs.Add(config);
+                            fileContext.DescriptorConfigs.Add(new Tuple<DescriptorConfig, Type>(config, generatorType));
                         }
                         else
                         {
@@ -131,8 +134,15 @@ namespace JsonResource
         {
             Tuple<string, Type>[] deserializerTypes =
             { 
-                new Tuple<string, Type>("DescriptorConfig", typeof(DescriptorConfig)) 
+                new Tuple<string, Type>("DescriptorConfig", typeof(DescriptorConfig))
             };
+
+            // early out
+            if (deserializerName == "")
+            {
+                return null;
+            }
+
             foreach (var deserializerType in deserializerTypes)
             {
                 if (deserializerType.Item1 == deserializerName)
@@ -142,6 +152,28 @@ namespace JsonResource
             }
             throw new System.InvalidOperationException("Couldn't find custom deserializer type.");
         }
-   
+        public Type GetCustomGeneratorType(string generatorName)
+        {
+            Tuple<string, Type>[] generatorTypes =
+            {
+                new Tuple<string, Type>("GpuDescriptorAccessorGenerator", typeof(Generator.GpuDescriptor.GpuDescriptorAccessorGenerator))
+            };
+
+            // early out
+            if (generatorName == "")
+            {
+                return null;
+            }
+
+            foreach (var type in generatorTypes)
+            {
+                if (type.Item1 == generatorName)
+                {
+                    return type.Item2;
+                }
+            }
+            throw new System.InvalidOperationException("Couldn't find custom generator type.");
+        }
+
     }
 }

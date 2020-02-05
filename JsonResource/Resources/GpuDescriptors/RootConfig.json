@@ -8,7 +8,13 @@
         "customDeserializerConfigs": [
             {
                 "definitionConfigName": "gpuDescriptorStruct",
-                "deserializerType": "DescriptorConfig"
+                "deserializerType": "DescriptorConfig",
+                "generatorType": ""
+            },
+            {
+                "definitionConfigName": "gpuDescriptorAccessor",
+                "deserializerType": "DescriptorConfig",
+                "generatorType": "GpuDescriptorAccessorGenerator"
             }
         ]
     },
@@ -18,7 +24,11 @@
             "definitions": [
                 {
                     "name": "gpuDescriptorStruct",
-                    "path" : "Definitions/RenderTargetDescriptor.json"
+                    "path": "Definitions/RenderTargetDescriptor.json"
+                },
+                {
+                    "name": "gpuDescriptorAccessor",
+                    "path": "Definitions/RenderTargetDescriptor.json"
                 }
             ]
         },
@@ -27,7 +37,11 @@
             "definitions": [
                 {
                     "name": "gpuDescriptorStruct",
-                    "path" : "Definitions/SamplerDescriptor.json"
+                    "path": "Definitions/SamplerDescriptor.json"
+                },
+                {
+                    "name": "gpuDescriptorAccessor",
+                    "path": "Definitions/SamplerDescriptor.json"
                 }
             ]
         },
@@ -36,7 +50,11 @@
             "definitions": [
                 {
                     "name": "gpuDescriptorStruct",
-                    "path" : "Definitions/TextureDescriptor.json"
+                    "path": "Definitions/TextureDescriptor.json"
+                },
+                {
+                    "name": "gpuDescriptorAccessor",
+                    "path": "Definitions/TextureDescriptor.json"
                 }
             ]
         }

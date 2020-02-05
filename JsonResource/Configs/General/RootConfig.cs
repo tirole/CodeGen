@@ -40,6 +40,8 @@ namespace JsonResource
         public string DefinitionName;
         [DataMember(Name = "deserializerType", IsRequired = true)]
         public string DeserializerType;
+        [DataMember(Name = "generatorType", IsRequired = true)]
+        public string GeneratorType;
     }
 
     [DataContract]
