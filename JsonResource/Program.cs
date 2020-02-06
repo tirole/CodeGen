@@ -94,6 +94,28 @@ namespace JsonResource
                 var line = structGenerator.TransformText();
                 Console.WriteLine(line);
             }
+
+            {
+                var info = new Generator.EnumGenerationInfo();
+                info.DoxyBrief = "This is simple enum.";
+                info.EnumBase = "int8_t";
+                info.EnumKey = "enum class";
+                info.EnumName = "Simple";
+                var info1 = new Generator.EnumeratorInfo();
+                info1.Name = "R8G8B8_Unorm";
+                info1.Value = "3";
+                info1.DoxyBrief = "3 component R8G8B8.";
+                info.EnumeratorInfos.Add(info1);
+                var info2 = new Generator.EnumeratorInfo();
+                info2.Name = "R8G8_Unorm";
+                info2.Value = "12";
+                info2.DoxyBrief = "2 component R8G8.";
+                info.EnumeratorInfos.Add(info2);
+
+                var generator = new Generator.EnumGenerator(info);
+                var line = generator.TransformText();
+                Console.WriteLine(line);
+            }
         }
     }
 }
