@@ -61,6 +61,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GpuDescriptorAccessorGenerator.tt</DependentUpon>
     </Compile>
+    <Compile Include="Generator\GpuDescriptor\GpuDescriptorStructGenerator.cs" />
+    <Compile Include="Generator\GpuDescriptor\GpuDescriptorStructGenerator1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GpuDescriptorStructGenerator.tt</DependentUpon>
+    </Compile>
     <Compile Include="Generator\RequirementSdkInfo.cs" />
     <Compile Include="Generator\StructGenerator.cs" />
     <Compile Include="Generator\StructGenerator1.cs">
@@ -88,6 +94,10 @@
     <Content Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>GpuDescriptorAccessorGenerator1.cs</LastGenOutput>
+    </Content>
+    <Content Include="Generator\GpuDescriptor\GpuDescriptorStructGenerator.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>GpuDescriptorStructGenerator1.cs</LastGenOutput>
     </Content>
     <Content Include="Generator\StructGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

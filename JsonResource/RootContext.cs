@@ -156,7 +156,8 @@ namespace JsonResource
         {
             Tuple<string, Type>[] generatorTypes =
             {
-                new Tuple<string, Type>("GpuDescriptorAccessorGenerator", typeof(Generator.GpuDescriptor.GpuDescriptorAccessorGenerator))
+                new Tuple<string, Type>("GpuDescriptorAccessorGenerator", typeof(Generator.GpuDescriptor.GpuDescriptorAccessorGenerator)),
+                new Tuple<string, Type>("GpuDescriptorStructGenerator", typeof(Generator.GpuDescriptor.GpuDescriptorStructGenerator))
             };
 
             // early out

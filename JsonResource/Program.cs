@@ -155,6 +155,11 @@ namespace JsonResource
                             var generator = new Generator.GpuDescriptor.GpuDescriptorAccessorGenerator(structInfo);
                             output += generator.TransformText();
                         }
+                        else if (serializerType == typeof(Generator.GpuDescriptor.GpuDescriptorStructGenerator))
+                        {
+                            var generator = new Generator.GpuDescriptor.GpuDescriptorStructGenerator(structInfo);
+                            output += generator.TransformText();
+                        }
                         else if(serializerType == typeof(Generator.StructGenerator) || (serializerType == null))
                         {
                             var generator = new Generator.StructGenerator(structInfo);

@@ -9,7 +9,7 @@
             {
                 "definitionConfigName": "gpuDescriptorStruct",
                 "deserializerType": "DescriptorConfig",
-                "generatorType": ""
+                "generatorType": "GpuDescriptorStructGenerator"
             },
             {
                 "definitionConfigName": "gpuDescriptorAccessor",
