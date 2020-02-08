@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JsonResource.Generator
 {
-    public class RequirementSdkGenerator
+    public class RequirementSdkInfo : RequirementInfo
     {
         private string[] MacroNames = new string[(int)RequirementInfo.RequirementType.Count]
         {
@@ -16,24 +16,22 @@ namespace JsonResource.Generator
             "SDK_LESS_EQUAL",
             "SDK_MIN_MAX",
         };
-        private RequirementInfo Info;
-        public RequirementSdkGenerator(RequirementInfo info)
+        public RequirementSdkInfo()
         {
-            this.Info = info;
         }
         private string GetMacroName()
         {
-            return MacroNames[(int)this.Info.Type];
+            return MacroNames[(int)this.Type];
         }
-        public string GetString(string variableName)
+        public override string GetString(string variableName)
         {
-            switch (this.Info.Type)
+            switch (this.Type)
             {
                 case RequirementInfo.RequirementType.Less:
                 case RequirementInfo.RequirementType.LessEqual:
                 case RequirementInfo.RequirementType.MinMax:
                     string ret = GetMacroName() + "(" + variableName + ", ";
-                    foreach (var value in this.Info.Values)
+                    foreach (var value in this.Values)
                     {
                         ret += value + ", ";
                     }

@@ -22,7 +22,7 @@ namespace JsonResource.Generator
             Count,
         };
 
-        public string[] RequirementTags = new string[(int)RequirementType.Count]
+        public static string[] RequirementTags = new string[(int)RequirementType.Count]
         {
             "",
             "NOTNULL",
@@ -34,5 +34,17 @@ namespace JsonResource.Generator
         public RequirementType Type { get; set; }
         public List<string> Values { get; set; }
         public abstract string GetString(string variableName);
+
+        public static RequirementType GetRequirementType(string str)
+        {
+            for(int i = 0; i < RequirementTags.Length; ++i)
+            {
+                if(RequirementTags[i] == str)
+                {
+                    return (RequirementType)i;
+                }
+            }
+            throw new System.InvalidOperationException("Couldn't find RequirementType.");
+        }
     }
 }
