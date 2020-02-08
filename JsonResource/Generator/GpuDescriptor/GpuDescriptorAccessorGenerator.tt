@@ -6,28 +6,28 @@
 <# // セッター・ゲッター定義 #>
 <#  foreach(var member in Info.MemberVariableInfos) { #>
 inline
-void Set<#=Info.Name #><#=char.ToUpper(member.Name[0]) + member.Name.Substring(1) #>(<#=Info.Name#>* pDesc, <#=member.Type#> <#=member.Name#>)
+void Set<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(<#=Info.Name#>* pDesc, <#=member.Type#> <#=member.VariableName#>)
 {
     <#if(member.RequirementInfos != null) { #>
-    <#=member.RequirementInfos[0].GetString(member.Name) #>
+    <#=member.RequirementInfos[0].GetString(member.VariableName) #>
     <#} #>
     
 <#if((member.BitEnd - member.BitBegin) == 63) { #>
     constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
     auto pOut = reinterpret_cast<<#=member.Type #>*>(&pDesc->data[uint32ArrayIndex]);
-    *pOut = <#=member.Name #>;
+    *pOut = <#=member.VariableName #>;
 <#} else { #>
     constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
     constexpr int bitOffset = <#=member.BitBegin #>;
     constexpr int bitLength = (<#=member.BitEnd #> - bitOffset) + 1;
     constexpr int mask = static_cast<int>(~(static_cast<int64_t>(-1) << bitLength ));
-    int inputVal = static_cast<int>(<#=member.Name #>);
+    int inputVal = static_cast<int>(<#=member.VariableName #>);
     pDesc->data[uint32ArrayIndex] |= (inputVal & mask) << bitOffset;
 <#} #>
 }
 
 inline
-<#=member.Type #> Get<#=Info.Name #><#=char.ToUpper(member.Name[0]) + member.Name.Substring(1) #>(const <#=Info.Name #>* pDesc)
+<#=member.Type #> Get<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(const <#=Info.Name #>* pDesc)
 {
 <#if((member.BitEnd - member.BitBegin) == 63) { #>
     constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;

@@ -32,7 +32,7 @@ namespace JsonResource.Generator
             this.Write("    ");
             this.Write(this.ToStringHelper.ToStringWithCulture(memberVariableInfo.Type));
             this.Write(" ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(memberVariableInfo.Name));
+            this.Write(this.ToStringHelper.ToStringWithCulture(memberVariableInfo.VariableName));
             this.Write(";\r\n");
   } 
             this.Write("};");

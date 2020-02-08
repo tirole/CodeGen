@@ -14,7 +14,8 @@ namespace JsonResource.Generator
             HasBitWidthDeclaration = false;
         }
         public string Type { get; set; }
-        public string Name { get; set; }
+        public string VariableName { get; set; }
+        public string NameAlias { get; set; }
         public string DoxyBrief { get; set; }
         public string DefaultValue { get; set; }
         public List<RequirementInfo> RequirementInfos { get; set; }

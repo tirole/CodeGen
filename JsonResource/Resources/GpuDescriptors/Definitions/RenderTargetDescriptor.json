@@ -31,11 +31,11 @@
             "bitRange": "31:16"
         },
         {
-            "variableName": "srcBufOsset2",
+            "variableName": "srcBufOsset3",
             "type": "../../GpuEnum/Definitions/CompressionMode.json",
             "defaultValue": "",
             "nameAlias": "",
-            "doxyBrief": "This is srcBufOsset2.",
+            "doxyBrief": "This is srcBufOsset3.",
             "requirements": [
                 ""
             ],

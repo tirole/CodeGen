@@ -31,32 +31,6 @@
                     "path": "Definitions/RenderTargetDescriptor.json"
                 }
             ]
-        },
-        {
-            "outputFileName": "my_SamplerDescriptor",
-            "definitions": [
-                {
-                    "name": "gpuDescriptorStruct",
-                    "path": "Definitions/SamplerDescriptor.json"
-                },
-                {
-                    "name": "gpuDescriptorAccessor",
-                    "path": "Definitions/SamplerDescriptor.json"
-                }
-            ]
-        },
-        {
-            "outputFileName": "my_TextureDescriptor",
-            "definitions": [
-                {
-                    "name": "gpuDescriptorStruct",
-                    "path": "Definitions/TextureDescriptor.json"
-                },
-                {
-                    "name": "gpuDescriptorAccessor",
-                    "path": "Definitions/TextureDescriptor.json"
-                }
-            ]
         }
     ]
 }

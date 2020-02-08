@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace JsonResource
 {
-    class FileContext
+    public class FileContext
     {
         public FileContext()
         {
@@ -22,7 +22,7 @@ namespace JsonResource
         public List<EnumConfig> EnumConfigs;
         public List<Tuple<DescriptorConfig,Type>> DescriptorConfigs;
     }
-    class RootContext
+    public class RootContext
     {
         public string RootConfigDirectoryName;
         public string Copyright;
@@ -53,7 +53,7 @@ namespace JsonResource
                     fileContext.FileConfig = fileConfig;
                     foreach (var definitionConfig in fileConfig.DefinitionConfigs)
                     {
-                        string jsonFilePath = RootConfigDirectoryName + "/" + definitionConfig;
+                        string jsonFilePath = RootConfigDirectoryName + "/" + definitionConfig.Path;
                         var descriptorConfig = Deserialize<DeclarationConfig>(jsonFilePath);
 
                         Type configType = null;

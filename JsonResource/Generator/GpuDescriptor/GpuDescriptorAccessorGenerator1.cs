@@ -29,17 +29,17 @@ namespace JsonResource.Generator.GpuDescriptor
   foreach(var member in Info.MemberVariableInfos) { 
             this.Write("inline\r\nvoid Set");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
-            this.Write(this.ToStringHelper.ToStringWithCulture(char.ToUpper(member.Name[0]) + member.Name.Substring(1)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1)));
             this.Write("(");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
             this.Write("* pDesc, ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
             this.Write(" ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(member.Name));
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
             this.Write(")\r\n{\r\n    ");
 if(member.RequirementInfos != null) { 
             this.Write("    ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(member.RequirementInfos[0].GetString(member.Name)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.RequirementInfos[0].GetString(member.VariableName)));
             this.Write("\r\n    ");
 } 
             this.Write("    \r\n");
@@ -49,7 +49,7 @@ if((member.BitEnd - member.BitBegin) == 63) {
             this.Write(";\r\n    auto pOut = reinterpret_cast<");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
             this.Write("*>(&pDesc->data[uint32ArrayIndex]);\r\n    *pOut = ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(member.Name));
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
             this.Write(";\r\n");
 } else { 
             this.Write("    constexpr int uint32ArrayIndex = ");
@@ -60,14 +60,14 @@ if((member.BitEnd - member.BitBegin) == 63) {
             this.Write(this.ToStringHelper.ToStringWithCulture(member.BitEnd));
             this.Write(" - bitOffset) + 1;\r\n    constexpr int mask = static_cast<int>(~(static_cast<int64" +
                     "_t>(-1) << bitLength ));\r\n    int inputVal = static_cast<int>(");
-            this.Write(this.ToStringHelper.ToStringWithCulture(member.Name));
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
             this.Write(");\r\n    pDesc->data[uint32ArrayIndex] |= (inputVal & mask) << bitOffset;\r\n");
 } 
             this.Write("}\r\n\r\ninline\r\n");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
             this.Write(" Get");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
-            this.Write(this.ToStringHelper.ToStringWithCulture(char.ToUpper(member.Name[0]) + member.Name.Substring(1)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1)));
             this.Write("(const ");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
             this.Write("* pDesc)\r\n{\r\n");
