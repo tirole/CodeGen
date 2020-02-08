@@ -2,24 +2,27 @@
     "declaration": {
         "doxyBrief": "This is simple structure.",
         "definitionType": "struct",
-        "definitionName": "SimpleStruct"
+        "definitionName": "SimpleStruct",
+        "nameAlias":"シンプルな構造体"
     },
     "memberVariables": [
         {
-            "name": "intVal",
-            "doxyBrief": "int value",
+            "variableName": "intVal",
             "type": "int32_t",
             "defaultValue": "",
+            "doxyBrief": "int value",
+            "nameAlias":"整数値",
             "requirements": [
                 "MINMAX:0:7",
                 "NOTNULL"
             ]
         },
         {
-            "name": "floatVal",
-            "doxyBrief": "float value",
+            "variableName": "floatVal",
             "type": "float",
             "defaultValue": "",
+            "doxyBrief": "float value",
+            "nameAlias":"フロート値",
             "requirements": [
                 "MINMAX:0:7",
                 "NOTNULL"

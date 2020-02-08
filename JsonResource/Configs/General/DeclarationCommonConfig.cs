@@ -16,12 +16,13 @@ namespace JsonResource
     [DataContract]
     public partial class DeclarationCommonConfig
     {
-
-        [DataMember(Name = "doxyBrief")]
-        public string DoxyBrief;
         [DataMember(Name = "definitionType", IsRequired = true)]
         public string DefinitionType;
         [DataMember(Name = "definitionName", IsRequired = true)]
         public string DefinitionName;
+        [DataMember(Name = "doxyBrief")]
+        public string DoxyBrief;
+        [DataMember(Name = "nameAlias")]
+        public string NameAlias;
     }
 }

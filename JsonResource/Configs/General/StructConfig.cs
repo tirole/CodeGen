@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace JsonResource
 {
-    // Type created for JSON at <<root>>
     [DataContract]
     public partial class StructConfig : DeclarationConfig
     {

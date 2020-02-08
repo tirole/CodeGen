@@ -10,18 +10,18 @@ namespace JsonResource
     [DataContract]
     public partial class EnumConfig : DeclarationConfig
     {
-        [DataMember(Name = "underlyingType", IsRequired = true)]
-        public string UnderlyingType;
+        [DataMember(Name = "enumBase", IsRequired = true)]
+        public string EnumBase;
 
-        [DataMember(Name = "enums")]
-        public Enum[] enums;
+        [DataMember(Name = "enumerators", IsRequired = true),]
+        public Enumerator[] Enumerators;
     }
 
     [DataContract]
-    public partial class Enum
+    public partial class Enumerator
     {
 
-        [DataMember(Name = "name")]
+        [DataMember(Name = "enumeratorMame", IsRequired = true)]
         public string Name;
 
         [DataMember(Name = "value")]

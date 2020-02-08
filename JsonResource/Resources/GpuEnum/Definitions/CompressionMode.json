@@ -1,18 +1,19 @@
 {
     "declaration": {
-        "doxyBrief": "The enumulation for something.",
         "definitionType": "enum class",
-        "definitionName": "CompressionMode"
+        "definitionName": "CompressionMode",
+        "doxyBrief": "The enumulation for something.",
+        "nameAlias":"圧縮モード"
     },
-    "underlyingType": "int8_t",
-    "enums": [
+    "enumBase": "int8_t",
+    "enumerators": [
         {
-            "name": "Linear",
+            "enumeratorMame": "Linear",
             "value": "1",
             "doxyBrief": "Linear format"
         },
         {
-            "name": "Block",
+            "enumeratorMame": "Block",
             "value": "2",
             "doxyBrief": "Block format"
         }

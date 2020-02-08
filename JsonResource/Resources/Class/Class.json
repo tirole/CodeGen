@@ -2,72 +2,85 @@
     "declaration": {
         "doxyBrief": "This is simple class.",
         "definitionType": "class",
-        "definitionName": "SimpleClass"
+        "definitionName": "SimpleClass",
+        "nameAlias": "シンプルなクラス"
     },
-    "isDefineAccessor" : "true",
-    "publicMemberFunctions": [
+    "isDefineAccessor": "true",
+    "memberFunctions": [
         {
-            "functionName": "DoSomething",
-            "definitionPlace": "cpp",
-            "doxyBrief": "何かします。",
-            "returnType": "void",
-            "arguments": [
-                {
-                    "nameAlias": "GPU アドレス",
-                    "variableName": "gpuAddr",
-                    "doxyBrief": "GPU アドレスです。",
-                    "type": "GpuAddress",
-                    "defaultValue": "",
-                    "requirements": [
-                        "MINMAX:0:7",
-                        "NOTNULL"
-                    ]
-                }
-            ]
+            "accessModifier": "public",
+            "function": {
+                "functionName": "DoSomething",
+                "isInline": false,
+                "doxyBrief": "何かします。",
+                "returnType": "void",
+                "arguments": [
+                    {
+                        "variableName": "gpuAddr",
+                        "type": "GpuAddress",
+                        "defaultValue": "",
+                        "nameAlias": "GPU アドレス",
+                        "doxyBrief": "GPU アドレスです。",
+                        "requirements": [
+                            "MINMAX:0:7",
+                            "NOTNULL"
+                        ]
+                    }
+                ]
+            }
         },
         {
-            "functionName": "DoNothing",
-            "definitionPlace": "h",
-            "doxyBrief": "何もしません。",
-            "returnType": "void",
-            "defaultValue": "",
-            "arguments": [
-                {
-                    "nameAlias": "オフセット",
-                    "variableName": "offset",
-                    "doxyBrief": "オフセットです。",
-                    "type": "ptrdiff_t",
-                    "defaultValue": "",
-                    "requirements": [
-                        "MINMAX:0:7",
-                        "NOTNULL"
-                    ]
-                }
-            ]
+            "accessModifier": "public",
+            "function": {
+                "functionName": "DoNothing",
+                "isInline": false,
+                "doxyBrief": "何もしません。",
+                "returnType": "void",
+                "defaultValue": "",
+                "arguments": [
+                    {
+                        "variableName": "offset",
+                        "type": "ptrdiff_t",
+                        "defaultValue": "",
+                        "nameAlias": "オフセット",
+                        "doxyBrief": "オフセットです。",
+                        "requirements": [
+                            "MINMAX:0:7",
+                            "NOTNULL"
+                        ]
+                    }
+                ]
+            }
         }
     ],
-    "privateMemberVariables": [
+    "memberVariables": [
         {
-            "nameAlias": "GPU アドレス",
-            "variableName": "m_GpuAddress",
-            "doxyBrief": "GPU アドレスです。",
-            "type": "GpuAddress",
-            "defaultValue": "",
-            "requirements": [
-                "MINMAX:0:7",
-                "NOTNULL"
-            ]
+            "accessModifier": "private",
+            "variable": {
+                "variableName": "m_GpuAddres",
+                "type": "GpuAddress",
+                "defaultValue": "",
+                "nameAlias": "GPU アドレス",
+                "doxyBrief": "GPU アドレスです。",
+                "requirements": [
+                    "MINMAX:0:7",
+                    "NOTNULL"
+                ]
+            }
         },
         {
-            "nameAlias": "オフセット",
-            "variableName": "m_Offset",
-            "doxyBrief": "GPU アドレスです。",
-            "type": "ptrdiff_t",
-            "defaultValue": "",
-            "requirements": [
-                "MINMAX:0:7",
-                "NOTNULL"
-            ]
+            "accessModifier": "private",
+            "variable": {
+                "variableName": "m_Offset",
+                "type": "ptrdiff_t",
+                "defaultValue": "",
+                "nameAlias": "オフセット",
+                "doxyBrief": "GPU アドレスです。",
+                "requirements": [
+                    "MINMAX:0:7",
+                    "NOTNULL"
+                ]
+            }
         }
     ]
 }
