@@ -248,18 +248,8 @@ namespace JsonResource
                         {
                             var variableInfo = new Generator.VariableInfo();
                             variableInfo.VariableName = memberVariable.VariableName;
-                            if(memberVariable.Type.Split('.').Length > 1)
-                            {
-                                var typeDeclaration = Path.GetDirectoryName(descConfig.Item2) + "/" + memberVariable.Type;
-                                var declarationConfig = RootContext.Deserialize<DeclarationConfig>(typeDeclaration);
-                                variableInfo.Type = declarationConfig.Declaration.DefinitionName;
-                                variableInfo.NameAlias = declarationConfig.Declaration.NameAlias;
-                            }
-                            else
-                            {
-                                variableInfo.Type = memberVariable.Type;
-                                variableInfo.NameAlias = memberVariable.NameAlias;
-                            }
+                            variableInfo.Type = memberVariable.Type;
+                            variableInfo.NameAlias = memberVariable.NameAlias;
                             variableInfo.DoxyBrief = memberVariable.DoxyBrief;
                             variableInfo.DefaultValue = memberVariable.DefaultValue;
 
@@ -294,7 +284,7 @@ namespace JsonResource
                         }
 
                         var structGenTuple =
-                            new Tuple<Generator.StructGenerationInfo, Type>(structGenInfo, descConfig.Item3);
+                            new Tuple<Generator.StructGenerationInfo, Type>(structGenInfo, descConfig.Item2);
                         fileInfo.StructGenerationInfos.Add(structGenTuple);
                     }
                     fileInfos.Add(fileInfo);
