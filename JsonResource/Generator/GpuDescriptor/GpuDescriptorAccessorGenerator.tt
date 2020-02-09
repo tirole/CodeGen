@@ -8,10 +8,13 @@
 inline
 void Set<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(<#=Info.Name#>* pDesc, <#=member.Type#> <#=member.VariableName#>)
 {
-    <#if(member.RequirementInfos != null) { #>
-    <#=member.RequirementInfos[0].GetString(member.VariableName) #>
-    <#} #>
-    
+<#if(member.RequirementInfos != null) { #>
+<#foreach(var info in member.RequirementInfos) { #>
+<#if(info.Type != RequirementInfo.RequirementType.NoRequirement) { #>
+    <#=info.GetString(member.VariableName) #>
+<#} #>
+<#} #>
+<#} #>
 <#if((member.BitEnd - member.BitBegin) == 63) { #>
     constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
     auto pOut = reinterpret_cast<<#=member.Type #>*>(&pDesc->data[uint32ArrayIndex]);

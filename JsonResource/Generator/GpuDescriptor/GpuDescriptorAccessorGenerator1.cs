@@ -36,13 +36,16 @@ namespace JsonResource.Generator.GpuDescriptor
             this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
             this.Write(" ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
-            this.Write(")\r\n{\r\n    ");
+            this.Write(")\r\n{\r\n");
 if(member.RequirementInfos != null) { 
+foreach(var info in member.RequirementInfos) { 
+if(info.Type != RequirementInfo.RequirementType.NoRequirement) { 
             this.Write("    ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(member.RequirementInfos[0].GetString(member.VariableName)));
-            this.Write("\r\n    ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.GetString(member.VariableName)));
+            this.Write("\r\n");
 } 
-            this.Write("    \r\n");
+} 
+} 
 if((member.BitEnd - member.BitBegin) == 63) { 
             this.Write("    constexpr int uint32ArrayIndex = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.OffsetIn4ByteUnit));

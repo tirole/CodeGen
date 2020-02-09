@@ -266,8 +266,10 @@ namespace JsonResource
                                 }
                                 var requirementInfo = new Generator.RequirementSdkInfo();
                                 List<string> requirements = new List<string>(requirement.Split(':'));
-                                requirementInfo.Values.AddRange(requirements);
                                 requirementInfo.Type = Generator.RequirementInfo.GetRequirementType(requirements[0]);
+                                // remove first element which shows requirement type.
+                                requirements.RemoveAt(0);
+                                requirementInfo.Values.AddRange(requirements);
                                 variableInfo.RequirementInfos.Add(requirementInfo);
                             }
 

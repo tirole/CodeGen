@@ -13,7 +13,7 @@
             "nameAlias": "ソースオフセット",
             "doxyBrief": "This is srcBufOsset.",
             "requirements": [
-                ""
+                "NOTNULL"
             ],
             "wordOffset": "0",
             "bitRange": "15:0"
@@ -37,7 +37,7 @@
             "nameAlias": "",
             "doxyBrief": "This is srcBufOsset3.",
             "requirements": [
-                ""
+                "LE:8"
             ],
             "wordOffset": "1",
             "bitRange": "31:0"
@@ -49,7 +49,7 @@
             "nameAlias": "クリアカラー",
             "doxyBrief": "This is clear colors.",
             "requirements": [
-                ""
+                "L:16"
             ],
             "wordOffset": "2",
             "bitRange": "127:0"
