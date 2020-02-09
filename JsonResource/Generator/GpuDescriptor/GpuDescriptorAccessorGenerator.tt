@@ -5,6 +5,14 @@
 <#@ import namespace="System.Collections.Generic" #>
 <# // セッター・ゲッター定義 #>
 <#  foreach(var member in Info.MemberVariableInfos) { #>
+<#if((member.BitEnd - member.BitBegin) > 63) { #>
+inline
+void Set<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(<#=Info.Name#>* pDesc, const <#=member.Type#> <#=member.VariableName#>[<#=member.ArrayLength #>])
+{
+    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
+    memcpy(&pDesc->data[uint32ArrayIndex], <#=member.VariableName#>, sizeof(<#=member.Type #>) * <#=member.ArrayLength #>);
+}
+<#}else {#>
 inline
 void Set<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(<#=Info.Name#>* pDesc, <#=member.Type#> <#=member.VariableName#>)
 {
@@ -28,8 +36,16 @@ void Set<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.Variable
     pDesc->data[uint32ArrayIndex] |= (inputVal & mask) << bitOffset;
 <#} #>
 }
+<#} #>
 
+<#if((member.BitEnd - member.BitBegin) > 63) { #>
 inline
+void Get<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(<#=member.Type #> <#=member.VariableName #>[<#=member.ArrayLength #>], const <#=Info.Name #>* pDesc)
+{
+    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
+    memcpy(<#=member.VariableName#>, &pDesc->data[uint32ArrayIndex], sizeof(<#=member.Type #>) * <#=member.ArrayLength #>);
+}
+<#}else {#>
 <#=member.Type #> Get<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(const <#=Info.Name #>* pDesc)
 {
 <#if((member.BitEnd - member.BitBegin) == 63) { #>
@@ -45,5 +61,6 @@ inline
     return outputVal;
 <#} #>
 }
+<#} #>
 
 <#  } #>

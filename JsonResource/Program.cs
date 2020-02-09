@@ -248,7 +248,15 @@ namespace JsonResource
                         {
                             var variableInfo = new Generator.VariableInfo();
                             variableInfo.VariableName = memberVariable.VariableName;
-                            variableInfo.Type = memberVariable.Type;
+                            variableInfo.Type = memberVariable.Type.Split('[')[0];
+                            if(memberVariable.Type.Split('[').Length > 1)
+                            {
+                                variableInfo.ArrayLength = memberVariable.Type.Split('[')[1].Split(']')[0];
+                            }
+                            else
+                            {
+                                variableInfo.ArrayLength = "0";
+                            }
                             variableInfo.NameAlias = memberVariable.NameAlias;
                             variableInfo.DoxyBrief = memberVariable.DoxyBrief;
                             variableInfo.DefaultValue = memberVariable.DefaultValue;
@@ -277,8 +285,8 @@ namespace JsonResource
                             {
                                 variableInfo.HasBitWidthDeclaration = true;
                                 var bitRanges = memberVariable.BitRange.Split(':');
-                                variableInfo.BitBegin = int.Parse(bitRanges[0]);
-                                variableInfo.BitEnd= int.Parse(bitRanges[1]);
+                                variableInfo.BitBegin = int.Parse(bitRanges[1]);
+                                variableInfo.BitEnd = int.Parse(bitRanges[0]);
                                 variableInfo.OffsetIn4ByteUnit = int.Parse(memberVariable.WordOffset);
                             }
 

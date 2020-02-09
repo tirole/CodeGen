@@ -27,6 +27,28 @@ namespace JsonResource.Generator.GpuDescriptor
         {
  // セッター・ゲッター定義 
   foreach(var member in Info.MemberVariableInfos) { 
+if((member.BitEnd - member.BitBegin) > 63) { 
+            this.Write("inline\r\nvoid Set");
+            this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
+            this.Write(this.ToStringHelper.ToStringWithCulture(char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1)));
+            this.Write("(");
+            this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
+            this.Write("* pDesc, const ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
+            this.Write(" ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
+            this.Write("[");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.ArrayLength));
+            this.Write("])\r\n{\r\n    constexpr int uint32ArrayIndex = ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.OffsetIn4ByteUnit));
+            this.Write(";\r\n    memcpy(&pDesc->data[uint32ArrayIndex], ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
+            this.Write(", sizeof(");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
+            this.Write(") * ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.ArrayLength));
+            this.Write(");\r\n}\r\n");
+}else {
             this.Write("inline\r\nvoid Set");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
             this.Write(this.ToStringHelper.ToStringWithCulture(char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1)));
@@ -66,7 +88,31 @@ if((member.BitEnd - member.BitBegin) == 63) {
             this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
             this.Write(");\r\n    pDesc->data[uint32ArrayIndex] |= (inputVal & mask) << bitOffset;\r\n");
 } 
-            this.Write("}\r\n\r\ninline\r\n");
+            this.Write("}\r\n");
+} 
+            this.Write("\r\n");
+if((member.BitEnd - member.BitBegin) > 63) { 
+            this.Write("inline\r\nvoid Get");
+            this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
+            this.Write(this.ToStringHelper.ToStringWithCulture(char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1)));
+            this.Write("(");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
+            this.Write(" ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
+            this.Write("[");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.ArrayLength));
+            this.Write("], const ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
+            this.Write("* pDesc)\r\n{\r\n    constexpr int uint32ArrayIndex = ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.OffsetIn4ByteUnit));
+            this.Write(";\r\n    memcpy(");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
+            this.Write(", &pDesc->data[uint32ArrayIndex], sizeof(");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
+            this.Write(") * ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.ArrayLength));
+            this.Write(");\r\n}\r\n");
+}else {
             this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
             this.Write(" Get");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
@@ -94,7 +140,9 @@ if((member.BitEnd - member.BitBegin) == 63) {
             this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
             this.Write(">((pDesc->data[uint32ArrayIndex] & mask) >> bitOffset);\r\n    return outputVal;\r\n");
 } 
-            this.Write("}\r\n\r\n");
+            this.Write("}\r\n");
+} 
+            this.Write("\r\n");
   } 
             return this.GenerationEnvironment.ToString();
         }
