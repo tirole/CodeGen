@@ -13,14 +13,14 @@ namespace JsonResource
         public FileContext()
         {
             FileConfig = new FileConfig();
-            DescriptorConfigs = new List<Tuple<DescriptorConfig, Type>>();
-            StructConfigs = new List<StructConfig>();
-            EnumConfigs = new List<EnumConfig>();
+            DescriptorConfigs = new List<Tuple<DescriptorConfig, string, Type>>();
+            StructConfigs = new List<Tuple<StructConfig, string>>();
+            EnumConfigs = new List<Tuple<EnumConfig, string>>();
         }
         public FileConfig FileConfig;
-        public List<StructConfig> StructConfigs;
-        public List<EnumConfig> EnumConfigs;
-        public List<Tuple<DescriptorConfig,Type>> DescriptorConfigs;
+        public List<Tuple<StructConfig, string>> StructConfigs;
+        public List<Tuple<EnumConfig, string>> EnumConfigs;
+        public List<Tuple<DescriptorConfig,string,Type>> DescriptorConfigs;
     }
     public class RootContext
     {
@@ -83,17 +83,20 @@ namespace JsonResource
                         if (configType == typeof(EnumConfig))
                         {
                             var config = Deserialize<EnumConfig>(jsonFilePath);
-                            fileContext.EnumConfigs.Add(config);
+                            var tuple = new Tuple<EnumConfig, string>(config, jsonFilePath);
+                            fileContext.EnumConfigs.Add(tuple);
                         }
                         else if (configType == typeof(StructConfig))
                         {
                             var config = Deserialize<StructConfig>(jsonFilePath);
-                            fileContext.StructConfigs.Add(config);
+                            var tuple = new Tuple<StructConfig, string>(config, jsonFilePath);
+                            fileContext.StructConfigs.Add(tuple);
                         }
                         else if(configType == typeof(DescriptorConfig))
                         {
                             var config = Deserialize<DescriptorConfig>(jsonFilePath);
-                            fileContext.DescriptorConfigs.Add(new Tuple<DescriptorConfig, Type>(config, generatorType));
+                            var tuple = new Tuple<DescriptorConfig, string, Type>(config, jsonFilePath, generatorType);
+                            fileContext.DescriptorConfigs.Add(tuple);
                         }
                         else
                         {

@@ -180,7 +180,6 @@ namespace JsonResource
                     File.WriteAllText(outputPath, output);
                 }
             }
-
         }
     }
 
@@ -242,9 +241,6 @@ namespace JsonResource
                     for(int i = 0; i < fileContext.DescriptorConfigs.Count; ++i)
                     {
                         var descConfig = fileContext.DescriptorConfigs[i];
-                        string descJsonPath =
-                            RootContext.RootConfigDirectoryName + "/" +
-                            fileConfig.DefinitionConfigs[i].Path;
 
                         var structGenInfo = new Generator.StructGenerationInfo();
                         structGenInfo.Name = descConfig.Item1.Declaration.DefinitionName;
@@ -254,7 +250,8 @@ namespace JsonResource
                             variableInfo.VariableName = memberVariable.VariableName;
                             if(memberVariable.Type.Split('.').Length > 1)
                             {
-                                var declarationConfig = RootContext.Deserialize<DeclarationConfig>(descJsonPath);
+                                var typeDeclaration = Path.GetDirectoryName(descConfig.Item2) + "/" + memberVariable.Type;
+                                var declarationConfig = RootContext.Deserialize<DeclarationConfig>(typeDeclaration);
                                 variableInfo.Type = declarationConfig.Declaration.DefinitionName;
                                 variableInfo.NameAlias = declarationConfig.Declaration.NameAlias;
                             }
@@ -297,7 +294,7 @@ namespace JsonResource
                         }
 
                         var structGenTuple =
-                            new Tuple<Generator.StructGenerationInfo, Type>(structGenInfo, descConfig.Item2);
+                            new Tuple<Generator.StructGenerationInfo, Type>(structGenInfo, descConfig.Item3);
                         fileInfo.StructGenerationInfos.Add(structGenTuple);
                     }
                     fileInfos.Add(fileInfo);
