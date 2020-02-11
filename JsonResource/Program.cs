@@ -118,9 +118,15 @@ namespace JsonResource
             }
 
             // RootContext and FileInfoBuilder Test
+            List<string> RootConfigPaths = new List<string>
             {
-                //string path = @"D:\prj\software\codegeneration\JsonResource\Resources\GpuDescriptors\RootConfig.json";
-                string path = @"D:\prj\software\codegeneration\JsonResource\Resources\GpuEnum\RootConfig.json";
+                @"D:\prj\software\codegeneration\JsonResource\Resources\GpuDescriptors\RootConfig.json",
+                @"D:\prj\software\codegeneration\JsonResource\Resources\GpuEnum\RootConfig.json"
+            };
+
+            foreach(var rootConfigPath in RootConfigPaths)
+            {
+                string path = rootConfigPath;
                 var rootCtx = new RootContext(path);
                 var fileInfos = new List<FileInfo>();
                 var builder = new FileInfoBuilder(rootCtx);
