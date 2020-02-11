@@ -48,6 +48,7 @@
     <Compile Include="Configs\General\EnumConfig.cs" />
     <Compile Include="Configs\General\RootConfig.cs" />
     <Compile Include="Configs\GpuDescriptor\DescriptorConfig.cs" />
+    <Compile Include="FileInfoBuilder.cs" />
     <Compile Include="Generator\EnumGenerationInfo.cs" />
     <Compile Include="Generator\EnumGenerator.cs" />
     <Compile Include="Generator\EnumGenerator1.cs">
