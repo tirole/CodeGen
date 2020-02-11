@@ -2,7 +2,8 @@
     "commonFileConfig": {
         "copyright": "../copyright.txt",
         "includeFiles": [
-            "<stdint.h>"
+            "<cstdint>",
+            "\"my_Enum.h\""
         ],
         "namespace": "my::detail",
         "customDeserializerConfigs": [

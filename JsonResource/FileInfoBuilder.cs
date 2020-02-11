@@ -50,6 +50,11 @@ namespace JsonResource
                         fileInfo.StructGenerationInfos = new List<Tuple<Generator.StructGenerationInfo, Type>>();
                     }
 
+                    if (fileContext.EnumConfigs.Count != 0)
+                    {
+                        fileInfo.EnumGenerationInfos = new List<Generator.EnumGenerationInfo>();
+                    }
+
                     // fileInfo.StructGenerationInfos
                     for (int i = 0; i < fileContext.DescriptorConfigs.Count; ++i)
                     {
@@ -110,6 +115,29 @@ namespace JsonResource
                             new Tuple<Generator.StructGenerationInfo, Type>(structGenInfo, descConfig.Item2);
                         fileInfo.StructGenerationInfos.Add(structGenTuple);
                     }
+
+                    // fileInfo.EnumGenerationInfos
+                    for (int i = 0; i < fileContext.EnumConfigs.Count; ++i)
+                    {
+                        var enumConfig = fileContext.EnumConfigs[i];
+
+                        var enumGenInfo = new Generator.EnumGenerationInfo();
+                        enumGenInfo.EnumName = enumConfig.Declaration.DefinitionName;
+                        enumGenInfo.DoxyBrief = enumConfig.Declaration.DoxyBrief;
+                        enumGenInfo.EnumBase = enumConfig.EnumBase;
+                        enumGenInfo.EnumKey = enumConfig.Declaration.DefinitionType;
+
+                        foreach (var enumerator in enumConfig.Enumerators)
+                        {
+                            var enumeratorInfo = new Generator.EnumeratorInfo();
+                            enumeratorInfo.Name = enumerator.Name;
+                            enumeratorInfo.Value = enumerator.Value;
+                            enumeratorInfo.DoxyBrief = enumerator.DoxyBrief;
+                            enumGenInfo.EnumeratorInfos.Add(enumeratorInfo);
+                        }
+                        fileInfo.EnumGenerationInfos.Add(enumGenInfo);
+                    }
+
                     fileInfos.Add(fileInfo);
                 }
             }

@@ -3,12 +3,12 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<# if (Info.DoxyBrief != "") { #>
+<# if (Info.DoxyBrief != null && Info.DoxyBrief != "") { #>
 /*
  * @brief    <#=Info.DoxyBrief#>
  */
 <# }#><##>
-<#=Info.EnumKey#> <#=Info.EnumName#> <#=Info.EnumBase#>
+<#=Info.EnumKey#> <#=Info.EnumName#> : <#=Info.EnumBase#>
 {
 <#  foreach(var enumInfo in Info.EnumeratorInfos) { #>
 <# if (enumInfo.DoxyBrief != null && enumInfo.DoxyBrief != "") { #>

@@ -2,7 +2,7 @@
     "commonFileConfig": {
         "copyright": "../copyright.txt",
         "includeFiles": [
-            "<stdint.h>"
+            "<cstdint>"
         ],
         "namespace": "my::detail"
     },
@@ -13,10 +13,6 @@
                 {
                     "name":"",
                     "path":"Definitions/CompressionMode.json"
-                },
-                {
-                    "name":"",
-                    "path":"Definitions/Format.json"
                 }
             ]
         }

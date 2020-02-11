@@ -4,6 +4,7 @@
 #include "../../CommaSeparatedResource\Output/TextureDescriptor.h"
 
 #include "../../JsonResource/Outputs/my_RenderTargetDescriptor.h"
+#include "../../JsonResource/Outputs/my_Enum.h"
 
 #define TEST_EQ(val1, val2)\
 {\
@@ -39,7 +40,7 @@ int main()
 		my::detail::SetRendeerTargetDescriptorClearColors( pDesc, colors );
 		my::detail::SetRendeerTargetDescriptorSrcBufOsset( pDesc, 5 );
 		my::detail::SetRendeerTargetDescriptorSrcBufOsset2( pDesc, 6 );
-		my::detail::SetRendeerTargetDescriptorSrcBufOsset3( pDesc, my::detail::CompressionMode::Low );
+		my::detail::SetRendeerTargetDescriptorSrcBufOsset3( pDesc, my::detail::CompressionMode::Block );
 		int32_t outColors[4] = {};
 		my::detail::GetRendeerTargetDescriptorClearColors( outColors, pDesc );
 		for(int i = 0; i < 4; ++i)
@@ -48,7 +49,7 @@ int main()
 		}
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset( pDesc ), 5 );
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset2( pDesc ), 6 );
-		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset3( pDesc ), my::detail::CompressionMode::Low );
+		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset3( pDesc ), my::detail::CompressionMode::Block );
 	}
 
 	return 0;

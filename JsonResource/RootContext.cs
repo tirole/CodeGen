@@ -60,13 +60,16 @@ namespace JsonResource
                         Type generatorType = null;
 
                         // search custom deserializer
-                        foreach (var customDeserializerConfig in RootConfig.CommonFileConfig.CustomDeserializerConfigs)
+                        if (RootConfig.CommonFileConfig.CustomDeserializerConfigs != null)
                         {
-                            if(customDeserializerConfig.DefinitionName == definitionConfig.DefinitionName)
+                            foreach (var customDeserializerConfig in RootConfig.CommonFileConfig.CustomDeserializerConfigs)
                             {
-                                configType = GetCustomDeserializerType(customDeserializerConfig.DeserializerType);
-                                generatorType = GetCustomGeneratorType(customDeserializerConfig.GeneratorType);
-                                break;
+                                if (customDeserializerConfig.DefinitionName == definitionConfig.DefinitionName)
+                                {
+                                    configType = GetCustomDeserializerType(customDeserializerConfig.DeserializerType);
+                                    generatorType = GetCustomGeneratorType(customDeserializerConfig.GeneratorType);
+                                    break;
+                                }
                             }
                         }
 

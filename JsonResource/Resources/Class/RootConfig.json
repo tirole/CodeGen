@@ -2,7 +2,7 @@
     "commonFileConfig": {
         "copyright": "../copyright.txt",
         "includeFiles": [
-            "<stdint.h>"
+            "<cstdint>"
         ],
         "namespace": "my::detail"
     },

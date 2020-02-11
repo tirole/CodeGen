@@ -25,7 +25,7 @@ namespace JsonResource.Generator
         /// </summary>
         public virtual string TransformText()
         {
- if (Info.DoxyBrief != "") { 
+ if (Info.DoxyBrief != null && Info.DoxyBrief != "") { 
             this.Write("/*\r\n * @brief    ");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.DoxyBrief));
             this.Write("\r\n */\r\n");
@@ -33,7 +33,7 @@ namespace JsonResource.Generator
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.EnumKey));
             this.Write(" ");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.EnumName));
-            this.Write(" ");
+            this.Write(" : ");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.EnumBase));
             this.Write("\r\n{\r\n");
   foreach(var enumInfo in Info.EnumeratorInfos) { 
