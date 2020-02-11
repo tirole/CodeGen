@@ -133,7 +133,7 @@ namespace JsonResource
 
                     foreach (var include in fileInfo.Includes)
                     {
-                        output += include;
+                        output += "#include " + include;
                         output += "\n";
                     }
 
