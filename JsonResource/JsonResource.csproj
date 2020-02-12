@@ -44,11 +44,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configs\General\ClassConfig.cs" />
     <Compile Include="Configs\General\DeclarationCommonConfig.cs" />
     <Compile Include="Configs\General\EnumConfig.cs" />
+    <Compile Include="Configs\General\FunctionConfig.cs" />
     <Compile Include="Configs\General\RootConfig.cs" />
     <Compile Include="Configs\GpuDescriptor\DescriptorConfig.cs" />
     <Compile Include="FileInfoBuilder.cs" />
+    <Compile Include="Generator\ClassGenerationInfo.cs" />
+    <Compile Include="Generator\ClassGenerator.cs" />
+    <Compile Include="Generator\ClassGenerator1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClassGenerator.tt</DependentUpon>
+    </Compile>
     <Compile Include="Generator\EnumGenerationInfo.cs" />
     <Compile Include="Generator\EnumGenerator.cs" />
     <Compile Include="Generator\EnumGenerator1.cs">
@@ -56,6 +65,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EnumGenerator.tt</DependentUpon>
     </Compile>
+    <Compile Include="Generator\FunctionInfo.cs" />
     <Compile Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator.cs" />
     <Compile Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator1.cs">
       <AutoGen>True</AutoGen>
@@ -68,6 +78,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GpuDescriptorStructGenerator.tt</DependentUpon>
     </Compile>
+    <Compile Include="Generator\MemberFunctionInfo.cs" />
+    <Compile Include="Generator\MemberVariableInfo.cs" />
     <Compile Include="Generator\RequirementSdkInfo.cs" />
     <Compile Include="Generator\StructGenerator.cs" />
     <Compile Include="Generator\StructGenerator1.cs">
@@ -88,6 +100,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Generator\ClassGenerator.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ClassGenerator1.cs</LastGenOutput>
+    </Content>
     <Content Include="Generator\EnumGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>EnumGenerator1.cs</LastGenOutput>

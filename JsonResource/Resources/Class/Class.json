@@ -1,11 +1,10 @@
 {
     "declaration": {
-        "doxyBrief": "This is simple class.",
         "definitionType": "class",
         "definitionName": "SimpleClass",
+        "doxyBrief": "This is simple class.",
         "nameAlias": "シンプルなクラス"
     },
-    "isDefineAccessor": "true",
     "memberFunctions": [
         {
             "accessModifier": "public",
@@ -36,7 +35,6 @@
                 "isInline": false,
                 "doxyBrief": "何もしません。",
                 "returnType": "void",
-                "defaultValue": "",
                 "arguments": [
                     {
                         "variableName": "offset",
@@ -56,6 +54,9 @@
     "memberVariables": [
         {
             "accessModifier": "private",
+            "isDefineAccessor":true,
+            "isInlineAccessor" : true,
+            "isAccessorReturnThis" : true,
             "variable": {
                 "variableName": "m_GpuAddres",
                 "type": "GpuAddress",
@@ -70,6 +71,9 @@
         },
         {
             "accessModifier": "private",
+            "isDefineAccessor":true,
+            "isInlineAccessor" : true,
+            "isAccessorReturnThis" : true,
             "variable": {
                 "variableName": "m_Offset",
                 "type": "ptrdiff_t",

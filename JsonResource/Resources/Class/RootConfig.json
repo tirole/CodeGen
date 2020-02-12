@@ -8,7 +8,7 @@
     },
     "fileConfigs": [
         {
-            "outputFileName": "my_SimpleStruct",
+            "outputFileName": "my_SimpleClass",
             "definitions": [
                 {
                     "name":"",

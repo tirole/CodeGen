@@ -55,6 +55,11 @@ namespace JsonResource
                         fileInfo.EnumGenerationInfos = new List<Generator.EnumGenerationInfo>();
                     }
 
+                    if (fileContext.ClassConfigs.Count != 0)
+                    {
+                        fileInfo.ClassGenerationInfos = new List<Generator.ClassGenerationInfo>();
+                    }
+
                     // fileInfo.StructGenerationInfos
                     for (int i = 0; i < fileContext.DescriptorConfigs.Count; ++i)
                     {
@@ -65,39 +70,8 @@ namespace JsonResource
                         foreach (var memberVariable in descConfig.Item1.memberVariables)
                         {
                             var variableInfo = new Generator.VariableInfo();
-                            variableInfo.VariableName = memberVariable.VariableName;
-                            variableInfo.Type = memberVariable.Type.Split('[')[0];
-                            if (memberVariable.Type.Split('[').Length > 1)
-                            {
-                                variableInfo.ArrayLength = memberVariable.Type.Split('[')[1].Split(']')[0];
-                            }
-                            else
-                            {
-                                variableInfo.ArrayLength = "0";
-                            }
-                            variableInfo.NameAlias = memberVariable.NameAlias;
-                            variableInfo.DoxyBrief = memberVariable.DoxyBrief;
-                            variableInfo.DefaultValue = memberVariable.DefaultValue;
 
-                            if (memberVariable.Requirements != null)
-                            {
-                                variableInfo.RequirementInfos = new List<Generator.RequirementInfo>();
-                            }
-
-                            foreach (var requirement in memberVariable.Requirements)
-                            {
-                                if (requirement == null && requirement == "")
-                                {
-                                    continue;
-                                }
-                                var requirementInfo = new Generator.RequirementSdkInfo();
-                                List<string> requirements = new List<string>(requirement.Split(':'));
-                                requirementInfo.Type = Generator.RequirementInfo.GetRequirementType(requirements[0]);
-                                // remove first element which shows requirement type.
-                                requirements.RemoveAt(0);
-                                requirementInfo.Values.AddRange(requirements);
-                                variableInfo.RequirementInfos.Add(requirementInfo);
-                            }
+                            this.SetVariableInfo(variableInfo, memberVariable);
 
                             if ((memberVariable.WordOffset != null) && (memberVariable.WordOffset != ""))
                             {
@@ -138,8 +112,94 @@ namespace JsonResource
                         fileInfo.EnumGenerationInfos.Add(enumGenInfo);
                     }
 
+                    // fileInfo.ClassGenerationInfos
+                    for (int i = 0; i < fileContext.ClassConfigs.Count; ++i)
+                    {
+                        var classConfig = fileContext.ClassConfigs[i];
+
+                        var classGenInfo = new Generator.ClassGenerationInfo();
+                        classGenInfo.Name = classConfig.Declaration.DefinitionName;
+                        classGenInfo.DoxyBrief = classConfig.Declaration.DoxyBrief;
+
+                        foreach (var config in classConfig.MemberFunctionConfigs)
+                        {
+                            var memberFunctionInfo = new Generator.MemberFunctionInfo();
+                            memberFunctionInfo.AccessModifier = config.AccessModifier;
+                            memberFunctionInfo.DoxyBrief = config.FunctionConfig.DoxyBrief;
+                            memberFunctionInfo.FunctionName = config.FunctionConfig.FunctionName;
+                            memberFunctionInfo.IsInline = config.FunctionConfig.IsInline;
+                            memberFunctionInfo.ReturnType = config.FunctionConfig.ReturnType;
+
+                            foreach (var argConfig in config.FunctionConfig.ArgumentConfigs)
+                            {
+                                var argInfo = new Generator.VariableInfo();
+                                this.SetVariableInfo(argInfo, argConfig);
+                                memberFunctionInfo.ArgumentInfos.Add(argInfo);
+                            }
+
+                            classGenInfo.AddMemberFunctionInfo(memberFunctionInfo);
+                        }
+
+                        foreach (var config in classConfig.MemberVariableConfigs)
+                        {
+                            var memberVariableInfo = new Generator.MemberVariableInfo();
+                            this.SetVariableInfo(memberVariableInfo, config.VariableConfig);
+                            memberVariableInfo.AccessModifier = config.AccessModifier;
+                            memberVariableInfo.IsDefineAccessor = config.IsDefineAccessor;
+                            memberVariableInfo.IsInlineAccessor = config.IsInlineAccessor;
+                            memberVariableInfo.IsAccessorReturnThis = config.IsAccessorReturnThis;
+
+                            int idxOfFirstUpperCase = 0;
+                            foreach (Char c in config.VariableConfig.VariableName)
+                            {
+                                if (Char.IsUpper(c)) break;
+                                ++idxOfFirstUpperCase;
+                            }
+                            memberVariableInfo.AccessorName = config.VariableConfig.VariableName.Substring(idxOfFirstUpperCase);
+                            classGenInfo.AddMemberVariableInfo(memberVariableInfo);
+                        }
+
+                        fileInfo.ClassGenerationInfos.Add(classGenInfo);
+                    }
+
                     fileInfos.Add(fileInfo);
                 }
+            }
+        }
+        private void SetVariableInfo(Generator.VariableInfo variableInfo, VariableConfig config)
+        {
+            variableInfo.VariableName = config.VariableName;
+            variableInfo.Type = config.Type.Split('[')[0];
+            if (config.Type.Split('[').Length > 1)
+            {
+                variableInfo.ArrayLength = config.Type.Split('[')[1].Split(']')[0];
+            }
+            else
+            {
+                variableInfo.ArrayLength = "0";
+            }
+            variableInfo.NameAlias = config.NameAlias;
+            variableInfo.DoxyBrief = config.DoxyBrief;
+            variableInfo.DefaultValue = config.DefaultValue;
+
+            if (config.Requirements != null)
+            {
+                variableInfo.RequirementInfos = new List<Generator.RequirementInfo>();
+            }
+
+            foreach (var requirement in config.Requirements)
+            {
+                if (requirement == null && requirement == "")
+                {
+                    continue;
+                }
+                var requirementInfo = new Generator.RequirementSdkInfo();
+                List<string> requirements = new List<string>(requirement.Split(':'));
+                requirementInfo.Type = Generator.RequirementInfo.GetRequirementType(requirements[0]);
+                // remove first element which shows requirement type.
+                requirements.RemoveAt(0);
+                requirementInfo.Values.AddRange(requirements);
+                variableInfo.RequirementInfos.Add(requirementInfo);
             }
         }
     }

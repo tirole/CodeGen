@@ -16,11 +16,13 @@ namespace JsonResource
             DescriptorConfigs = new List<Tuple<DescriptorConfig, Type>>();
             StructConfigs = new List<StructConfig>();
             EnumConfigs = new List<EnumConfig>();
+            ClassConfigs = new List<ClassConfig>();
         }
         public FileConfig FileConfig;
         public List<StructConfig> StructConfigs;
         public List<EnumConfig> EnumConfigs;
         public List<Tuple<DescriptorConfig,Type>> DescriptorConfigs;
+        public List<ClassConfig> ClassConfigs;
     }
     public class RootContext
     {
@@ -98,6 +100,11 @@ namespace JsonResource
                             var config = Deserialize<DescriptorConfig>(jsonFilePath);
                             fileContext.DescriptorConfigs.Add(new Tuple<DescriptorConfig, Type>(config, generatorType));
                         }
+                        else if (configType == typeof(ClassConfig))
+                        {
+                            var config = Deserialize<ClassConfig>(jsonFilePath);
+                            fileContext.ClassConfigs.Add(config);
+                        }
                         else
                         {
                             throw new System.InvalidOperationException("Couldn't find proper deserializer type.");
@@ -140,6 +147,7 @@ namespace JsonResource
             { 
                 new Tuple<string, Type>("enum class", typeof(EnumConfig)) ,
                 new Tuple<string, Type>("struct", typeof(StructConfig)),
+                new Tuple<string, Type>("class", typeof(ClassConfig)),
             };
             foreach (var deserializerType in deserializerTypes)
             {

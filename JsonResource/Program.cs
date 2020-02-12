@@ -120,8 +120,9 @@ namespace JsonResource
             // RootContext and FileInfoBuilder Test
             List<string> RootConfigPaths = new List<string>
             {
-                @"D:\prj\software\codegeneration\JsonResource\Resources\GpuDescriptors\RootConfig.json",
-                @"D:\prj\software\codegeneration\JsonResource\Resources\GpuEnum\RootConfig.json"
+                @"D:\prj\software\codegeneration\JsonResource\Resources\Class\RootConfig.json",
+                //@"D:\prj\software\codegeneration\JsonResource\Resources\GpuDescriptors\RootConfig.json",
+                //@"D:\prj\software\codegeneration\JsonResource\Resources\GpuEnum\RootConfig.json"
             };
 
             foreach(var rootConfigPath in RootConfigPaths)
@@ -193,6 +194,16 @@ namespace JsonResource
                         }
                     }
 
+                    // fileInfo.ClassGenerationInfos
+                    if (fileInfo.ClassGenerationInfos != null)
+                    {
+                        foreach (var info in fileInfo.ClassGenerationInfos)
+                        {
+                            var generator = new Generator.ClassGenerator(info);
+                            output += generator.TransformText(); output += "\n\n";
+                        }
+                    }
+
                     foreach (var namespaceName in fileInfo.NameSpaces)
                     {
                         output += "}";
@@ -217,5 +228,6 @@ namespace JsonResource
         public List<Tuple<Generator.StructGenerationInfo, Type>> StructGenerationInfos;
         public List<Generator.VariableInfo> VariableInfo;
         public List<Generator.EnumGenerationInfo> EnumGenerationInfos;
+        public List<Generator.ClassGenerationInfo> ClassGenerationInfos;
     }
 }
