@@ -85,6 +85,23 @@
                     "NOTNULL"
                 ]
             }
+        },
+        {
+            "accessModifier": "private",
+            "isDefineAccessor":true,
+            "isInlineAccessor" : true,
+            "isAccessorReturnThis" : true,
+            "variable": {
+                "variableName": "m_CompressionMode",
+                "type": "../GpuEnum/Definitions/CompressionMode.json",
+                "defaultValue": "",
+                "nameAlias": "",
+                "doxyBrief": "GPU アドレスです。",
+                "requirements": [
+                    "MINMAX:0:7",
+                    "NOTNULL"
+                ]
+            }
         }
     ]
 }
