@@ -89,7 +89,7 @@
         {
             "accessModifier": "private",
             "isDefineAccessor":true,
-            "isInlineAccessor" : true,
+            "isInlineAccessor" : false,
             "isAccessorReturnThis" : true,
             "variable": {
                 "variableName": "m_CompressionMode",
@@ -97,6 +97,57 @@
                 "defaultValue": "",
                 "nameAlias": "",
                 "doxyBrief": "GPU アドレスです。",
+                "requirements": [
+                    "MINMAX:0:7",
+                    "NOTNULL"
+                ]
+            }
+        },
+        {
+            "accessModifier": "public",
+            "isDefineAccessor":false,
+            "isInlineAccessor" : false,
+            "isAccessorReturnThis" : false,
+            "variable": {
+                "variableName": "m_PubcliMember",
+                "type": "int",
+                "defaultValue": "",
+                "nameAlias": "",
+                "doxyBrief": "パブリックメンバーです。",
+                "requirements": [
+                    "MINMAX:0:7",
+                    "NOTNULL"
+                ]
+            }
+        },
+        {
+            "accessModifier": "public",
+            "isDefineAccessor":true,
+            "isInlineAccessor" : true,
+            "isAccessorReturnThis" : false,
+            "variable": {
+                "variableName": "m_PubcliMember2",
+                "type": "int",
+                "defaultValue": "",
+                "nameAlias": "",
+                "doxyBrief": "パブリックメンバーです。",
+                "requirements": [
+                    "MINMAX:0:7",
+                    "NOTNULL"
+                ]
+            }
+        },
+        {
+            "accessModifier": "public",
+            "isDefineAccessor":true,
+            "isInlineAccessor" : false,
+            "isAccessorReturnThis" : false,
+            "variable": {
+                "variableName": "m_PubcliMember3",
+                "type": "int",
+                "defaultValue": "",
+                "nameAlias": "",
+                "doxyBrief": "パブリックメンバーです。",
                 "requirements": [
                     "MINMAX:0:7",
                     "NOTNULL"

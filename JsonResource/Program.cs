@@ -204,6 +204,16 @@ namespace JsonResource
                         }
                     }
 
+                    // fileInfo.FunctionGenerationInfos
+                    if (fileInfo.FunctionGenerationInfos != null)
+                    {
+                        foreach (var info in fileInfo.FunctionGenerationInfos)
+                        {
+                            var generator = new Generator.FunctionGenerator(info);
+                            output += generator.TransformText(); output += "\n";
+                        }
+                    }
+
                     foreach (var namespaceName in fileInfo.NameSpaces)
                     {
                         output += "}";
@@ -229,5 +239,13 @@ namespace JsonResource
         public List<Generator.VariableInfo> VariableInfo;
         public List<Generator.EnumGenerationInfo> EnumGenerationInfos;
         public List<Generator.ClassGenerationInfo> ClassGenerationInfos;
+        public List<Generator.FunctionGenerationInfo> FunctionGenerationInfos;
+        public bool IsEmpty()
+        {
+            return 
+                (StructGenerationInfos == null) && (VariableInfo == null) && 
+                (EnumGenerationInfos == null) && (ClassGenerationInfos == null) && 
+                (FunctionGenerationInfos == null);
+    }
     }
 }

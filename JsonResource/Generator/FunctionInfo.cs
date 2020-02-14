@@ -17,6 +17,7 @@ namespace JsonResource.Generator
         public bool IsInline;
         public string DoxyBrief;
         public string ReturnType;
+        public string StringAfterArgument;
         public List<VariableInfo> ArgumentInfos;
     }
 }

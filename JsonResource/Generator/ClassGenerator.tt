@@ -31,9 +31,9 @@ public:
     <#  } #>
 <#  } else { #>
 <#if(info.IsAccessorReturnThis) {#>
-<#=Info.Name #>& Set<#=info.AccessorName #>(<#=info.Type#> <#=char.ToLower(info.AccessorName[0]) + info.AccessorName.Substring(1) #>);
+    <#=Info.Name #>& Set<#=info.AccessorName #>(<#=info.Type#> <#=char.ToLower(info.AccessorName[0]) + info.AccessorName.Substring(1) #>);
 <#  } else { #>
-void Set<#=info.AccessorName #>(<#=info.Type#> <#=char.ToLower(info.AccessorName[0]) + info.AccessorName.Substring(1) #>);
+    void Set<#=info.AccessorName #>(<#=info.Type#> <#=char.ToLower(info.AccessorName[0]) + info.AccessorName.Substring(1) #>);
 <#  } #>
 <#  } #>
 <#  } #>
@@ -51,9 +51,9 @@ void Set<#=info.AccessorName #>(<#=info.Type#> <#=char.ToLower(info.AccessorName
     }
 <#  } else { #>
 <#if(info.IsAccessorReturnThis) {#>
-<#=Info.Name #>& Set<#=info.AccessorName #>(<#=info.Type#> <#=char.ToLower(info.AccessorName[0]) + info.AccessorName.Substring(1) #>);
+    <#=Info.Name #>& Get<#=info.AccessorName #>(<#=info.Type#> <#=char.ToLower(info.AccessorName[0]) + info.AccessorName.Substring(1) #>);
 <#  } else { #>
-<#=info.Type#> Get<#=info.AccessorName #>() const;
+    <#=info.Type#> Get<#=info.AccessorName #>() const;
 <#  } #>
 <#  } #>
 <#  } #>

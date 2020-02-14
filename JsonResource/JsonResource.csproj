@@ -65,6 +65,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EnumGenerator.tt</DependentUpon>
     </Compile>
+    <Compile Include="Generator\FunctionGenerationInfo.cs" />
+    <Compile Include="Generator\FunctionGenerator.cs" />
+    <Compile Include="Generator\FunctionGenerator1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FunctionGenerator.tt</DependentUpon>
+    </Compile>
     <Compile Include="Generator\FunctionInfo.cs" />
     <Compile Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator.cs" />
     <Compile Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator1.cs">
@@ -107,6 +114,10 @@
     <Content Include="Generator\EnumGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>EnumGenerator1.cs</LastGenOutput>
+    </Content>
+    <Content Include="Generator\FunctionGenerator.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>FunctionGenerator1.cs</LastGenOutput>
     </Content>
     <Content Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

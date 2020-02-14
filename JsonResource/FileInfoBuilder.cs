@@ -16,8 +16,11 @@ namespace JsonResource
         public void BuildFileInfo(List<FileInfo> fileInfos)
         {
             var fileInfo = new FileInfo();
+            var fileInfoCpp = new FileInfo();
+
             {
                 fileInfo.Copyright = RootContext.Copyright;
+                fileInfoCpp.Copyright = RootContext.Copyright;
 
                 // RootConfig.CommonFileConfig
                 {
@@ -31,8 +34,8 @@ namespace JsonResource
                 foreach (var fileContext in RootContext.FileContexts)
                 {
                     var fileConfig = fileContext.FileConfig;
-                    // TODO: .cpp 対応
                     fileInfo.OutputFileName = fileConfig.OutputFileName.Split('.')[0] + ".h";
+                    fileInfoCpp.OutputFileName = fileConfig.OutputFileName.Split('.')[0] + ".cpp";
 
                     if (fileConfig.IncludeFiles != null)
                     {
@@ -58,6 +61,18 @@ namespace JsonResource
                     if (fileContext.ClassConfigs.Count != 0)
                     {
                         fileInfo.ClassGenerationInfos = new List<Generator.ClassGenerationInfo>();
+                    }
+
+                    {
+                        string include = "<";
+                        foreach (var namespaceName in fileInfo.NameSpaces)
+                        {
+                            include += namespaceName + "/";
+                        }
+                        include += fileInfo.OutputFileName + ">";
+                        fileInfoCpp.Includes = new List<string>();
+                        fileInfoCpp.Includes.Add(include);
+                        fileInfoCpp.NameSpaces = fileInfo.NameSpaces;
                     }
 
                     // fileInfo.StructGenerationInfos
@@ -157,12 +172,57 @@ namespace JsonResource
                             }
                             memberVariableInfo.AccessorName = config.VariableConfig.VariableName.Substring(idxOfFirstUpperCase);
                             classGenInfo.AddMemberVariableInfo(memberVariableInfo);
+
+                            if(memberVariableInfo.IsDefineAccessor && memberVariableInfo.IsInlineAccessor)
+                            {
+                                if (fileInfoCpp.FunctionGenerationInfos == null)
+                                {
+                                    fileInfoCpp.FunctionGenerationInfos = new List<Generator.FunctionGenerationInfo>();
+                                }
+
+                                {
+                                    // アクセサについても隠している時点で自分で実装したいのでスケルトンを cpp に出力する。
+                                    var funcGen = new Generator.FunctionGenerationInfo();
+                                    funcGen.IsDeclaration = false;
+                                    var skeltonDefinition = funcGen.FunctionInfo;
+                                    skeltonDefinition.FunctionName =
+                                        classGenInfo.Name + "::" + "Get" + memberVariableInfo.AccessorName;
+                                    skeltonDefinition.StringAfterArgument = "const";
+                                    if (memberVariableInfo.IsAccessorReturnThis)
+                                    {
+                                        skeltonDefinition.ReturnType = classGenInfo.Name + "&";
+                                    }
+                                    else
+                                    {
+                                        skeltonDefinition.ReturnType = "void";
+                                    }
+                                    fileInfoCpp.FunctionGenerationInfos.Add(funcGen);
+                                }
+
+                                // setter
+                                {
+                                    // アクセサについても隠している時点で自分で実装したいのでスケルトンを cpp に出力する。
+                                    var funcGen = new Generator.FunctionGenerationInfo();
+                                    funcGen.IsDeclaration = false;
+                                    var skeltonDefinition = funcGen.FunctionInfo;
+                                    skeltonDefinition.FunctionName =
+                                        classGenInfo.Name + "::" + "Set" + memberVariableInfo.AccessorName;
+                                    skeltonDefinition.StringAfterArgument = "";
+                                    skeltonDefinition.ReturnType = "void";
+                                    skeltonDefinition.ArgumentInfos.Add((Generator.VariableInfo)memberVariableInfo);
+                                    fileInfoCpp.FunctionGenerationInfos.Add(funcGen);
+                                }
+                            }
                         }
 
                         fileInfo.ClassGenerationInfos.Add(classGenInfo);
                     }
 
                     fileInfos.Add(fileInfo);
+                    if (!fileInfoCpp.IsEmpty())
+                    {
+                        fileInfos.Add(fileInfoCpp);
+                    }
                 }
             }
         }

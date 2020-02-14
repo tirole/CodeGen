@@ -1,0 +1,34 @@
+﻿<#@ template language="C#" linePragmas="false" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#  var info = Info.FunctionInfo; 
+    var stringAfterArgument = "";
+    if(info.StringAfterArgument != "")
+    {
+        stringAfterArgument = " " + info.StringAfterArgument;
+    }
+#>
+<#if(info.IsInline) {#>
+inline
+<#} #>
+<#if(Info.IsDeclaration) {#>
+<#=info.ReturnType #> <#=info.FunctionName #>(<#  
+        for(int i = 0; i < info.ArgumentInfos.Count; ++ i) { #>
+<#=info.ArgumentInfos[i].Type #> <#=info.ArgumentInfos[i].VariableName #><#
+            if(i != info.ArgumentInfos.Count - 1) { #>
+, 
+<#} #>
+<#        } #>)<#=stringAfterArgument #>;
+<#    } else { #>
+<#=info.ReturnType #> <#=info.FunctionName #>(<#  
+        for(int i = 0; i < info.ArgumentInfos.Count; ++ i) { #>
+<#=info.ArgumentInfos[i].Type #> <#=info.ArgumentInfos[i].VariableName #><#
+            if(i != info.ArgumentInfos.Count - 1) { #>
+, 
+<#} #>
+<#        } #>)<#=stringAfterArgument #>
+{
+}
+<#    } #>

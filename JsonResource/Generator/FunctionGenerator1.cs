@@ -18,125 +18,60 @@ namespace JsonResource.Generator
     /// Class to produce the template output
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class ClassGenerator : ClassGeneratorBase
+    public partial class FunctionGenerator : FunctionGeneratorBase
     {
         /// <summary>
         /// Create the template output
         /// </summary>
         public virtual string TransformText()
         {
- if (Info.DoxyBrief != null && Info.DoxyBrief != "") { 
-            this.Write("/*\r\n * @brief    ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(Info.DoxyBrief));
-            this.Write("\r\n */\r\n");
- }
-            this.Write("class ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
-            this.Write("\r\n{\r\npublic:\r\n");
-    foreach(var info in Info.PublicMemberVariableInfos) { 
-    } 
-            this.Write("\r\n");
-  foreach(var info in Info.PrivateMemberVariableInfos) { 
-if(info.IsDefineAccessor) {
-            this.Write("    /*\r\n     * @brief    ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.NameAlias));
-            this.Write("をセットします。\r\n     */\r\n");
-if(info.IsInlineAccessor) {
-if(info.IsAccessorReturnThis) {
-            this.Write("    ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
-            this.Write("& Set");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.AccessorName));
+  var info = Info.FunctionInfo; 
+    var stringAfterArgument = "";
+    if(info.StringAfterArgument != "")
+    {
+        stringAfterArgument = " " + info.StringAfterArgument;
+    }
+
+if(info.IsInline) {
+            this.Write("inline\r\n");
+} 
+if(Info.IsDeclaration) {
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.ReturnType));
+            this.Write(" ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.FunctionName));
             this.Write("(");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.Type));
+  
+        for(int i = 0; i < info.ArgumentInfos.Count; ++ i) { 
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.ArgumentInfos[i].Type));
             this.Write(" ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(char.ToLower(info.AccessorName[0]) + info.AccessorName.Substring(1)));
-            this.Write(")\r\n    {\r\n        ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.VariableName));
-            this.Write(" = ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(char.ToLower(info.AccessorName[0]) + info.AccessorName.Substring(1)));
-            this.Write(";\r\n        return *this;\r\n    }\r\n");
-  } else { 
-            this.Write("    void Set");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.AccessorName));
-            this.Write("(");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.Type));
-            this.Write(" ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(char.ToLower(info.AccessorName[0]) + info.AccessorName.Substring(1)));
-            this.Write(")\r\n    {\r\n        ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.VariableName));
-            this.Write(" = ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(char.ToLower(info.AccessorName[0]) + info.AccessorName.Substring(1)));
-            this.Write(";\r\n    }\r\n    ");
-  } 
-  } else { 
-if(info.IsAccessorReturnThis) {
-            this.Write("    ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
-            this.Write("& Set");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.AccessorName));
-            this.Write("(");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.Type));
-            this.Write(" ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(char.ToLower(info.AccessorName[0]) + info.AccessorName.Substring(1)));
-            this.Write(");\r\n");
-  } else { 
-            this.Write("    void Set");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.AccessorName));
-            this.Write("(");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.Type));
-            this.Write(" ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(char.ToLower(info.AccessorName[0]) + info.AccessorName.Substring(1)));
-            this.Write(");\r\n");
-  } 
-  } 
-  } 
-            this.Write("\r\n");
-  } 
-  foreach(var info in Info.PrivateMemberVariableInfos) { 
-if(info.IsDefineAccessor) {
-            this.Write("    /*\r\n     * @brief    ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.NameAlias));
-            this.Write("を取得します。\r\n     */\r\n");
-if(info.IsInlineAccessor) {
-            this.Write("    ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.Type));
-            this.Write(" Get");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.AccessorName));
-            this.Write("() const\r\n    {\r\n        return ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.VariableName));
-            this.Write(";\r\n    }\r\n");
-  } else { 
-if(info.IsAccessorReturnThis) {
-            this.Write("    ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
-            this.Write("& Get");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.AccessorName));
-            this.Write("(");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.Type));
-            this.Write(" ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(char.ToLower(info.AccessorName[0]) + info.AccessorName.Substring(1)));
-            this.Write(");\r\n");
-  } else { 
-            this.Write("    ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.Type));
-            this.Write(" Get");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.AccessorName));
-            this.Write("() const;\r\n");
-  } 
-  } 
-  } 
-            this.Write("\r\n");
-  } 
-            this.Write("private:\r\n");
-  foreach(var info in Info.PrivateMemberVariableInfos) { 
-            this.Write("    ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.Type));
-            this.Write(" ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.ArgumentInfos[i].VariableName));
+
+            if(i != info.ArgumentInfos.Count - 1) { 
+            this.Write(", \r\n");
+} 
+        } 
+            this.Write(")");
+            this.Write(this.ToStringHelper.ToStringWithCulture(stringAfterArgument));
             this.Write(";\r\n");
-  } 
-            this.Write("};");
+    } else { 
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.ReturnType));
+            this.Write(" ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.FunctionName));
+            this.Write("(");
+  
+        for(int i = 0; i < info.ArgumentInfos.Count; ++ i) { 
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.ArgumentInfos[i].Type));
+            this.Write(" ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.ArgumentInfos[i].VariableName));
+
+            if(i != info.ArgumentInfos.Count - 1) { 
+            this.Write(", \r\n");
+} 
+        } 
+            this.Write(")");
+            this.Write(this.ToStringHelper.ToStringWithCulture(stringAfterArgument));
+            this.Write("\r\n{\r\n}\r\n");
+    } 
             return this.GenerationEnvironment.ToString();
         }
     }
@@ -145,7 +80,7 @@ if(info.IsAccessorReturnThis) {
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class ClassGeneratorBase
+    public class FunctionGeneratorBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;
