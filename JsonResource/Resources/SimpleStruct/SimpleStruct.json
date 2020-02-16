@@ -10,8 +10,8 @@
             "variableName": "intVal",
             "type": "int32_t",
             "defaultValue": "",
-            "doxyBrief": "int value",
             "nameAlias":"整数値",
+            "doxyBrief": "int value",
             "requirements": [
                 "MINMAX:0:7",
                 "NOTNULL"
@@ -21,8 +21,8 @@
             "variableName": "floatVal",
             "type": "float",
             "defaultValue": "",
-            "doxyBrief": "float value",
             "nameAlias":"フロート値",
+            "doxyBrief": "float value",
             "requirements": [
                 "MINMAX:0:7",
                 "NOTNULL"

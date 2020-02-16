@@ -153,6 +153,22 @@ namespace JsonResource
                         }
                     }
                 }
+                else if (type == typeof(StructConfig))
+                {
+                    var config = (StructConfig)(object)result;
+
+                    foreach (var member in config.MemberVariables)
+                    {
+                        if (member.Type.Split('.').Length > 1)
+                        {
+                            var dependedDescPath =
+                                Path.GetDirectoryName(jsonFIiePath) + "/" + member.Type;
+                            DeclarationConfig declConfig = Deserialize<DeclarationConfig>(dependedDescPath);
+                            member.Type = declConfig.Declaration.DefinitionName;
+                            member.NameAlias = declConfig.Declaration.NameAlias;
+                        }
+                    }
+                }
                 return result;
             }
         }

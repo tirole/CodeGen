@@ -48,7 +48,7 @@ namespace JsonResource
                         fileInfo.NameSpaces = namespaces;
                     }
 
-                    if (fileContext.DescriptorConfigs.Count != 0)
+                    if ((fileContext.DescriptorConfigs.Count != 0) || (fileContext.StructConfigs.Count != 0))
                     {
                         fileInfo.StructGenerationInfos = new List<Tuple<Generator.StructGenerationInfo, Type>>();
                     }
@@ -75,7 +75,26 @@ namespace JsonResource
                         fileInfoCpp.NameSpaces = fileInfo.NameSpaces;
                     }
 
-                    // fileInfo.StructGenerationInfos
+                    // fileInfo.StructGenerationInfos for StructConfigs
+                    for (int i = 0; i < fileContext.StructConfigs.Count; ++i)
+                    {
+                        var config = fileContext.StructConfigs[i];
+
+                        var structGenInfo = new Generator.StructGenerationInfo();
+                        structGenInfo.Name = config.Declaration.DefinitionName;
+                        foreach (var memberVariable in config.MemberVariables)
+                        {
+                            var variableInfo = new Generator.VariableInfo();
+                            this.SetVariableInfo(variableInfo, memberVariable);
+                            structGenInfo.MemberVariableInfos.Add(variableInfo);
+                        }
+
+                        var structGenTuple =
+                            new Tuple<Generator.StructGenerationInfo, Type>(structGenInfo, null);
+                        fileInfo.StructGenerationInfos.Add(structGenTuple);
+                    }
+
+                    // fileInfo.StructGenerationInfos for DescriptorConfigs
                     for (int i = 0; i < fileContext.DescriptorConfigs.Count; ++i)
                     {
                         var descConfig = fileContext.DescriptorConfigs[i];
