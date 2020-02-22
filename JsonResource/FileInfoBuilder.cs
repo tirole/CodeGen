@@ -281,10 +281,7 @@ namespace JsonResource
             }
             variableInfo.NameAlias = config.NameAlias;
             variableInfo.DoxyBrief = config.DoxyBrief;
-            List<string> defaultValues = new List<string>();
-            GetDefaultValues(defaultValues, config.DefaultValues);
-            // TODO: 配列対応
-            variableInfo.DefaultValue = defaultValues[0];
+            variableInfo.DefaultValue = GetDefaultValue(config.DefaultValues);
 
             if (config.Requirements != null)
             {
@@ -307,8 +304,9 @@ namespace JsonResource
             }
         }
 
-        private void GetDefaultValues(List<string> outDefaultValues, string[] defaultValues)
+        private string GetDefaultValue(string[] defaultValues)
         {
+            string ret = "";
             //if((defaultValue.Length - defaultValue.LastIndexOf(".csv")) == 4)
             //{
             //    // TODO: csv を read していい感じに {} を挿入する。
@@ -318,9 +316,15 @@ namespace JsonResource
             //    //              -> 自身からの相対パスなので辿れるか。
             //}
             //else
+            for(int i = 0; i < defaultValues.Length; ++i)
             {
-                outDefaultValues.AddRange(defaultValues);
+                ret += defaultValues[i];
+                if(i != defaultValues.Length - 1)
+                {
+                    ret += ", ";
+                }
             }
+            return ret;
         }
     }
 }

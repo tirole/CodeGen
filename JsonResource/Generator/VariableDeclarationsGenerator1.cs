@@ -26,6 +26,13 @@ namespace JsonResource.Generator
         public virtual string TransformText()
         {
     foreach(var variableInfo in Info.VariableInfos) { 
+ 
+        string variableName = variableInfo.VariableName;
+        if(variableInfo.ArrayLength > 0)
+        {
+            variableName += "[" + variableInfo.ArrayLength + "]";
+        }
+
         if (variableInfo.DoxyBrief != null && variableInfo.DoxyBrief != "") { 
             this.Write("//// @brief    ");
             this.Write(this.ToStringHelper.ToStringWithCulture(variableInfo.DoxyBrief));
@@ -37,11 +44,13 @@ namespace JsonResource.Generator
         } 
             this.Write(this.ToStringHelper.ToStringWithCulture(variableInfo.Type));
             this.Write(" ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(variableInfo.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(variableName));
 
         if(variableInfo.IsAssignDefaultValue){
             if(variableInfo.ArrayLength > 0) { 
-            this.Write("= \r\n{\r\n    // TODO:\r\n};\r\n");
+            this.Write(" = \r\n{\r\n    ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(variableInfo.DefaultValue));
+            this.Write("\r\n};\r\n");
             } else {
             this.Write(" = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(variableInfo.DefaultValue));

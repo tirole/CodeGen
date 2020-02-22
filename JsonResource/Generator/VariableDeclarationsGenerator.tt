@@ -4,18 +4,25 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#    foreach(var variableInfo in Info.VariableInfos) { #>
+<# 
+        string variableName = variableInfo.VariableName;
+        if(variableInfo.ArrayLength > 0)
+        {
+            variableName += "[" + variableInfo.ArrayLength + "]";
+        }
+#>
 <#        if (variableInfo.DoxyBrief != null && variableInfo.DoxyBrief != "") { #>
 //// @brief    <#=                variableInfo.DoxyBrief#>
 <#        } #>
 <#        if(variableInfo.DeclarationPrefix != null && variableInfo.DeclarationPrefix != "") { #>
 <#=                variableInfo.DeclarationPrefix #>
 <#        } #>
-<#=            variableInfo.Type #> <#=            variableInfo.VariableName #><#
+<#=            variableInfo.Type #> <#=            variableName #><#
         if(variableInfo.IsAssignDefaultValue){#>
 <#            if(variableInfo.ArrayLength > 0) { #>
-= 
+ = 
 {
-    // TODO:
+    <#=variableInfo.DefaultValue #>
 };
 <#            } else {#>
  = <#=                    variableInfo.DefaultValue #>;
