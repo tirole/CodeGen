@@ -49,6 +49,7 @@
     <Compile Include="Configs\General\EnumConfig.cs" />
     <Compile Include="Configs\General\FunctionConfig.cs" />
     <Compile Include="Configs\General\RootConfig.cs" />
+    <Compile Include="Configs\General\VariableDeclarationsConfig.cs" />
     <Compile Include="Configs\GpuDescriptor\DescriptorConfig.cs" />
     <Compile Include="FileInfoBuilder.cs" />
     <Compile Include="Generator\ClassGenerationInfo.cs" />
@@ -96,6 +97,13 @@
     </Compile>
     <Compile Include="Generator\RequirementInfo.cs" />
     <Compile Include="Generator\StructGenerationInfo.cs" />
+    <Compile Include="Generator\VariableDeclarationsGenerationInfo.cs" />
+    <Compile Include="Generator\VariableDeclarationsGenerator.cs" />
+    <Compile Include="Generator\VariableDeclarationsGenerator1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VariableDeclarationsGenerator.tt</DependentUpon>
+    </Compile>
     <Compile Include="Generator\VariableInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -130,6 +138,10 @@
     <Content Include="Generator\StructGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>StructGenerator1.cs</LastGenOutput>
+    </Content>
+    <Content Include="Generator\VariableDeclarationsGenerator.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>VariableDeclarationsGenerator1.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>

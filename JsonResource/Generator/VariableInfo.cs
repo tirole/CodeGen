@@ -14,7 +14,7 @@ namespace JsonResource.Generator
             HasBitWidthDeclaration = false;
         }
         public string Type { get; set; }
-        public string ArrayLength { get; set; }
+        public int ArrayLength { get; set; }
         public string VariableName { get; set; }
         public string NameAlias { get; set; }
         public string DoxyBrief { get; set; }
@@ -24,6 +24,8 @@ namespace JsonResource.Generator
         public int BitBegin { get; set; }
         public int BitEnd { get; set; }
         public int OffsetIn4ByteUnit { get; set; }
+        public bool IsAssignDefaultValue { get; set; }
+        public string DeclarationPrefix { get; set; }
         //abstract public string GetString();
     }
 }

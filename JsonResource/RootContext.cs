@@ -17,12 +17,14 @@ namespace JsonResource
             StructConfigs = new List<StructConfig>();
             EnumConfigs = new List<EnumConfig>();
             ClassConfigs = new List<ClassConfig>();
+            VariableDeclarationsConfigs = new List<VariableDeclarationsConfig>();
         }
         public FileConfig FileConfig;
         public List<StructConfig> StructConfigs;
         public List<EnumConfig> EnumConfigs;
         public List<Tuple<DescriptorConfig,Type>> DescriptorConfigs;
         public List<ClassConfig> ClassConfigs;
+        public List<VariableDeclarationsConfig> VariableDeclarationsConfigs;
     }
     public class RootContext
     {
@@ -105,6 +107,11 @@ namespace JsonResource
                             var config = Deserialize<ClassConfig>(jsonFilePath);
                             fileContext.ClassConfigs.Add(config);
                         }
+                        else if (configType == typeof(VariableDeclarationsConfig))
+                        {
+                            var config = Deserialize<VariableDeclarationsConfig>(jsonFilePath);
+                            fileContext.VariableDeclarationsConfigs.Add(config);
+                        }
                         else
                         {
                             throw new System.InvalidOperationException("Couldn't find proper deserializer type.");
@@ -169,6 +176,23 @@ namespace JsonResource
                         }
                     }
                 }
+                else if (type == typeof(VariableDeclarationsConfig))
+                {
+                    var config = (VariableDeclarationsConfig)(object)result;
+
+                    foreach (var variable in config.VariableDeclarationConfigs)
+                    {
+                        if (variable.VariableConfig.Type.Split('.').Length > 1)
+                        {
+                            var dependedDescPath =
+                                Path.GetDirectoryName(jsonFIiePath) + "/" + variable.VariableConfig.Type;
+                            DeclarationConfig declConfig = Deserialize<DeclarationConfig>(dependedDescPath);
+                            variable.VariableConfig.Type = declConfig.Declaration.DefinitionName;
+                            variable.VariableConfig.NameAlias = declConfig.Declaration.NameAlias;
+                        }
+                        // TODO: default value が csv の時の処理
+                    }
+                }
                 return result;
             }
         }
@@ -180,6 +204,7 @@ namespace JsonResource
                 new Tuple<string, Type>("enum class", typeof(EnumConfig)) ,
                 new Tuple<string, Type>("struct", typeof(StructConfig)),
                 new Tuple<string, Type>("class", typeof(ClassConfig)),
+                new Tuple<string, Type>("variable", typeof(VariableDeclarationsConfig)),
             };
             foreach (var deserializerType in deserializerTypes)
             {
@@ -188,7 +213,7 @@ namespace JsonResource
                     return deserializerType.Item2;
                 }
             }
-            throw new System.InvalidOperationException("Couldn't find custom deserializer type.");
+            throw new System.InvalidOperationException("Couldn't find default deserializer type.");
         }
         public Type GetCustomDeserializerType(string deserializerName)
         {

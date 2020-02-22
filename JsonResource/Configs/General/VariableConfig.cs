@@ -17,8 +17,8 @@ namespace JsonResource
         [DataMember(Name = "type", IsRequired = true)]
         public string Type;
 
-        [DataMember(Name = "defaultValue")]
-        public string DefaultValue;
+        [DataMember(Name = "defaultValues")]
+        public string[] DefaultValues;
 
         [DataMember(Name = "doxyBrief")]
         public string DoxyBrief;

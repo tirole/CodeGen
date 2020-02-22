@@ -63,6 +63,11 @@ namespace JsonResource
                         fileInfo.ClassGenerationInfos = new List<Generator.ClassGenerationInfo>();
                     }
 
+                    if (fileContext.VariableDeclarationsConfigs.Count != 0)
+                    {
+                        fileInfo.VariableDeclarationsGenerationInfos = new List<Generator.VariableDeclarationsGenerationInfo>();
+                    }
+
                     {
                         string include = "<";
                         foreach (var namespaceName in fileInfo.NameSpaces)
@@ -75,6 +80,23 @@ namespace JsonResource
                         fileInfoCpp.NameSpaces = fileInfo.NameSpaces;
                     }
 
+                    // fileInfo.VariableDeclarationConfigs
+                    for (int i = 0; i < fileContext.VariableDeclarationsConfigs.Count; ++i)
+                    {
+                        var variableConfig = fileContext.VariableDeclarationsConfigs[i];
+                        var variableGenInfo = new Generator.VariableDeclarationsGenerationInfo();
+
+                        foreach (var variable in variableConfig.VariableDeclarationConfigs)
+                        {
+                            var variableInfo = new Generator.VariableInfo();
+                            SetCommonVariableInfo(variableInfo, variable.VariableConfig);
+                            variableInfo.IsAssignDefaultValue = variable.IsAssignDefaultValue;
+                            variableInfo.DeclarationPrefix = variable.DeclarationPrefix;
+                            variableGenInfo.VariableInfos.Add(variableInfo);
+                        }
+                        fileInfo.VariableDeclarationsGenerationInfos.Add(variableGenInfo);
+                    }
+
                     // fileInfo.StructGenerationInfos for StructConfigs
                     for (int i = 0; i < fileContext.StructConfigs.Count; ++i)
                     {
@@ -85,7 +107,7 @@ namespace JsonResource
                         foreach (var memberVariable in config.MemberVariables)
                         {
                             var variableInfo = new Generator.VariableInfo();
-                            this.SetVariableInfo(variableInfo, memberVariable);
+                            this.SetCommonVariableInfo(variableInfo, memberVariable);
                             structGenInfo.MemberVariableInfos.Add(variableInfo);
                         }
 
@@ -105,7 +127,7 @@ namespace JsonResource
                         {
                             var variableInfo = new Generator.VariableInfo();
 
-                            this.SetVariableInfo(variableInfo, memberVariable);
+                            this.SetCommonVariableInfo(variableInfo, memberVariable);
 
                             if ((memberVariable.WordOffset != null) && (memberVariable.WordOffset != ""))
                             {
@@ -167,7 +189,7 @@ namespace JsonResource
                             foreach (var argConfig in config.FunctionConfig.ArgumentConfigs)
                             {
                                 var argInfo = new Generator.VariableInfo();
-                                this.SetVariableInfo(argInfo, argConfig);
+                                this.SetCommonVariableInfo(argInfo, argConfig);
                                 memberFunctionInfo.ArgumentInfos.Add(argInfo);
                             }
 
@@ -177,7 +199,7 @@ namespace JsonResource
                         foreach (var config in classConfig.MemberVariableConfigs)
                         {
                             var memberVariableInfo = new Generator.MemberVariableInfo();
-                            this.SetVariableInfo(memberVariableInfo, config.VariableConfig);
+                            this.SetCommonVariableInfo(memberVariableInfo, config.VariableConfig);
                             memberVariableInfo.AccessModifier = config.AccessModifier;
                             memberVariableInfo.IsDefineAccessor = config.IsDefineAccessor;
                             memberVariableInfo.IsInlineAccessor = config.IsInlineAccessor;
@@ -245,21 +267,24 @@ namespace JsonResource
                 }
             }
         }
-        private void SetVariableInfo(Generator.VariableInfo variableInfo, VariableConfig config)
+        private void SetCommonVariableInfo(Generator.VariableInfo variableInfo, VariableConfig config)
         {
             variableInfo.VariableName = config.VariableName;
             variableInfo.Type = config.Type.Split('[')[0];
             if (config.Type.Split('[').Length > 1)
             {
-                variableInfo.ArrayLength = config.Type.Split('[')[1].Split(']')[0];
+                variableInfo.ArrayLength = int.Parse(config.Type.Split('[')[1].Split(']')[0]);
             }
             else
             {
-                variableInfo.ArrayLength = "0";
+                variableInfo.ArrayLength = 0;
             }
             variableInfo.NameAlias = config.NameAlias;
             variableInfo.DoxyBrief = config.DoxyBrief;
-            variableInfo.DefaultValue = config.DefaultValue;
+            List<string> defaultValues = new List<string>();
+            GetDefaultValues(defaultValues, config.DefaultValues);
+            // TODO: 配列対応
+            variableInfo.DefaultValue = defaultValues[0];
 
             if (config.Requirements != null)
             {
@@ -279,6 +304,22 @@ namespace JsonResource
                 requirements.RemoveAt(0);
                 requirementInfo.Values.AddRange(requirements);
                 variableInfo.RequirementInfos.Add(requirementInfo);
+            }
+        }
+
+        private void GetDefaultValues(List<string> outDefaultValues, string[] defaultValues)
+        {
+            //if((defaultValue.Length - defaultValue.LastIndexOf(".csv")) == 4)
+            //{
+            //    // TODO: csv を read していい感じに {} を挿入する。
+            //    //      -> でもこの時に結局 struct の情報が必要になる。
+            //    //      -> ここから辿っても辿った先が分からない。
+            //    //          -> VariableConfig は所詮宣言だけをするためのものであって初期値の代入まではできない。
+            //    //              -> 自身からの相対パスなので辿れるか。
+            //}
+            //else
+            {
+                outDefaultValues.AddRange(defaultValues);
             }
         }
     }

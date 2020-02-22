@@ -120,7 +120,8 @@ namespace JsonResource
             // RootContext and FileInfoBuilder Test
             List<string> RootConfigPaths = new List<string>
             {
-                @"D:\prj\software\codegeneration\JsonResource\Resources\Class\RootConfig.json",
+                @"D:\prj\software\codegeneration\JsonResource\Resources\Variable\RootConfig.json",
+                //@"D:\prj\software\codegeneration\JsonResource\Resources\Class\RootConfig.json",
                 //@"D:\prj\software\codegeneration\JsonResource\Resources\GpuDescriptors\RootConfig.json",
                 //@"D:\prj\software\codegeneration\JsonResource\Resources\GpuEnum\RootConfig.json"
             };
@@ -214,6 +215,16 @@ namespace JsonResource
                         }
                     }
 
+                    // fileInfo.FunctionGenerationInfos
+                    if (fileInfo.VariableDeclarationsGenerationInfos != null)
+                    {
+                        foreach (var info in fileInfo.VariableDeclarationsGenerationInfos)
+                        {
+                            var generator = new Generator.VariableDeclarationsGenerator(info);
+                            output += generator.TransformText(); output += "\n";
+                        }
+                    }
+
                     foreach (var namespaceName in fileInfo.NameSpaces)
                     {
                         output += "}";
@@ -236,14 +247,14 @@ namespace JsonResource
         public List<string> Includes;
         public string[] NameSpaces;
         public List<Tuple<Generator.StructGenerationInfo, Type>> StructGenerationInfos;
-        public List<Generator.VariableInfo> VariableInfo;
+        public List<Generator.VariableDeclarationsGenerationInfo> VariableDeclarationsGenerationInfos;
         public List<Generator.EnumGenerationInfo> EnumGenerationInfos;
         public List<Generator.ClassGenerationInfo> ClassGenerationInfos;
         public List<Generator.FunctionGenerationInfo> FunctionGenerationInfos;
         public bool IsEmpty()
         {
             return 
-                (StructGenerationInfos == null) && (VariableInfo == null) && 
+                (StructGenerationInfos == null) && (VariableDeclarationsGenerationInfos == null) && 
                 (EnumGenerationInfos == null) && (ClassGenerationInfos == null) && 
                 (FunctionGenerationInfos == null);
     }

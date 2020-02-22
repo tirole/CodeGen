@@ -1,0 +1,27 @@
+﻿<#@ template language="C#" linePragmas="false" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#    foreach(var variableInfo in Info.VariableInfos) { #>
+<#        if (variableInfo.DoxyBrief != null && variableInfo.DoxyBrief != "") { #>
+//// @brief    <#=                variableInfo.DoxyBrief#>
+<#        } #>
+<#        if(variableInfo.DeclarationPrefix != null && variableInfo.DeclarationPrefix != "") { #>
+<#=                variableInfo.DeclarationPrefix #>
+<#        } #>
+<#=            variableInfo.Type #> <#=            variableInfo.VariableName #><#
+        if(variableInfo.IsAssignDefaultValue){#>
+<#            if(variableInfo.ArrayLength > 0) { #>
+= 
+{
+    // TODO:
+};
+<#            } else {#>
+ = <#=                    variableInfo.DefaultValue #>;
+<#            } #>
+<#        } else {#>
+;
+<#        } #>
+
+<#    } #>
