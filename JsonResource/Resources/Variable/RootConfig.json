@@ -1,0 +1,20 @@
+{
+    "commonFileConfig": {
+        "copyright": "../copyright.txt",
+        "includeFiles": [
+            "<cstdint>"
+        ],
+        "namespace": "my::detail"
+    },
+    "fileConfigs": [
+        {
+            "outputFileName": "my_VariableDeclarations.h",
+            "definitions": [
+                {
+                    "name":"",
+                    "path":"VariableDeclarations.json"
+                }
+            ]
+        }
+    ]
+}

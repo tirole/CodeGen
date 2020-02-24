@@ -1,0 +1,69 @@
+{
+    "declaration": {
+        "definitionType": "variable",
+        "definitionName": "",
+        "doxyBrief": "",
+        "nameAlias": ""
+    },
+    "variableDeclarations": [
+        {
+            "isAssignDefaultValue": true,
+            "declarationPrefix": "",
+            "variable": {
+                "variableName": "Tables",
+                "type": "../SimpleStruct/SimpleStruct.json",
+                "defaultValues": [
+                    "SimpleStructTypeDefaultValues.csv"
+                ],
+                "nameAlias": "テーブル",
+                "doxyBrief": "テーブルです。",
+                "requirements": []
+            }
+        },
+        {
+            "isAssignDefaultValue": true,
+            "declarationPrefix": "constexpr",
+            "variable": {
+                "variableName": "TextureMinAlignment",
+                "type": "size_t",
+                "defaultValues": [
+                    "64"
+                ],
+                "nameAlias": "最小アライメント",
+                "doxyBrief": "最小アライメントです。",
+                "requirements": []
+            }
+        },
+        {
+            "isAssignDefaultValue": false,
+            "declarationPrefix": "constexpr",
+            "variable": {
+                "variableName": "VertexBufferMinAlignment",
+                "type": "size_t",
+                "defaultValues": [
+                    "64"
+                ],
+                "nameAlias": "最小アライメント",
+                "doxyBrief": "最小アライメントです。",
+                "requirements": []
+            }
+        },
+        {
+            "isAssignDefaultValue": true,
+            "declarationPrefix": "",
+            "variable": {
+                "variableName": "FormatTable",
+                "type": "int[4]",
+                "defaultValues": [
+                    "1",
+                    "2",
+                    "3",
+                    "4"
+                ],
+                "nameAlias": "最小アライメント",
+                "doxyBrief": "最小アライメントです。",
+                "requirements": []
+            }
+        }
+    ]
+}

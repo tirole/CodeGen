@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -270,10 +271,24 @@ namespace JsonResource
         private void SetCommonVariableInfo(Generator.VariableInfo variableInfo, VariableConfig config)
         {
             variableInfo.VariableName = config.VariableName;
+
             variableInfo.Type = config.Type.Split('[')[0];
             if (config.Type.Split('[').Length > 1)
             {
                 variableInfo.ArrayLength = int.Parse(config.Type.Split('[')[1].Split(']')[0]);
+            }
+            else if(config.DefaultValues != null && (config.DefaultValues[0].IndexOf(".csv") != -1))
+            {
+                var file = new StreamReader(config.DefaultValues[0]).ReadToEnd();
+                var lines = file.Split(new char[] { '\n' });
+                if (lines[lines.Length - 1] == "")
+                {
+                    variableInfo.ArrayLength = lines.Length - 1;
+                }
+                else
+                {
+                    variableInfo.ArrayLength = lines.Length;
+                }
             }
             else
             {
@@ -281,7 +296,16 @@ namespace JsonResource
             }
             variableInfo.NameAlias = config.NameAlias;
             variableInfo.DoxyBrief = config.DoxyBrief;
-            variableInfo.DefaultValue = GetDefaultValue(config.DefaultValues);
+            variableInfo.DefaultValue = GetDefaultValue(config);
+
+            // override Type and NameAlias if it have dependency.
+            if (config.Type.IndexOf(".json") != -1)
+            {
+                DeclarationCommonConfig declarationCommonConfig = new DeclarationCommonConfig();
+                RootContext.GetType(declarationCommonConfig, config.Type);
+                variableInfo.Type = declarationCommonConfig.DefinitionName;
+                variableInfo.NameAlias = declarationCommonConfig.NameAlias;
+            }
 
             if (config.Requirements != null)
             {
@@ -304,27 +328,44 @@ namespace JsonResource
             }
         }
 
-        private string GetDefaultValue(string[] defaultValues)
+        private string GetDefaultValue(VariableConfig config)
         {
-            string ret = "";
-            //if((defaultValue.Length - defaultValue.LastIndexOf(".csv")) == 4)
-            //{
-            //    // TODO: csv を read していい感じに {} を挿入する。
-            //    //      -> でもこの時に結局 struct の情報が必要になる。
-            //    //      -> ここから辿っても辿った先が分からない。
-            //    //          -> VariableConfig は所詮宣言だけをするためのものであって初期値の代入まではできない。
-            //    //              -> 自身からの相対パスなので辿れるか。
-            //}
-            //else
-            for(int i = 0; i < defaultValues.Length; ++i)
+            if (config.DefaultValues != null)
             {
-                ret += defaultValues[i];
-                if(i != defaultValues.Length - 1)
+                if ((config.DefaultValues[0].Length - config.DefaultValues[0].LastIndexOf(".csv")) == 4)
                 {
-                    ret += ", ";
+                    // TODO: csv を read していい感じに {} を挿入する。
+                    //      -> でもこの時に結局 struct の情報が必要になる。
+                    //      -> ここから辿っても辿った先が分からない。
+                    //          -> VariableConfig は所詮宣言だけをするためのものであって初期値の代入まではできない。
+                    //              -> 自身からの相対パスなので辿れるか。
+                    ReadDefaultValue readDefaultValue = new ReadDefaultValue();
+                    string ret = "";
+                    var defaultValues = readDefaultValue.GetCsvDefaultValue(config);
+                    foreach(var value in defaultValues)
+                    {
+                        ret += value;
+                    }
+                    return ret;
+                }
+                else
+                {
+                    string ret = "";
+                    for (int i = 0; i < config.DefaultValues.Length; ++i)
+                    {
+                        ret += config.DefaultValues[i];
+                        if (i != config.DefaultValues.Length - 1)
+                        {
+                            ret += ", ";
+                        }
+                    }
+                    return ret;
                 }
             }
-            return ret;
+            else
+            {
+                return null;
+            }
         }
     }
 }

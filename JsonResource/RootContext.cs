@@ -121,10 +121,10 @@ namespace JsonResource
                 }
             }
         }
-        public static T Deserialize<T>(string jsonFIiePath)
+        public static T Deserialize<T>(string jsonFilePath)
         {
             var deserializer = new DataContractJsonSerializer(typeof(T));
-            using (var stream = new StreamReader(jsonFIiePath))
+            using (var stream = new StreamReader(jsonFilePath))
             {
                 T result = (T)deserializer.ReadObject(stream.BaseStream);
                 Type type = result.GetType();
@@ -136,11 +136,11 @@ namespace JsonResource
                     {
                         if(member.Type.Split('.').Length > 1)
                         {
-                            var dependedDescPath =
-                                Path.GetDirectoryName(jsonFIiePath) + "/" + member.Type;
-                            DeclarationConfig config = Deserialize<DeclarationConfig>(dependedDescPath);
-                            member.Type = config.Declaration.DefinitionName;
-                            member.NameAlias = config.Declaration.NameAlias;
+                            member.Type = Path.GetDirectoryName(jsonFilePath) + "/" + member.Type;
+                        }
+                        if (member.DefaultValues != null && member.DefaultValues[0].Split('.').Length > 1)
+                        {
+                            member.DefaultValues[0] = Path.GetDirectoryName(jsonFilePath) + "/" + member.DefaultValues[0];
                         }
                     }
                 }
@@ -152,11 +152,11 @@ namespace JsonResource
                     {
                         if (member.VariableConfig.Type.Split('.').Length > 1)
                         {
-                            var dependedDescPath =
-                                Path.GetDirectoryName(jsonFIiePath) + "/" + member.VariableConfig.Type;
-                            DeclarationConfig declConfig = Deserialize<DeclarationConfig>(dependedDescPath);
-                            member.VariableConfig.Type = declConfig.Declaration.DefinitionName;
-                            member.VariableConfig.NameAlias = declConfig.Declaration.NameAlias;
+                            member.VariableConfig.Type = Path.GetDirectoryName(jsonFilePath) + "/" + member.VariableConfig.Type;
+                        }
+                        if (member.VariableConfig.DefaultValues != null && member.VariableConfig.DefaultValues[0].Split('.').Length > 1)
+                        {
+                            member.VariableConfig.DefaultValues[0] = Path.GetDirectoryName(jsonFilePath) + "/" + member.VariableConfig.DefaultValues[0];
                         }
                     }
                 }
@@ -168,11 +168,11 @@ namespace JsonResource
                     {
                         if (member.Type.Split('.').Length > 1)
                         {
-                            var dependedDescPath =
-                                Path.GetDirectoryName(jsonFIiePath) + "/" + member.Type;
-                            DeclarationConfig declConfig = Deserialize<DeclarationConfig>(dependedDescPath);
-                            member.Type = declConfig.Declaration.DefinitionName;
-                            member.NameAlias = declConfig.Declaration.NameAlias;
+                            member.Type = Path.GetDirectoryName(jsonFilePath) + "/" + member.Type;
+                        }
+                        if (member.DefaultValues != null && member.DefaultValues[0].Split('.').Length > 1)
+                        {
+                            member.DefaultValues[0] = Path.GetDirectoryName(jsonFilePath) + "/" + member.DefaultValues[0];
                         }
                     }
                 }
@@ -184,20 +184,28 @@ namespace JsonResource
                     {
                         if (variable.VariableConfig.Type.Split('.').Length > 1)
                         {
-                            var dependedDescPath =
-                                Path.GetDirectoryName(jsonFIiePath) + "/" + variable.VariableConfig.Type;
-                            DeclarationConfig declConfig = Deserialize<DeclarationConfig>(dependedDescPath);
-                            variable.VariableConfig.Type = declConfig.Declaration.DefinitionName;
-                            variable.VariableConfig.NameAlias = declConfig.Declaration.NameAlias;
+                            var dependedDescPath = Path.GetDirectoryName(jsonFilePath) + "/" + variable.VariableConfig.Type;
+                            variable.VariableConfig.Type = dependedDescPath;
                         }
-                        // TODO: default value が csv の時の処理
+                        if (variable.VariableConfig.DefaultValues != null && variable.VariableConfig.DefaultValues[0].Split('.').Length > 1)
+                        {
+                            variable.VariableConfig.DefaultValues[0] = Path.GetDirectoryName(jsonFilePath) + "/" + variable.VariableConfig.DefaultValues[0];
+                        }
                     }
                 }
                 return result;
             }
         }
-
-        public Type GetGenericDeserializerType(string definitionType)
+        public static void GetType(DeclarationCommonConfig commonDeclConfig, string jsonFilePath)
+        {
+            using (var stream = new StreamReader(jsonFilePath))
+            {
+                DeclarationConfig config = Deserialize<DeclarationConfig>(jsonFilePath);
+                commonDeclConfig.DefinitionName = config.Declaration.DefinitionName;
+                commonDeclConfig.NameAlias = config.Declaration.NameAlias;
+            }
+        }
+        public static Type GetGenericDeserializerType(string definitionType)
         {
             Tuple<string, Type>[] deserializerTypes =    
             { 
