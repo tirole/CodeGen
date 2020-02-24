@@ -16,7 +16,8 @@
                 "NOTNULL"
             ],
             "wordOffset": "0",
-            "bitRange": "15:0"
+            "bitRange": "15:0",
+            "modifier": "-= 1"
         },
         {
             "variableName": "srcBufOsset2",
@@ -28,7 +29,8 @@
                 "MINMAX:0:32"
             ],
             "wordOffset": "0",
-            "bitRange": "31:16"
+            "bitRange": "31:16",
+            "modifier": ""
         },
         {
             "variableName": "srcBufOsset3",
@@ -40,7 +42,8 @@
                 "LE:8"
             ],
             "wordOffset": "1",
-            "bitRange": "31:0"
+            "bitRange": "31:0",
+            "modifier": ""
         },
         {
             "variableName": "clearColors",
@@ -52,7 +55,8 @@
                 "L:16"
             ],
             "wordOffset": "2",
-            "bitRange": "127:0"
+            "bitRange": "127:0",
+            "modifier": ""
         }
     ]
 }

@@ -47,7 +47,7 @@ int main()
 		{
 			TEST_EQ(outColors[i], colors[i]);
 		}
-		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset( pDesc ), 5 );
+		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset( pDesc ), 5 - 1);
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset2( pDesc ), 6 );
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset3( pDesc ), my::detail::CompressionMode::Block );
 	}

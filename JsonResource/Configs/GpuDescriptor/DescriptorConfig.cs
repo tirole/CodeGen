@@ -17,10 +17,13 @@ namespace JsonResource
     [DataContract]
     public partial class DescriptorVariableConfig : VariableConfig
     {
-        [DataMember(Name = "wordOffset")]
+        [DataMember(Name = "wordOffset", IsRequired = true)]
         public string WordOffset;
 
-        [DataMember(Name = "bitRange")]
+        [DataMember(Name = "bitRange", IsRequired = true)]
         public string BitRange;
+
+        [DataMember(Name = "modifier", IsRequired = true)]
+        public string Modifier;
     }
 }

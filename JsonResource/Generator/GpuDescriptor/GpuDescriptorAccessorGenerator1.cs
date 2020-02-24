@@ -86,7 +86,13 @@ if((member.BitEnd - member.BitBegin) == 63) {
             this.Write(" - bitOffset) + 1;\r\n    constexpr int mask = static_cast<int>(~(static_cast<int64" +
                     "_t>(-1) << bitLength ));\r\n    int inputVal = static_cast<int>(");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
-            this.Write(");\r\n    pDesc->data[uint32ArrayIndex] |= (inputVal & mask) << bitOffset;\r\n");
+            this.Write(");\r\n");
+                if(member.Modifier != null) { 
+            this.Write("    inputVal ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.Modifier));
+            this.Write(";\r\n");
+                } 
+            this.Write("    pDesc->data[uint32ArrayIndex] |= (inputVal & mask) << bitOffset;\r\n");
 } 
             this.Write("}\r\n");
 } 

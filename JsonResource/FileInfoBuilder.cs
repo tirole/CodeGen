@@ -137,6 +137,7 @@ namespace JsonResource
                                 variableInfo.BitBegin = int.Parse(bitRanges[1]);
                                 variableInfo.BitEnd = int.Parse(bitRanges[0]);
                                 variableInfo.OffsetIn4ByteUnit = int.Parse(memberVariable.WordOffset);
+                                variableInfo.Modifier = memberVariable.Modifier;
                             }
 
                             structGenInfo.MemberVariableInfos.Add(variableInfo);

@@ -33,6 +33,9 @@ void Set<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.Variable
     constexpr int bitLength = (<#=member.BitEnd #> - bitOffset) + 1;
     constexpr int mask = static_cast<int>(~(static_cast<int64_t>(-1) << bitLength ));
     int inputVal = static_cast<int>(<#=member.VariableName #>);
+<#                if(member.Modifier != null) { #>
+    inputVal <#=                        member.Modifier #>;
+<#                } #>
     pDesc->data[uint32ArrayIndex] |= (inputVal & mask) << bitOffset;
 <#} #>
 }

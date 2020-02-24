@@ -24,6 +24,8 @@ namespace JsonResource.Generator
         public int BitBegin { get; set; }
         public int BitEnd { get; set; }
         public int OffsetIn4ByteUnit { get; set; }
+        // Get/Set 時に値に Modifier を加えます。今の所 DescriptorConfig でしか利用していない。
+        public string Modifier { get; set; }
         public bool IsAssignDefaultValue { get; set; }
         public string DeclarationPrefix { get; set; }
         //abstract public string GetString();
