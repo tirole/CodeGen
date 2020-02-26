@@ -257,14 +257,12 @@ namespace JsonResource
                                     skeltonDefinition.FunctionName =
                                         classGenInfo.Name + "::" + "Get" + memberVariableInfo.AccessorName;
                                     skeltonDefinition.StringAfterArgument = "const";
-                                    if (memberVariableInfo.IsAccessorReturnThis)
-                                    {
-                                        skeltonDefinition.ReturnType = classGenInfo.Name + "&";
-                                    }
-                                    else
-                                    {
-                                        skeltonDefinition.ReturnType = "void";
-                                    }
+                                    skeltonDefinition.ReturnType = memberVariableInfo.Type;
+                                    // TODO: struct 型はポインタにする
+                                    var arg = new Generator.VariableInfo();
+                                    SetCommonVariableInfo(arg, config.VariableConfig);
+                                    arg.VariableName = char.ToLower(memberVariableInfo.AccessorName[0]) + memberVariableInfo.AccessorName.Substring(1);
+                                    skeltonDefinition.ArgumentInfos.Add(arg);
                                     fileInfoCpp.FunctionGenerationInfos.Add(funcGen);
                                 }
 
@@ -279,7 +277,11 @@ namespace JsonResource
                                         classGenInfo.Name + "::" + "Set" + memberVariableInfo.AccessorName;
                                     skeltonDefinition.StringAfterArgument = "";
                                     skeltonDefinition.ReturnType = "void";
-                                    skeltonDefinition.ArgumentInfos.Add((Generator.VariableInfo)memberVariableInfo);
+                                    // TODO: struct 型はポインタにする
+                                    var arg = new Generator.VariableInfo();
+                                    SetCommonVariableInfo(arg, config.VariableConfig);
+                                    arg.VariableName = char.ToLower(memberVariableInfo.AccessorName[0]) + memberVariableInfo.AccessorName.Substring(1);
+                                    skeltonDefinition.ArgumentInfos.Add(arg);
                                     fileInfoCpp.FunctionGenerationInfos.Add(funcGen);
                                 }
                             }
