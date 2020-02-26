@@ -24,6 +24,17 @@
                             "MINMAX:0:7",
                             "NOTNULL"
                         ]
+                    },
+                    {
+                        "variableName": "size",
+                        "type": "size_t",
+                        "defaultValue": "",
+                        "nameAlias": "サイズ",
+                        "doxyBrief": "サイズです。",
+                        "requirements": [
+                            "MINMAX:0:7",
+                            "NOTNULL"
+                        ]
                     }
                 ]
             }
@@ -32,7 +43,7 @@
             "accessModifier": "public",
             "function": {
                 "functionName": "DoNothing",
-                "isInline": false,
+                "isInline": true,
                 "doxyBrief": "何もしません。",
                 "returnType": "void",
                 "arguments": [

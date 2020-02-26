@@ -196,6 +196,31 @@ namespace JsonResource
                             }
 
                             classGenInfo.AddMemberFunctionInfo(memberFunctionInfo);
+
+                            if(!memberFunctionInfo.IsInline)
+                            {
+                                var funcGen = new Generator.FunctionGenerationInfo();
+                                funcGen.IsDeclaration = false;
+                                var skeltonDefinition = funcGen.FunctionInfo;
+                                skeltonDefinition.FunctionName =
+                                    classGenInfo.Name + "::" + memberFunctionInfo.FunctionName;
+                                skeltonDefinition.StringAfterArgument = memberFunctionInfo.StringAfterArgument;
+                                skeltonDefinition.ReturnType = memberFunctionInfo.ReturnType;
+
+                                foreach (var argConfig in config.FunctionConfig.ArgumentConfigs)
+                                {
+                                    var argInfo = new Generator.VariableInfo();
+                                    this.SetCommonVariableInfo(argInfo, argConfig);
+                                    skeltonDefinition.ArgumentInfos.Add(argInfo);
+                                }
+
+                                if (fileInfoCpp.FunctionGenerationInfos == null)
+                                {
+                                    fileInfoCpp.FunctionGenerationInfos = new List<Generator.FunctionGenerationInfo>();
+                                }
+
+                                fileInfoCpp.FunctionGenerationInfos.Add(funcGen);
+                            }
                         }
 
                         foreach (var config in classConfig.MemberVariableConfigs)

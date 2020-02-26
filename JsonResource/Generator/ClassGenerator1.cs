@@ -33,9 +33,41 @@ namespace JsonResource.Generator
             this.Write("class ");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
             this.Write("\r\n{\r\npublic:\r\n");
-    foreach(var info in Info.PublicMemberVariableInfos) { 
-    } 
+    foreach(var info in Info.PublicMemberFunctionInfos) { 
+  
+        var stringAfterArgument = "";
+        if(info.StringAfterArgument != null && info.StringAfterArgument != "")
+        {
+            stringAfterArgument = " " + info.StringAfterArgument;
+        }
+
+        var arguments = "";
+        for(int i =     0; i < info.ArgumentInfos.Count; ++ i) 
+        {
+            arguments += info.ArgumentInfos[i].Type + " " + info.ArgumentInfos[i].VariableName;
+            if(i != info.ArgumentInfos.Count - 1) 
+            {
+                arguments += ", ";
+            }
+        }
+
+            this.Write("    /*\r\n     * @brief    ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.DoxyBrief));
+            this.Write("\r\n     */\r\n    ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.ReturnType));
+            this.Write(" ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.FunctionName));
+            this.Write("(");
+            this.Write(this.ToStringHelper.ToStringWithCulture(arguments));
+            this.Write(")");
+            this.Write(this.ToStringHelper.ToStringWithCulture(stringAfterArgument));
+if(info.IsInline) {
+            this.Write("\r\n    {\r\n    }\r\n");
+        }else { 
+            this.Write(";\r\n");
+        } 
             this.Write("\r\n");
+    } 
   foreach(var info in Info.PrivateMemberVariableInfos) { 
 if(info.IsDefineAccessor) {
             this.Write("    /*\r\n     * @brief    ");

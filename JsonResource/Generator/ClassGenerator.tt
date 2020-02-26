@@ -11,6 +11,36 @@
 class <#=Info.Name#>
 {
 public:
+<#    foreach(var info in Info.PublicMemberFunctionInfos) { #>
+<#  
+        var stringAfterArgument = "";
+        if(info.StringAfterArgument != null && info.StringAfterArgument != "")
+        {
+            stringAfterArgument = " " + info.StringAfterArgument;
+        }
+
+        var arguments = "";
+        for(int i =     0; i < info.ArgumentInfos.Count; ++ i) 
+        {
+            arguments += info.ArgumentInfos[i].Type + " " + info.ArgumentInfos[i].VariableName;
+            if(i != info.ArgumentInfos.Count - 1) 
+            {
+                arguments += ", ";
+            }
+        }
+#>
+    /*
+     * @brief    <#=            info.DoxyBrief #>
+     */
+    <#=info.ReturnType #> <#=info.FunctionName #>(<#=arguments #>)<#=stringAfterArgument #><#if(info.IsInline) {#>
+
+    {
+    }
+<#        }else { #>
+;
+<#        } #>
+
+<#    } #>
 <#  foreach(var info in Info.PrivateMemberVariableInfos) { #>
 <#if(info.IsDefineAccessor) {#>
     /*
