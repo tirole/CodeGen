@@ -241,15 +241,16 @@ namespace JsonResource
                             memberVariableInfo.AccessorName = config.VariableConfig.VariableName.Substring(idxOfFirstUpperCase);
                             classGenInfo.AddMemberVariableInfo(memberVariableInfo);
 
-                            if(memberVariableInfo.IsDefineAccessor && memberVariableInfo.IsInlineAccessor)
+                            if(memberVariableInfo.IsDefineAccessor)
                             {
                                 if (fileInfoCpp.FunctionGenerationInfos == null)
                                 {
                                     fileInfoCpp.FunctionGenerationInfos = new List<Generator.FunctionGenerationInfo>();
                                 }
 
+                                // アクセサ定義を必要としているがインラインじゃない場合は cpp に出力
+                                if(!memberVariableInfo.IsInlineAccessor)
                                 {
-                                    // アクセサについても隠している時点で自分で実装したいのでスケルトンを cpp に出力する。
                                     var funcGen = new Generator.FunctionGenerationInfo();
                                     funcGen.IsDeclaration = false;
                                     var skeltonDefinition = funcGen.FunctionInfo;
@@ -268,6 +269,7 @@ namespace JsonResource
                                 }
 
                                 // setter
+                                if (!memberVariableInfo.IsInlineAccessor)
                                 {
                                     // アクセサについても隠している時点で自分で実装したいのでスケルトンを cpp に出力する。
                                     var funcGen = new Generator.FunctionGenerationInfo();
