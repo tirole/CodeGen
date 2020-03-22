@@ -144,6 +144,7 @@ namespace JsonResource
             // RootContext and FileInfoBuilder Test
             List<string> RootConfigPaths = new List<string>
             {
+                @"D:\prj\software\codegeneration\JsonResource\Resources\GpuCommand\RootConfig.json",
                 //@"D:\prj\software\codegeneration\JsonResource\Resources\Variable\RootConfig.json",
                 //@"D:\prj\software\codegeneration\JsonResource\Resources\Class\RootConfig.json",
                 @"D:\prj\software\codegeneration\JsonResource\Resources\GpuDescriptors\RootConfig.json",
@@ -182,6 +183,16 @@ namespace JsonResource
                     }
                     output += "\n\n";
 
+                    // fileInfo.EnumeratorInfos
+                    if (fileInfo.EnumGenerationInfos != null)
+                    {
+                        foreach (var info in fileInfo.EnumGenerationInfos)
+                        {
+                            var generator = new Generator.EnumGenerator(info);
+                            output += generator.TransformText(); output += "\n\n";
+                        }
+                    }
+
                     // fileInfo.StructGenerationInfos
                     if (fileInfo.StructGenerationInfos != null)
                     {
@@ -205,17 +216,12 @@ namespace JsonResource
                                 var generator = new Generator.StructGenerator(structInfo);
                                 output += generator.TransformText();
                             }
+                            else if (serializerType == typeof(Generator.GpuCommandGenerator))
+                            {
+                                var generator = new Generator.GpuCommandGenerator(structInfo);
+                                output += generator.TransformText();
+                            }
                             output += "\n\n";
-                        }
-                    }
-
-                    // fileInfo.EnumeratorInfos
-                    if (fileInfo.EnumGenerationInfos != null)
-                    {
-                        foreach (var info in fileInfo.EnumGenerationInfos)
-                        {
-                            var generator = new Generator.EnumGenerator(info);
-                            output += generator.TransformText(); output += "\n\n";
                         }
                     }
 

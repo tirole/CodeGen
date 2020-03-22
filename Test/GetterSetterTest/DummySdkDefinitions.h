@@ -8,6 +8,7 @@
 #define SDK_NOT_EQUAL(var, val)
 
 typedef uint64_t GpuAddress;
+typedef uint64_t GpuCommand;
 enum class FilterMode
 {
 	Point,

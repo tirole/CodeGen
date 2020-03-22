@@ -74,6 +74,12 @@
       <DependentUpon>FunctionGenerator.tt</DependentUpon>
     </Compile>
     <Compile Include="Generator\FunctionInfo.cs" />
+    <Compile Include="Generator\GpuCommandGenerator.cs" />
+    <Compile Include="Generator\GpuCommandGenerator1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GpuCommandGenerator.tt</DependentUpon>
+    </Compile>
     <Compile Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator.cs" />
     <Compile Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator1.cs">
       <AutoGen>True</AutoGen>
@@ -127,6 +133,10 @@
     <Content Include="Generator\FunctionGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>FunctionGenerator1.cs</LastGenOutput>
+    </Content>
+    <Content Include="Generator\GpuCommandGenerator.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>GpuCommandGenerator1.cs</LastGenOutput>
     </Content>
     <Content Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

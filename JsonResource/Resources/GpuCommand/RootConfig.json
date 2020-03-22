@@ -1,0 +1,31 @@
+{
+    "commonFileConfig": {
+        "copyright": "../copyright.txt",
+        "includeFiles": [
+            "<cstdint>"
+        ],
+        "namespace": "my::detail",
+        "customDeserializerConfigs": [
+            {
+                "definitionConfigName": "gpuCommand",
+                "deserializerType": "DescriptorConfig",
+                "generatorType": "GpuCommandGenerator"
+            }
+        ]
+    },
+    "fileConfigs": [
+        {
+            "outputFileName": "my_GpuCommand.h",
+            "definitions": [
+                {
+                    "name": "gpuCommand",
+                    "path": "Move.json"
+                },
+                {
+                    "name": "",
+                    "path": "Opcode.json"
+                }
+            ]
+        }
+    ]
+}

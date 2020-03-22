@@ -1,10 +1,11 @@
 #include <stdlib.h>
 #include <iostream>
+#include "DummySdkDefinitions.h"
 #include "../../CommaSeparatedResource\Output/SamplerDescriptor.h"
 #include "../../CommaSeparatedResource\Output/TextureDescriptor.h"
-
 #include "../../JsonResource/Outputs/my_RenderTargetDescriptor.h"
 #include "../../JsonResource/Outputs/my_Enum.h"
+#include "../../JsonResource/Outputs/my_GpuCommand.h"
 
 #define TEST_EQ(val1, val2)\
 {\
@@ -56,5 +57,10 @@ int main()
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorPointer( pDesc ), pointer - 1 );
 	}
 
+	{
+		int value = 0;
+		int index = 0;
+		GpuCommand cmd = my::detail::MakeMove(value, index);
+	}
 	return 0;
 }

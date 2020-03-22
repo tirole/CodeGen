@@ -1,0 +1,21 @@
+{
+    "declaration": {
+        "definitionType": "enum class",
+        "definitionName": "Opcode",
+        "doxyBrief": "",
+        "nameAlias": "オペコード"
+    },
+    "enumBase": "int8_t",
+    "enumerators": [
+        {
+            "enumeratorName": "Nop",
+            "value": "0b00000000",
+            "doxyBrief": ""
+        },
+        {
+            "enumeratorName": "Move",
+            "value": "0b00000001",
+            "doxyBrief": ""
+        }
+    ]
+}

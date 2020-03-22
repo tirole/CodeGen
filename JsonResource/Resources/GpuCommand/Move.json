@@ -1,0 +1,45 @@
+{
+    "declaration": {
+        "doxyBrief": "",
+        "definitionType": "struct",
+        "definitionName": "Move",
+        "nameAlias": "ムーブコマンド"
+    },
+    "memberVariables": [
+        {
+            "variableName": "value",
+            "type": "int",
+            "defaultValue": "",
+            "nameAlias": "値",
+            "doxyBrief": "",
+            "requirements": [],
+            "wordOffset": "0",
+            "bitRange": "31:0",
+            "modifier": ""
+        },
+        {
+            "variableName": "index",
+            "type": "int",
+            "defaultValue": "",
+            "nameAlias": "インデックス",
+            "doxyBrief": "",
+            "requirements": [],
+            "wordOffset": "0",
+            "bitRange": "55:48",
+            "modifier": ""
+        },
+        {
+            "variableName": "opcode",
+            "type": "int",
+            "defaultValue": "",
+            "nameAlias": "オペコード",
+            "doxyBrief": "",
+            "requirements": [
+                "EQ,Opcode::Move"
+            ],
+            "wordOffset": "0",
+            "bitRange": "63:56",
+            "modifier": ""
+        }
+    ]
+}
