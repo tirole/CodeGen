@@ -21,7 +21,7 @@
                         "nameAlias": "GPU アドレス",
                         "doxyBrief": "GPU アドレスです。",
                         "requirements": [
-                            "MINMAX:0:7",
+                            "MINMAX,0,7",
                             "NOTNULL"
                         ]
                     },
@@ -32,7 +32,7 @@
                         "nameAlias": "サイズ",
                         "doxyBrief": "サイズです。",
                         "requirements": [
-                            "MINMAX:0:7",
+                            "MINMAX,0,7",
                             "NOTNULL"
                         ]
                     }
@@ -54,7 +54,7 @@
                         "nameAlias": "オフセット",
                         "doxyBrief": "オフセットです。",
                         "requirements": [
-                            "MINMAX:0:7",
+                            "MINMAX,0,7",
                             "NOTNULL"
                         ]
                     }
@@ -75,7 +75,7 @@
                 "nameAlias": "GPU アドレス",
                 "doxyBrief": "GPU アドレスです。",
                 "requirements": [
-                    "MINMAX:0:7",
+                    "MINMAX,0,7",
                     "NOTNULL"
                 ]
             }
@@ -92,7 +92,7 @@
                 "nameAlias": "オフセット",
                 "doxyBrief": "GPU アドレスです。",
                 "requirements": [
-                    "MINMAX:0:7",
+                    "MINMAX,0,7",
                     "NOTNULL"
                 ]
             }
@@ -109,7 +109,7 @@
                 "nameAlias": "",
                 "doxyBrief": "GPU アドレスです。",
                 "requirements": [
-                    "MINMAX:0:7",
+                    "MINMAX,0,7",
                     "NOTNULL"
                 ]
             }
@@ -126,7 +126,7 @@
                 "nameAlias": "",
                 "doxyBrief": "パブリックメンバーです。",
                 "requirements": [
-                    "MINMAX:0:7",
+                    "MINMAX,0,7",
                     "NOTNULL"
                 ]
             }
@@ -143,7 +143,7 @@
                 "nameAlias": "",
                 "doxyBrief": "パブリックメンバーです。",
                 "requirements": [
-                    "MINMAX:0:7",
+                    "MINMAX,0,7",
                     "NOTNULL"
                 ]
             }
@@ -160,7 +160,7 @@
                 "nameAlias": "",
                 "doxyBrief": "パブリックメンバーです。",
                 "requirements": [
-                    "MINMAX:0:7",
+                    "MINMAX,0,7",
                     "NOTNULL"
                 ]
             }

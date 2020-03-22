@@ -134,9 +134,31 @@ namespace JsonResource
                             {
                                 variableInfo.HasBitWidthDeclaration = true;
                                 var bitRanges = memberVariable.BitRange.Split(':');
-                                variableInfo.BitBegin = int.Parse(bitRanges[1]);
-                                variableInfo.BitEnd = int.Parse(bitRanges[0]);
-                                variableInfo.OffsetIn4ByteUnit = int.Parse(memberVariable.WordOffset);
+                                if (bitRanges.Length == 1)
+                                {
+                                    variableInfo.BitBegin = int.Parse(bitRanges[0]);
+                                    variableInfo.BitEnd = int.Parse(bitRanges[0]);
+                                }
+                                else
+                                {
+                                    variableInfo.BitBegin = int.Parse(bitRanges[1]);
+                                    variableInfo.BitEnd = int.Parse(bitRanges[0]);
+                                }
+
+                                var wordRanges = memberVariable.WordOffset.Split(':');
+                                if (wordRanges.Length == 1)
+                                {
+                                    variableInfo.OffsetIn4ByteUnit = int.Parse(wordRanges[0]);
+                                }
+                                else
+                                {
+                                    if (int.Parse(wordRanges[0]) > int.Parse(wordRanges[1]))
+                                    {
+                                        throw new System.InvalidOperationException("WordOffsetRange must be wordRanges[0] <= wordRanges[1].");
+                                    }
+                                    variableInfo.OffsetIn4ByteUnit = int.Parse(wordRanges[0]);
+                                }
+                                
                                 variableInfo.Modifier = memberVariable.Modifier;
                             }
 
@@ -349,7 +371,7 @@ namespace JsonResource
                     continue;
                 }
                 var requirementInfo = new Generator.RequirementSdkInfo();
-                List<string> requirements = new List<string>(requirement.Split(':'));
+                List<string> requirements = new List<string>(requirement.Split(requirementInfo.RequirementValueSeparater));
                 requirementInfo.Type = Generator.RequirementInfo.GetRequirementType(requirements[0]);
                 // remove first element which shows requirement type.
                 requirements.RemoveAt(0);

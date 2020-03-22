@@ -13,7 +13,7 @@
             "nameAlias":"整数値",
             "doxyBrief": "int value",
             "requirements": [
-                "MINMAX:0:7",
+                "MINMAX,0,7",
                 "NOTNULL"
             ]
         },
@@ -24,7 +24,7 @@
             "nameAlias":"フロート値",
             "doxyBrief": "float value",
             "requirements": [
-                "MINMAX:0:7",
+                "MINMAX,0,7",
                 "NOTNULL"
             ]
         }

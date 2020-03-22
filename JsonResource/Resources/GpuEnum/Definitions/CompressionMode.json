@@ -8,14 +8,19 @@
     "enumBase": "int8_t",
     "enumerators": [
         {
-            "enumeratorMame": "Linear",
+            "enumeratorName": "Linear",
             "value": "1",
             "doxyBrief": "Linear format"
         },
         {
-            "enumeratorMame": "Block",
+            "enumeratorName": "Block",
             "value": "2",
-            "doxyBrief": "Block format"
+            "doxyBrief": "Block format",
+            "doxyDetails":
+            [
+                "ブロックフォーマットは 16x16 の",
+                "ピクセルの集合です。"
+            ]
         }
     ]
 }

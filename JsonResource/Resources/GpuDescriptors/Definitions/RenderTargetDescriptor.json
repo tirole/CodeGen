@@ -3,7 +3,7 @@
         "doxyBrief": "This is RenderTargetDescriptor.",
         "definitionType": "struct",
         "definitionName": "RendeerTargetDescriptor",
-        "nameAlias":"レンダーターゲットデスクリプター"
+        "nameAlias": "レンダーターゲットデスクリプター"
     },
     "memberVariables": [
         {
@@ -26,7 +26,7 @@
             "nameAlias": "ソースオフセット 2",
             "doxyBrief": "This is srcBufOsset2.",
             "requirements": [
-                "MINMAX:0:32"
+                "MINMAX,0,32"
             ],
             "wordOffset": "0",
             "bitRange": "31:16",
@@ -39,10 +39,34 @@
             "nameAlias": "",
             "doxyBrief": "This is srcBufOsset3.",
             "requirements": [
-                "LE:8"
+                "LE,std::numeric_limits<uint32_t>::max()",
+                "NE,3",
+                "COM,IsInitialized() されている"
             ],
             "wordOffset": "1",
             "bitRange": "31:0",
+            "modifier": ""
+        },
+        {
+            "variableName": "smhEnabled",
+            "type": "bool",
+            "defaultValue": "",
+            "nameAlias": "何かの有効無効",
+            "doxyBrief": "",
+            "requirements": [],
+            "wordOffset": "2",
+            "bitRange": "0",
+            "modifier": ""
+        },
+        {
+            "variableName": "smhEnabled2",
+            "type": "bool",
+            "defaultValue": "",
+            "nameAlias": "何か 2 の有効無効",
+            "doxyBrief": "",
+            "requirements": [],
+            "wordOffset": "2",
+            "bitRange": "1",
             "modifier": ""
         },
         {
@@ -52,9 +76,9 @@
             "nameAlias": "クリアカラー",
             "doxyBrief": "This is clear colors.",
             "requirements": [
-                "L:16"
+                "L,16"
             ],
-            "wordOffset": "2",
+            "wordOffset": "3:6",
             "bitRange": "127:0",
             "modifier": ""
         }

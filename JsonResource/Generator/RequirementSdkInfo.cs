@@ -15,6 +15,8 @@ namespace JsonResource.Generator
             "SDK_LESS",
             "SDK_LESS_EQUAL",
             "SDK_MIN_MAX",
+            "SDK_NOT_EQUAL",
+            "// ",
         };
         public RequirementSdkInfo()
         {
@@ -30,6 +32,7 @@ namespace JsonResource.Generator
                 case RequirementInfo.RequirementType.Less:
                 case RequirementInfo.RequirementType.LessEqual:
                 case RequirementInfo.RequirementType.MinMax:
+                case RequirementInfo.RequirementType.NotEqual:
                     string ret = GetMacroName() + "(" + variableName + ", ";
                     foreach (var value in this.Values)
                     {
@@ -40,6 +43,9 @@ namespace JsonResource.Generator
                     return GetMacroName() + "(" + variableName + ");";
                 case RequirementInfo.RequirementType.NoRequirement:
                     return GetMacroName();
+                case RequirementInfo.RequirementType.Comment:
+                    // NOTE: 1 行コメントのみに対応
+                    return GetMacroName() + this.Values[0];
             }
             return "Invalid variableName";
         }

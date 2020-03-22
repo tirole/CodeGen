@@ -21,7 +21,7 @@ namespace JsonResource
     public partial class Enumerator
     {
 
-        [DataMember(Name = "enumeratorMame", IsRequired = true)]
+        [DataMember(Name = "enumeratorName", IsRequired = true)]
         public string Name;
 
         [DataMember(Name = "value")]

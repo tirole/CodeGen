@@ -49,6 +49,7 @@ void Get<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.Variable
     memcpy(<#=member.VariableName#>, &pDesc->data[uint32ArrayIndex], sizeof(<#=member.Type #>) * <#=member.ArrayLength #>);
 }
 <#}else {#>
+inline
 <#=member.Type #> Get<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(const <#=Info.Name #>* pDesc)
 {
 <#if((member.BitEnd - member.BitBegin) == 63) { #>
