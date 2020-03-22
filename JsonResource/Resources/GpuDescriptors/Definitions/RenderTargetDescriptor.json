@@ -70,6 +70,28 @@
             "modifier": ""
         },
         {
+            "variableName": "mode",
+            "type": "int",
+            "defaultValue": "",
+            "nameAlias": "モード",
+            "doxyBrief": "",
+            "requirements": [],
+            "wordOffset": "3",
+            "bitRange": "1:0",
+            "modifier": ""
+        },
+        {
+            "variableName": "pointer",
+            "type": "GpuAddress",
+            "defaultValue": "",
+            "nameAlias": "ポインター",
+            "doxyBrief": "",
+            "requirements": [],
+            "wordOffset": "3:4",
+            "bitRange": "63:6",
+            "modifier": "-= 1"
+        },
+        {
             "variableName": "clearColors",
             "type": "int32_t[4]",
             "defaultValue": "",
@@ -78,7 +100,7 @@
             "requirements": [
                 "L,16"
             ],
-            "wordOffset": "3:6",
+            "wordOffset": "5:8",
             "bitRange": "127:0",
             "modifier": ""
         }

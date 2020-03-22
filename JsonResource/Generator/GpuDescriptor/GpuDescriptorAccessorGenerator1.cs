@@ -76,6 +76,37 @@ if((member.BitEnd - member.BitBegin) == 63) {
             this.Write("*>(&pDesc->data[uint32ArrayIndex]);\r\n    *pOut = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
             this.Write(";\r\n");
+} else if((member.BitEnd - member.BitBegin) >= 32 && (member.BitBegin != 0)) { 
+            this.Write("    constexpr int uint32ArrayIndex = ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.OffsetIn4ByteUnit));
+            this.Write(";\r\n    constexpr int bitOffset = ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.BitBegin));
+            this.Write(";\r\n    constexpr int lowBitLength = 32 - bitOffset;\r\n    constexpr int lowBitMask" +
+                    " = static_cast<int>(~(static_cast<int64_t>(-1) << lowBitLength ));\r\n    constexp" +
+                    "r int highBitLength = (");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.BitEnd));
+            this.Write(" - ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.BitBegin));
+            this.Write(" + 1) - lowBitLength;\r\n    constexpr int highBitMask = static_cast<int>(~(-1LL <<" +
+                    " highBitLength));\r\n\r\n    uint64_t inputVal = static_cast<uint64_t>(");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
+            this.Write(");\r\n");
+                if(member.Modifier != null) { 
+            this.Write("    inputVal ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.Modifier));
+            this.Write(";\r\n");
+                } 
+            this.Write(@"    int lowVal = inputVal & lowBitMask;
+    int highVal = (inputVal & (highBitMask << lowBitLength)) >> lowBitLength;
+
+    // low side
+    pDesc->data[uint32ArrayIndex] &= ~(lowBitMask << bitOffset);
+    pDesc->data[uint32ArrayIndex] |= lowVal << bitOffset;
+    // high side
+    pDesc->data[uint32ArrayIndex + 1] &= ~highBitMask;
+    pDesc->data[uint32ArrayIndex + 1] |= (highVal & highBitMask);
+    
+");
 } else { 
             this.Write("    constexpr int uint32ArrayIndex = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.OffsetIn4ByteUnit));
@@ -133,6 +164,23 @@ if((member.BitEnd - member.BitBegin) == 63) {
             this.Write(";\r\n    auto pOut = reinterpret_cast<const ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
             this.Write("*>(&pDesc->data[uint32ArrayIndex]);\r\n    return *pOut;\r\n");
+} else if((member.BitEnd - member.BitBegin) >= 32 && (member.BitBegin != 0)) { 
+            this.Write("    constexpr int uint32ArrayIndex = ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.OffsetIn4ByteUnit));
+            this.Write(";\r\n    constexpr int bitOffset = ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.BitBegin));
+            this.Write(";\r\n    constexpr int lowBitLength = 32 - bitOffset;\r\n    constexpr int lowBitMask" +
+                    " = static_cast<int>(~(-1LL << lowBitLength));\r\n    constexpr int highBitLength =" +
+                    " (");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.BitEnd));
+            this.Write(" - ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.BitBegin));
+            this.Write(" + 1) - lowBitLength;\r\n    constexpr int highBitMask = static_cast<int>(~(-1LL <<" +
+                    " highBitLength));\r\n\r\n    ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
+            this.Write(" outputVal = 0;\r\n    outputVal = (pDesc->data[uint32ArrayIndex] & (lowBitMask << " +
+                    "bitOffset)) >> bitOffset;\r\n    outputVal |= static_cast<uint64_t>((pDesc->data[u" +
+                    "int32ArrayIndex + 1] & highBitMask)) << lowBitLength;\r\n    return outputVal;\r\n");
 } else { 
             this.Write("    constexpr int uint32ArrayIndex = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.OffsetIn4ByteUnit));

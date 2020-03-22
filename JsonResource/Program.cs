@@ -12,6 +12,30 @@ namespace JsonResource
     {
         static void Main(string[] args)
         {
+            {
+                var variableInfo = new Generator.VariableInfo();
+                variableInfo.OffsetIn4ByteUnit = 1;
+                variableInfo.BitBegin = 6;
+                variableInfo.BitEnd = 63;
+                int bitWidth = variableInfo.BitEnd - variableInfo.BitBegin + 1;
+                if (variableInfo.BitBegin != 0 && bitWidth > 63)
+                {
+                    int wordOffset = 0;
+                    while (bitWidth >= 0)
+                    {
+                        if (bitWidth < 32)
+                        {
+                            // ビットマスクで書き込む
+                        }
+                        else
+                        {
+                            // 32bit 代入
+                        }
+                        wordOffset += 1;
+                        bitWidth -= 32;
+                    }
+                }
+            }
             StreamReader sr =
                 new StreamReader(@"D:\prj\software\codegeneration\JsonResource\Resources\GpuEnum\RootConfig.json");
 

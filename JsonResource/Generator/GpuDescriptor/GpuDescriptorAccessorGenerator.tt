@@ -27,6 +27,28 @@ void Set<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.Variable
     constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
     auto pOut = reinterpret_cast<<#=member.Type #>*>(&pDesc->data[uint32ArrayIndex]);
     *pOut = <#=member.VariableName #>;
+<#} else if((member.BitEnd - member.BitBegin) >= 32 && (member.BitBegin != 0)) { #>
+    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
+    constexpr int bitOffset = <#=member.BitBegin #>;
+    constexpr int lowBitLength = 32 - bitOffset;
+    constexpr int lowBitMask = static_cast<int>(~(static_cast<int64_t>(-1) << lowBitLength ));
+    constexpr int highBitLength = (<#=member.BitEnd #> - <#=member.BitBegin#> + 1) - lowBitLength;
+    constexpr int highBitMask = static_cast<int>(~(-1LL << highBitLength));
+
+    uint64_t inputVal = static_cast<uint64_t>(<#=member.VariableName #>);
+<#                if(member.Modifier != null) { #>
+    inputVal <#=                        member.Modifier #>;
+<#                } #>
+    int lowVal = inputVal & lowBitMask;
+    int highVal = (inputVal & (highBitMask << lowBitLength)) >> lowBitLength;
+
+    // low side
+    pDesc->data[uint32ArrayIndex] &= ~(lowBitMask << bitOffset);
+    pDesc->data[uint32ArrayIndex] |= lowVal << bitOffset;
+    // high side
+    pDesc->data[uint32ArrayIndex + 1] &= ~highBitMask;
+    pDesc->data[uint32ArrayIndex + 1] |= (highVal & highBitMask);
+    
 <#} else { #>
     constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
     constexpr int bitOffset = <#=member.BitBegin #>;
@@ -56,6 +78,18 @@ inline
     constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
     auto pOut = reinterpret_cast<const <#=member.Type #>*>(&pDesc->data[uint32ArrayIndex]);
     return *pOut;
+<#} else if((member.BitEnd - member.BitBegin) >= 32 && (member.BitBegin != 0)) { #>
+    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
+    constexpr int bitOffset = <#=member.BitBegin #>;
+    constexpr int lowBitLength = 32 - bitOffset;
+    constexpr int lowBitMask = static_cast<int>(~(-1LL << lowBitLength));
+    constexpr int highBitLength = (<#=member.BitEnd #> - <#=member.BitBegin #> + 1) - lowBitLength;
+    constexpr int highBitMask = static_cast<int>(~(-1LL << highBitLength));
+
+    <#=member.Type #> outputVal = 0;
+    outputVal = (pDesc->data[uint32ArrayIndex] & (lowBitMask << bitOffset)) >> bitOffset;
+    outputVal |= static_cast<uint64_t>((pDesc->data[uint32ArrayIndex + 1] & highBitMask)) << lowBitLength;
+    return outputVal;
 <#} else { #>
     constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
     constexpr int bitOffset = <#=member.BitBegin #>;

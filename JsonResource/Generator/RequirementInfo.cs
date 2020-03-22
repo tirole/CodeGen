@@ -21,6 +21,7 @@ namespace JsonResource.Generator
             MinMax,
             NotEqual,
             Comment,
+            Equal,
             Count,
         };
 
@@ -33,6 +34,7 @@ namespace JsonResource.Generator
             "MINMAX",
             "NE",
             "COM",
+            "EQ",
         };
         public char RequirementValueSeparater = ',';
         public RequirementType Type { get; set; }

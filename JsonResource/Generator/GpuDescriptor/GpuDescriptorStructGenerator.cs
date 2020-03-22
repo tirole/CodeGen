@@ -10,7 +10,7 @@ namespace JsonResource.Generator.GpuDescriptor
     {
         public string DefinitionName;
         public string MemberName;
-        public const string MemberType = "int32_t"; // C# 向けの出力はどのみちテンプレートを変えざる負えないのでベタ書きにする。
+        public const string MemberType = "uint32_t"; // C# 向けの出力はどのみちテンプレートを変えざる負えないのでベタ書きにする。
         public GpuDescriptorStructGenerator(StructGenerationInfo info)
         {
             var lastMember = info.MemberVariableInfos[info.MemberVariableInfos.Count - 1];

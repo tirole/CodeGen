@@ -17,6 +17,7 @@ namespace JsonResource.Generator
             "SDK_MIN_MAX",
             "SDK_NOT_EQUAL",
             "// ",
+            "SDK_EQUAL",
         };
         public RequirementSdkInfo()
         {
@@ -33,6 +34,7 @@ namespace JsonResource.Generator
                 case RequirementInfo.RequirementType.LessEqual:
                 case RequirementInfo.RequirementType.MinMax:
                 case RequirementInfo.RequirementType.NotEqual:
+                case RequirementInfo.RequirementType.Equal:
                     string ret = GetMacroName() + "(" + variableName + ", ";
                     foreach (var value in this.Values)
                     {

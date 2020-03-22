@@ -41,6 +41,9 @@ int main()
 		my::detail::SetRendeerTargetDescriptorSrcBufOsset( pDesc, 5 );
 		my::detail::SetRendeerTargetDescriptorSrcBufOsset2( pDesc, 6 );
 		my::detail::SetRendeerTargetDescriptorSrcBufOsset3( pDesc, my::detail::CompressionMode::Block );
+		uint64_t pointer = 0xdeLL << 50;
+		pointer |= 0xdead;
+		my::detail::SetRendeerTargetDescriptorPointer( pDesc, pointer );
 		int32_t outColors[4] = {};
 		my::detail::GetRendeerTargetDescriptorClearColors( outColors, pDesc );
 		for(int i = 0; i < 4; ++i)
@@ -50,6 +53,7 @@ int main()
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset( pDesc ), 5 - 1);
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset2( pDesc ), 6 );
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset3( pDesc ), my::detail::CompressionMode::Block );
+		TEST_EQ( my::detail::GetRendeerTargetDescriptorPointer( pDesc ), pointer - 1 );
 	}
 
 	return 0;
