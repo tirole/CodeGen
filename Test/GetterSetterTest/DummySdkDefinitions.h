@@ -15,3 +15,8 @@ enum class FilterMode
 	Point,
 	Linear,
 };
+
+uint64_t Ceil( uint64_t val )
+{
+	return val;
+}

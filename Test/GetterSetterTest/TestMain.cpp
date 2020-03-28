@@ -48,7 +48,7 @@ int main()
 		my::detail::SetRendeerTargetDescriptorFormatDescriptorUnion( pDesc, simpleUnion);
 		uint64_t pointer = 0xdeLL << 50;
 		pointer |= 0xdead;
-		my::detail::SetRendeerTargetDescriptorPointer( pDesc, pointer );
+		my::detail::SetRendeerTargetDescriptorPointer( pDesc, pointer);
 		int32_t outColors[4] = {};
 		my::detail::GetRendeerTargetDescriptorClearColors( outColors, pDesc );
 		for(int i = 0; i < 4; ++i)
@@ -58,7 +58,9 @@ int main()
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset( pDesc ), 5 - 1);
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset2( pDesc ), 6 );
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset3( pDesc ), my::detail::CompressionMode::Block );
-		TEST_EQ( my::detail::GetRendeerTargetDescriptorPointer( pDesc ), pointer - 1 );
+
+		// modifiler ‚Å 2 ”{‚³‚ê‚Ä‚¢‚é‚Ì‚Å 2 * pointer
+		TEST_EQ( my::detail::GetRendeerTargetDescriptorPointer( pDesc ), (2 * pointer) & (~(-1LL << 58)) );
 		my::detail::SimpleUnion out = my::detail::GetRendeerTargetDescriptorFormatDescriptorUnion( pDesc );
 		TEST_EQ( out.intVal, simpleUnion.intVal );
 	}

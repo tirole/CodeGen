@@ -17,7 +17,7 @@
             ],
             "wordOffset": "0",
             "bitRange": "15:0",
-            "modifier": "-= 1"
+            "modifier": "add,-1"
         },
         {
             "variableName": "srcBufOsset2",
@@ -31,7 +31,7 @@
             ],
             "wordOffset": "0",
             "bitRange": "31:16",
-            "modifier": ""
+            "modifier": "func,Ceil"
         },
         {
             "variableName": "srcBufOsset3",
@@ -90,7 +90,7 @@
             "requirements": [],
             "wordOffset": "3:4",
             "bitRange": "63:6",
-            "modifier": "-= 1"
+            "modifier": "mul,2"
         },
         {
             "variableName": "clearColors",

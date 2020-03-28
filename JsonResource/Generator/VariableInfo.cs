@@ -29,5 +29,46 @@ namespace JsonResource.Generator
         public bool IsAssignDefaultValue { get; set; }
         public string DeclarationPrefix { get; set; }
         //abstract public string GetString();
+
+        public enum ModifierType
+        {
+            Add,
+            Mul,
+            Func,
+            Count
+        };
+        public string[] Modifiers = new string[(int)ModifierType.Count]
+        {
+            "add",
+            "mul",
+            "func",
+        };
+
+        public string InputTempVariableName = "inputVal";
+        public string OutputTempVariableName = "outputVal";
+
+        public string GetModifierString()
+        {
+            var modifierStrings = Modifier.Split(',');
+            string modifierName = modifierStrings[0];
+            string modifierVal = modifierStrings[1];
+            string retString = "";
+            switch (modifierName)
+            {
+                case "add":
+                    retString = InputTempVariableName + " += " + modifierVal;
+                    break;
+                case "mul":
+                    retString = InputTempVariableName + " *= " + modifierVal;
+                    break;
+                case "func":
+                    retString = InputTempVariableName + " = " + modifierVal + "(" + InputTempVariableName + ")";
+                    break;
+                default:
+                    throw new System.InvalidOperationException("Illegal modifier type.");
+            }
+
+            return retString;
+        }
     }
 }
