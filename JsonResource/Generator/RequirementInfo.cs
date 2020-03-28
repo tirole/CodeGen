@@ -22,6 +22,7 @@ namespace JsonResource.Generator
             NotEqual,
             Comment,
             Equal,
+            Align,
             Count,
         };
 
@@ -35,6 +36,7 @@ namespace JsonResource.Generator
             "NE",
             "COM",
             "EQ",
+            "ALIGN",
         };
         public char RequirementValueSeparater = ',';
         public RequirementType Type { get; set; }

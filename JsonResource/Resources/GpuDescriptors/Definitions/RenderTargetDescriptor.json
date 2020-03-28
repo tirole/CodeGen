@@ -26,7 +26,8 @@
             "nameAlias": "ソースオフセット 2",
             "doxyBrief": "This is srcBufOsset2.",
             "requirements": [
-                "MINMAX,0,32"
+                "MINMAX,0,32",
+                "ALIGN,64"
             ],
             "wordOffset": "0",
             "bitRange": "31:16",
