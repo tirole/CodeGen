@@ -11,8 +11,10 @@ namespace JsonResource.Generator
         public StructGenerationInfo()
         {
             MemberVariableInfos = new List<VariableInfo>();
+            StructureType = "struct";
         }
         public string Name { get; set; }
         public List<VariableInfo> MemberVariableInfos { get; set; }
+        public string StructureType { get; set; }
     }
 }

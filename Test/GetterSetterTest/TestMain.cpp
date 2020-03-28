@@ -3,6 +3,7 @@
 #include "DummySdkDefinitions.h"
 #include "../../CommaSeparatedResource\Output/SamplerDescriptor.h"
 #include "../../CommaSeparatedResource\Output/TextureDescriptor.h"
+#include "../../JsonResource/Outputs/my_SimpleStruct.h"
 #include "../../JsonResource/Outputs/my_RenderTargetDescriptor.h"
 #include "../../JsonResource/Outputs/my_Enum.h"
 #include "../../JsonResource/Outputs/my_GpuCommand.h"
@@ -38,10 +39,13 @@ int main()
 		my::detail::RendeerTargetDescriptor desc = {};
 		auto pDesc = &desc;
 		const int32_t colors[4] = { 1, 2, 3, 4 };
+		my::detail::SimpleUnion simpleUnion;
+		simpleUnion.intVal = 0xdead;
 		my::detail::SetRendeerTargetDescriptorClearColors( pDesc, colors );
 		my::detail::SetRendeerTargetDescriptorSrcBufOsset( pDesc, 5 );
 		my::detail::SetRendeerTargetDescriptorSrcBufOsset2( pDesc, 6 );
 		my::detail::SetRendeerTargetDescriptorSrcBufOsset3( pDesc, my::detail::CompressionMode::Block );
+		my::detail::SetRendeerTargetDescriptorFormatDescriptorUnion( pDesc, simpleUnion);
 		uint64_t pointer = 0xdeLL << 50;
 		pointer |= 0xdead;
 		my::detail::SetRendeerTargetDescriptorPointer( pDesc, pointer );
@@ -55,6 +59,8 @@ int main()
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset2( pDesc ), 6 );
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorSrcBufOsset3( pDesc ), my::detail::CompressionMode::Block );
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorPointer( pDesc ), pointer - 1 );
+		my::detail::SimpleUnion out = my::detail::GetRendeerTargetDescriptorFormatDescriptorUnion( pDesc );
+		TEST_EQ( out.intVal, simpleUnion.intVal );
 	}
 
 	{

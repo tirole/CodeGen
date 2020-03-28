@@ -103,6 +103,18 @@
             "wordOffset": "5:8",
             "bitRange": "127:0",
             "modifier": ""
+        },
+        {
+            "variableName": "formatDescriptorUnion",
+            "type": "../../SimpleStruct/SimpleUnion.json",
+            "defaultValue": "",
+            "nameAlias": "フォーマットデスクリプター",
+            "doxyBrief": "",
+            "requirements": [
+            ],
+            "wordOffset": "9:10",
+            "bitRange": "63:0",
+            "modifier": ""
         }
     ]
 }

@@ -134,6 +134,15 @@ namespace JsonResource
                             structGenInfo.MemberVariableInfos.Add(variableInfo);
                         }
 
+                        if (config.Declaration.DefinitionType == "union")
+                        {
+                            structGenInfo.StructureType = "union";
+                        }
+                        else
+                        {
+                            structGenInfo.StructureType = "struct";
+                        }
+
                         var structGenTuple =
                             new Tuple<Generator.StructGenerationInfo, Type>(structGenInfo, null);
                         fileInfo.StructGenerationInfos.Add(structGenTuple);

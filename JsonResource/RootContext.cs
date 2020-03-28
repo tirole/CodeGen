@@ -211,6 +211,7 @@ namespace JsonResource
             { 
                 new Tuple<string, Type>("enum class", typeof(EnumConfig)) ,
                 new Tuple<string, Type>("struct", typeof(StructConfig)),
+                new Tuple<string, Type>("union", typeof(StructConfig)),
                 new Tuple<string, Type>("class", typeof(ClassConfig)),
                 new Tuple<string, Type>("variable", typeof(VariableDeclarationsConfig)),
             };

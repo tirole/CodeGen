@@ -25,7 +25,8 @@ namespace JsonResource.Generator
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("struct ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(Info.StructureType));
+            this.Write(" ");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
             this.Write("\r\n{\r\n");
   foreach(var memberVariableInfo in Info.MemberVariableInfos) { 

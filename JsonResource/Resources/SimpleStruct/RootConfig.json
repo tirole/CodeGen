@@ -11,8 +11,12 @@
             "outputFileName": "my_SimpleStruct.h",
             "definitions": [
                 {
-                    "name":"",
-                    "path":"SimpleStruct.json"
+                    "name": "",
+                    "path": "SimpleUnion.json"
+                },
+                {
+                    "name": "",
+                    "path": "SimpleStruct.json"
                 }
             ]
         }
