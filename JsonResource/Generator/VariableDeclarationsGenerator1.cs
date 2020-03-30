@@ -38,8 +38,8 @@ namespace JsonResource.Generator
             this.Write(this.ToStringHelper.ToStringWithCulture(variableInfo.DoxyBrief));
             this.Write("\r\n");
         } 
-        if(variableInfo.DeclarationPrefix != null && variableInfo.DeclarationPrefix != "") { 
-            this.Write(this.ToStringHelper.ToStringWithCulture(variableInfo.DeclarationPrefix));
+        if(variableInfo.TypePrefix != null && variableInfo.TypePrefix != "") { 
+            this.Write(this.ToStringHelper.ToStringWithCulture(variableInfo.TypePrefix));
             this.Write("\r\n");
         } 
             this.Write(this.ToStringHelper.ToStringWithCulture(variableInfo.Type));

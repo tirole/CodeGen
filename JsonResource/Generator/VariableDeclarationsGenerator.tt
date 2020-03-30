@@ -14,8 +14,8 @@
 <#        if (variableInfo.DoxyBrief != null && variableInfo.DoxyBrief != "") { #>
 //// @brief    <#=                variableInfo.DoxyBrief#>
 <#        } #>
-<#        if(variableInfo.DeclarationPrefix != null && variableInfo.DeclarationPrefix != "") { #>
-<#=                variableInfo.DeclarationPrefix #>
+<#        if(variableInfo.TypePrefix != null && variableInfo.TypePrefix != "") { #>
+<#=                variableInfo.TypePrefix #>
 <#        } #>
 <#=            variableInfo.Type #> <#=            variableName #><#
         if(variableInfo.IsAssignDefaultValue){#>

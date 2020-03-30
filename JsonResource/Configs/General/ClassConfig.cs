@@ -26,8 +26,8 @@ namespace JsonResource
         public bool IsInlineAccessor;
         [DataMember(Name = "isAccessorReturnThis", IsRequired = true)]
         public bool IsAccessorReturnThis;
-        [DataMember(Name = "variable", IsRequired = true)]
-        public VariableConfig VariableConfig;
+        [DataMember(Name = "variableDeclaration", IsRequired = true)]
+        public VariableDeclarationConfig VariableDeclarationConfig;
     }
     [DataContract]
     public partial class MemberFunctionConfig

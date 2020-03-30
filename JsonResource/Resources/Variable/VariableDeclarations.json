@@ -8,7 +8,8 @@
     "variableDeclarations": [
         {
             "isAssignDefaultValue": true,
-            "declarationPrefix": "",
+            "typePrefix": "",
+            "typeSuffix": "",
             "variable": {
                 "variableName": "Tables",
                 "type": "../SimpleStruct/SimpleStruct.json",
@@ -22,7 +23,8 @@
         },
         {
             "isAssignDefaultValue": true,
-            "declarationPrefix": "constexpr",
+            "typePrefix": "constexpr",
+            "typeSuffix": "constexpr",
             "variable": {
                 "variableName": "TextureMinAlignment",
                 "type": "size_t",
@@ -36,7 +38,8 @@
         },
         {
             "isAssignDefaultValue": false,
-            "declarationPrefix": "constexpr",
+            "typePrefix": "constexpr",
+            "typeSuffix": "constexpr",
             "variable": {
                 "variableName": "VertexBufferMinAlignment",
                 "type": "size_t",
@@ -50,7 +53,8 @@
         },
         {
             "isAssignDefaultValue": true,
-            "declarationPrefix": "",
+            "typePrefix": "",
+            "typeSuffix": "",
             "variable": {
                 "variableName": "FormatTable",
                 "type": "int[4]",

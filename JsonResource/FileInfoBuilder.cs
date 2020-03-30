@@ -113,7 +113,7 @@ namespace JsonResource
                         var variableInfo = new Generator.VariableInfo();
                         SetCommonVariableInfo(variableInfo, variable.VariableConfig);
                         variableInfo.IsAssignDefaultValue = variable.IsAssignDefaultValue;
-                        variableInfo.DeclarationPrefix = variable.DeclarationPrefix;
+                        variableInfo.TypePrefix = variable.TypePrefix;
                         variableGenInfo.VariableInfos.Add(variableInfo);
                     }
                     fileInfo.VariableDeclarationsGenerationInfos.Add(variableGenInfo);
@@ -221,7 +221,9 @@ namespace JsonResource
                         foreach (var argConfig in config.FunctionConfig.ArgumentConfigs)
                         {
                             var argInfo = new Generator.VariableInfo();
-                            this.SetCommonVariableInfo(argInfo, argConfig);
+                            this.SetCommonVariableInfo(argInfo, argConfig.VariableConfig);
+                            argInfo.TypePrefix = argConfig.TypePrefix;
+                            argInfo.TypeSuffix = argConfig.TypeSuffix;
                             memberFunctionInfo.ArgumentInfos.Add(argInfo);
                         }
 
@@ -240,7 +242,9 @@ namespace JsonResource
                             foreach (var argConfig in config.FunctionConfig.ArgumentConfigs)
                             {
                                 var argInfo = new Generator.VariableInfo();
-                                this.SetCommonVariableInfo(argInfo, argConfig);
+                                this.SetCommonVariableInfo(argInfo, argConfig.VariableConfig);
+                                argInfo.TypePrefix = argConfig.TypePrefix;
+                                argInfo.TypeSuffix = argConfig.TypeSuffix;
                                 skeltonDefinition.ArgumentInfos.Add(argInfo);
                             }
 
@@ -256,19 +260,20 @@ namespace JsonResource
                     foreach (var config in classConfig.MemberVariableConfigs)
                     {
                         var memberVariableInfo = new Generator.MemberVariableInfo();
-                        this.SetCommonVariableInfo(memberVariableInfo, config.VariableConfig);
+                        var variableConfig = config.VariableDeclarationConfig.VariableConfig;
+                        this.SetCommonVariableInfo(memberVariableInfo, variableConfig);
                         memberVariableInfo.AccessModifier = config.AccessModifier;
                         memberVariableInfo.IsDefineAccessor = config.IsDefineAccessor;
                         memberVariableInfo.IsInlineAccessor = config.IsInlineAccessor;
                         memberVariableInfo.IsAccessorReturnThis = config.IsAccessorReturnThis;
 
                         int idxOfFirstUpperCase = 0;
-                        foreach (Char c in config.VariableConfig.VariableName)
+                        foreach (Char c in variableConfig.VariableName)
                         {
                             if (Char.IsUpper(c)) break;
                             ++idxOfFirstUpperCase;
                         }
-                        memberVariableInfo.AccessorName = config.VariableConfig.VariableName.Substring(idxOfFirstUpperCase);
+                        memberVariableInfo.AccessorName = variableConfig.VariableName.Substring(idxOfFirstUpperCase);
                         classGenInfo.AddMemberVariableInfo(memberVariableInfo);
 
                         if(memberVariableInfo.IsDefineAccessor)
@@ -290,7 +295,7 @@ namespace JsonResource
                                 skeltonDefinition.ReturnType = memberVariableInfo.Type;
                                 // TODO: struct 型はポインタにする
                                 var arg = new Generator.VariableInfo();
-                                SetCommonVariableInfo(arg, config.VariableConfig);
+                                SetCommonVariableInfo(arg, variableConfig);
                                 arg.VariableName = char.ToLower(memberVariableInfo.AccessorName[0]) + memberVariableInfo.AccessorName.Substring(1);
                                 skeltonDefinition.ArgumentInfos.Add(arg);
                                 fileInfoCpp.FunctionGenerationInfos.Add(funcGen);
@@ -309,7 +314,7 @@ namespace JsonResource
                                 skeltonDefinition.ReturnType = "void";
                                 // TODO: struct 型はポインタにする
                                 var arg = new Generator.VariableInfo();
-                                SetCommonVariableInfo(arg, config.VariableConfig);
+                                SetCommonVariableInfo(arg, variableConfig);
                                 arg.VariableName = char.ToLower(memberVariableInfo.AccessorName[0]) + memberVariableInfo.AccessorName.Substring(1);
                                 skeltonDefinition.ArgumentInfos.Add(arg);
                                 fileInfoCpp.FunctionGenerationInfos.Add(funcGen);

@@ -19,6 +19,6 @@ namespace JsonResource
         [DataMember(Name = "returnType")]
         public string ReturnType;
         [DataMember(Name = "arguments", IsRequired = true)]
-        public VariableConfig[] ArgumentConfigs;
+        public VariableDeclarationConfig[] ArgumentConfigs;
     }
 }

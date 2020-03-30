@@ -150,13 +150,14 @@ namespace JsonResource
 
                     foreach (var member in config.MemberVariableConfigs)
                     {
-                        if (member.VariableConfig.Type.Split('.').Length > 1)
+                        var variableConfig = member.VariableDeclarationConfig.VariableConfig;
+                        if (variableConfig.Type.Split('.').Length > 1)
                         {
-                            member.VariableConfig.Type = Path.GetDirectoryName(jsonFilePath) + "/" + member.VariableConfig.Type;
+                            variableConfig.Type = Path.GetDirectoryName(jsonFilePath) + "/" + variableConfig.Type;
                         }
-                        if (member.VariableConfig.DefaultValues != null && member.VariableConfig.DefaultValues[0].Split('.').Length > 1)
+                        if (variableConfig.DefaultValues != null && variableConfig.DefaultValues[0].Split('.').Length > 1)
                         {
-                            member.VariableConfig.DefaultValues[0] = Path.GetDirectoryName(jsonFilePath) + "/" + member.VariableConfig.DefaultValues[0];
+                            variableConfig.DefaultValues[0] = Path.GetDirectoryName(jsonFilePath) + "/" + variableConfig.DefaultValues[0];
                         }
                     }
                 }

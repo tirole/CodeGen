@@ -19,8 +19,10 @@ namespace JsonResource
         [DataMember(Name = "isAssignDefaultValue")]
         public bool IsAssignDefaultValue;
 
-        [DataMember(Name = "declarationPrefix")]
-        public string DeclarationPrefix;
+        [DataMember(Name = "typePrefix")]
+        public string TypePrefix;
+        [DataMember(Name = "typeSuffix")]
+        public string TypeSuffix;
         [DataMember(Name = "variable")]
         public VariableConfig VariableConfig;
     }

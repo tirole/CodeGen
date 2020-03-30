@@ -22,7 +22,17 @@ public:
         var arguments = "";
         for(int i =     0; i < info.ArgumentInfos.Count; ++ i) 
         {
-            arguments += info.ArgumentInfos[i].Type + " " + info.ArgumentInfos[i].VariableName;
+            var argInfo = info.ArgumentInfos[i];
+            if(argInfo.TypePrefix != "")
+            {
+                arguments += argInfo.TypePrefix + " ";
+            }
+            arguments += argInfo.Type;
+            if(argInfo.TypeSuffix != "")
+            {
+                arguments += " " + argInfo.TypeSuffix;
+            }
+            arguments += " " + argInfo.VariableName;
             if(i != info.ArgumentInfos.Count - 1) 
             {
                 arguments += ", ";

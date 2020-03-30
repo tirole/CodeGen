@@ -15,26 +15,36 @@
                 "returnType": "void",
                 "arguments": [
                     {
-                        "variableName": "gpuAddr",
-                        "type": "GpuAddress",
-                        "defaultValue": "",
-                        "nameAlias": "GPU アドレス",
-                        "doxyBrief": "GPU アドレスです。",
-                        "requirements": [
-                            "MINMAX,0,7",
-                            "NOTNULL"
-                        ]
+                        "isAssignDefaultValue": false,
+                        "typePrefix": "",
+                        "typeSuffix": "",
+                        "variable": {
+                            "variableName": "gpuAddr",
+                            "type": "GpuAddress",
+                            "defaultValue": "",
+                            "nameAlias": "GPU アドレス",
+                            "doxyBrief": "GPU アドレスです。",
+                            "requirements": [
+                                "MINMAX,0,7",
+                                "NOTNULL"
+                            ]
+                        }
                     },
                     {
-                        "variableName": "size",
-                        "type": "size_t",
-                        "defaultValue": "",
-                        "nameAlias": "サイズ",
-                        "doxyBrief": "サイズです。",
-                        "requirements": [
-                            "MINMAX,0,7",
-                            "NOTNULL"
-                        ]
+                        "isAssignDefaultValue": false,
+                        "typePrefix": "",
+                        "typeSuffix": "",
+                        "variable": {
+                            "variableName": "size",
+                            "type": "size_t",
+                            "defaultValue": "",
+                            "nameAlias": "サイズ",
+                            "doxyBrief": "サイズです。",
+                            "requirements": [
+                                "MINMAX,0,7",
+                                "NOTNULL"
+                            ]
+                        }
                     }
                 ]
             }
@@ -48,15 +58,20 @@
                 "returnType": "void",
                 "arguments": [
                     {
-                        "variableName": "offset",
-                        "type": "ptrdiff_t",
-                        "defaultValue": "",
-                        "nameAlias": "オフセット",
-                        "doxyBrief": "オフセットです。",
-                        "requirements": [
-                            "MINMAX,0,7",
-                            "NOTNULL"
-                        ]
+                        "isAssignDefaultValue": false,
+                        "typePrefix": "",
+                        "typeSuffix": "",
+                        "variable": {
+                            "variableName": "offset",
+                            "type": "ptrdiff_t",
+                            "defaultValue": "",
+                            "nameAlias": "オフセット",
+                            "doxyBrief": "オフセットです。",
+                            "requirements": [
+                                "MINMAX,0,7",
+                                "NOTNULL"
+                            ]
+                        }
                     }
                 ]
             }
@@ -65,104 +80,134 @@
     "memberVariables": [
         {
             "accessModifier": "private",
-            "isDefineAccessor":true,
-            "isInlineAccessor" : true,
-            "isAccessorReturnThis" : true,
-            "variable": {
-                "variableName": "m_GpuAddres",
-                "type": "GpuAddress",
-                "defaultValue": "",
-                "nameAlias": "GPU アドレス",
-                "doxyBrief": "GPU アドレスです。",
-                "requirements": [
-                    "MINMAX,0,7",
-                    "NOTNULL"
-                ]
+            "isDefineAccessor": true,
+            "isInlineAccessor": true,
+            "isAccessorReturnThis": true,
+            "variableDeclaration": {
+                "isAssignDefaultValue": false,
+                "typePrefix": "",
+                "typeSuffix": "",
+                "variable": {
+                    "variableName": "m_GpuAddres",
+                    "type": "GpuAddress",
+                    "defaultValue": "",
+                    "nameAlias": "GPU アドレス",
+                    "doxyBrief": "GPU アドレスです。",
+                    "requirements": [
+                        "MINMAX,0,7",
+                        "NOTNULL"
+                    ]
+                }
             }
         },
         {
             "accessModifier": "private",
-            "isDefineAccessor":true,
-            "isInlineAccessor" : true,
-            "isAccessorReturnThis" : true,
-            "variable": {
-                "variableName": "m_Offset",
-                "type": "ptrdiff_t",
-                "defaultValue": "",
-                "nameAlias": "オフセット",
-                "doxyBrief": "GPU アドレスです。",
-                "requirements": [
-                    "MINMAX,0,7",
-                    "NOTNULL"
-                ]
+            "isDefineAccessor": true,
+            "isInlineAccessor": true,
+            "isAccessorReturnThis": true,
+            "variableDeclaration": {
+                "isAssignDefaultValue": false,
+                "typePrefix": "",
+                "typeSuffix": "",
+                "variable": {
+                    "variableName": "m_Offset",
+                    "type": "ptrdiff_t",
+                    "defaultValue": "",
+                    "nameAlias": "オフセット",
+                    "doxyBrief": "GPU アドレスです。",
+                    "requirements": [
+                        "MINMAX,0,7",
+                        "NOTNULL"
+                    ]
+                }
             }
         },
         {
             "accessModifier": "private",
-            "isDefineAccessor":true,
-            "isInlineAccessor" : false,
-            "isAccessorReturnThis" : true,
-            "variable": {
-                "variableName": "m_CompressionMode",
-                "type": "../GpuEnum/Definitions/CompressionMode.json",
-                "defaultValue": "",
-                "nameAlias": "",
-                "doxyBrief": "GPU アドレスです。",
-                "requirements": [
-                    "MINMAX,0,7",
-                    "NOTNULL"
-                ]
+            "isDefineAccessor": true,
+            "isInlineAccessor": false,
+            "isAccessorReturnThis": true,
+            "variableDeclaration": {
+                "isAssignDefaultValue": false,
+                "typePrefix": "",
+                "typeSuffix": "",
+                "variable": {
+                    "variableName": "m_CompressionMode",
+                    "type": "../GpuEnum/Definitions/CompressionMode.json",
+                    "defaultValue": "",
+                    "nameAlias": "",
+                    "doxyBrief": "GPU アドレスです。",
+                    "requirements": [
+                        "MINMAX,0,7",
+                        "NOTNULL"
+                    ]
+                }
             }
         },
         {
             "accessModifier": "public",
-            "isDefineAccessor":false,
-            "isInlineAccessor" : false,
-            "isAccessorReturnThis" : false,
-            "variable": {
-                "variableName": "m_PubcliMember",
-                "type": "int",
-                "defaultValue": "",
-                "nameAlias": "",
-                "doxyBrief": "パブリックメンバーです。",
-                "requirements": [
-                    "MINMAX,0,7",
-                    "NOTNULL"
-                ]
+            "isDefineAccessor": false,
+            "isInlineAccessor": false,
+            "isAccessorReturnThis": false,
+            "variableDeclaration": {
+                "isAssignDefaultValue": false,
+                "typePrefix": "",
+                "typeSuffix": "",
+                "variable": {
+                    "variableName": "m_PubcliMember",
+                    "type": "int",
+                    "defaultValue": "",
+                    "nameAlias": "",
+                    "doxyBrief": "パブリックメンバーです。",
+                    "requirements": [
+                        "MINMAX,0,7",
+                        "NOTNULL"
+                    ]
+                }
             }
         },
         {
             "accessModifier": "public",
-            "isDefineAccessor":true,
-            "isInlineAccessor" : true,
-            "isAccessorReturnThis" : false,
-            "variable": {
-                "variableName": "m_PubcliMember2",
-                "type": "int",
-                "defaultValue": "",
-                "nameAlias": "",
-                "doxyBrief": "パブリックメンバーです。",
-                "requirements": [
-                    "MINMAX,0,7",
-                    "NOTNULL"
-                ]
+            "isDefineAccessor": true,
+            "isInlineAccessor": true,
+            "isAccessorReturnThis": false,
+            "variableDeclaration": {
+                "isAssignDefaultValue": false,
+                "typePrefix": "",
+                "typeSuffix": "",
+                "variable": {
+                    "variableName": "m_PubcliMember2",
+                    "type": "int",
+                    "defaultValue": "",
+                    "nameAlias": "",
+                    "doxyBrief": "パブリックメンバーです。",
+                    "requirements": [
+                        "MINMAX,0,7",
+                        "NOTNULL"
+                    ]
+                }
             }
         },
         {
             "accessModifier": "public",
-            "isDefineAccessor":true,
-            "isInlineAccessor" : false,
-            "isAccessorReturnThis" : false,
-            "variable": {
-                "variableName": "m_PubcliMember3",
-                "type": "int",
-                "defaultValue": "",
-                "nameAlias": "",
-                "doxyBrief": "パブリックメンバーです。",
-                "requirements": [
-                    "MINMAX,0,7",
-                    "NOTNULL"
-                ]
+            "isDefineAccessor": true,
+            "isInlineAccessor": false,
+            "isAccessorReturnThis": false,
+            "variableDeclaration": {
+                "isAssignDefaultValue": false,
+                "typePrefix": "",
+                "typeSuffix": "",
+                "variable": {
+                    "variableName": "m_PubcliMember3",
+                    "type": "int",
+                    "defaultValue": "",
+                    "nameAlias": "",
+                    "doxyBrief": "パブリックメンバーです。",
+                    "requirements": [
+                        "MINMAX,0,7",
+                        "NOTNULL"
+                    ]
+                }
             }
         }
     ]
