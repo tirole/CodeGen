@@ -11,8 +11,17 @@
             "outputFileName": "my_SimpleClass",
             "definitions": [
                 {
-                    "name":"",
-                    "path":"Class.json"
+                    "name": "",
+                    "path": "Class.json"
+                }
+            ]
+        },
+        {
+            "outputFileName": "my_Kitten",
+            "definitions": [
+                {
+                    "name": "",
+                    "path": "Kitten.json"
                 }
             ]
         }

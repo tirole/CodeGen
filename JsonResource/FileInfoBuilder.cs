@@ -16,10 +16,12 @@ namespace JsonResource
         }
         public void BuildFileInfo(List<FileInfo> fileInfos)
         {
-            var fileInfo = new FileInfo();
-            var fileInfoCpp = new FileInfo();
-
+            // RootConfig.FileContext
+            foreach (var fileContext in RootContext.FileContexts)
             {
+                var fileInfo = new FileInfo();
+                var fileInfoCpp = new FileInfo();
+
                 fileInfo.Copyright = RootContext.Copyright;
                 fileInfoCpp.Copyright = RootContext.Copyright;
 
@@ -31,301 +33,297 @@ namespace JsonResource
                     fileInfo.NameSpaces = namespaces;
                 }
 
-                // RootConfig.FileContext
-                foreach (var fileContext in RootContext.FileContexts)
+                var fileConfig = fileContext.FileConfig;
+                fileInfo.OutputFileName = fileConfig.OutputFileName.Split('.')[0] + ".h";
+                fileInfoCpp.OutputFileName = fileConfig.OutputFileName.Split('.')[0] + ".cpp";
+
+                if (fileConfig.IncludeFiles != null)
                 {
-                    var fileConfig = fileContext.FileConfig;
-                    fileInfo.OutputFileName = fileConfig.OutputFileName.Split('.')[0] + ".h";
-                    fileInfoCpp.OutputFileName = fileConfig.OutputFileName.Split('.')[0] + ".cpp";
+                    fileInfo.Includes.AddRange(new List<string>(fileConfig.IncludeFiles));
+                }
 
-                    if (fileConfig.IncludeFiles != null)
+                if ((fileConfig.Namespace != null) && (fileConfig.Namespace != ""))
+                {
+                    string[] namespaces = fileConfig.Namespace.Replace("::", ":").Split(':');
+                    fileInfo.NameSpaces = namespaces;
+                }
+
+                if ((fileContext.DescriptorConfigs.Count != 0) || (fileContext.StructConfigs.Count != 0))
+                {
+                    fileInfo.StructGenerationInfos = new List<Tuple<Generator.StructGenerationInfo, Type>>();
+                }
+
+                if (fileContext.EnumConfigs.Count != 0)
+                {
+                    fileInfo.EnumGenerationInfos = new List<Generator.EnumGenerationInfo>();
+                }
+
+                if (fileContext.ClassConfigs.Count != 0)
+                {
+                    fileInfo.ClassGenerationInfos = new List<Generator.ClassGenerationInfo>();
+                }
+
+                if (fileContext.VariableDeclarationsConfigs.Count != 0)
+                {
+                    fileInfo.VariableDeclarationsGenerationInfos = new List<Generator.VariableDeclarationsGenerationInfo>();
+                }
+
+                {
+                    string include = "<";
+                    foreach (var namespaceName in fileInfo.NameSpaces)
                     {
-                        fileInfo.Includes.AddRange(new List<string>(fileConfig.IncludeFiles));
+                        include += namespaceName + "/";
+                    }
+                    include += fileInfo.OutputFileName + ">";
+                    fileInfoCpp.Includes = new List<string>();
+                    fileInfoCpp.Includes.Add(include);
+                    fileInfoCpp.NameSpaces = fileInfo.NameSpaces;
+                }
+
+                // fileInfo.EnumGenerationInfos
+                for (int i = 0; i < fileContext.EnumConfigs.Count; ++i)
+                {
+                    var enumConfig = fileContext.EnumConfigs[i];
+
+                    var enumGenInfo = new Generator.EnumGenerationInfo();
+                    enumGenInfo.EnumName = enumConfig.Declaration.DefinitionName;
+                    enumGenInfo.DoxyBrief = enumConfig.Declaration.DoxyBrief;
+                    enumGenInfo.EnumBase = enumConfig.EnumBase;
+                    enumGenInfo.EnumKey = enumConfig.Declaration.DefinitionType;
+
+                    foreach (var enumerator in enumConfig.Enumerators)
+                    {
+                        var enumeratorInfo = new Generator.EnumeratorInfo();
+                        enumeratorInfo.Name = enumerator.Name;
+                        enumeratorInfo.Value = enumerator.Value;
+                        enumeratorInfo.DoxyBrief = enumerator.DoxyBrief;
+                        enumGenInfo.EnumeratorInfos.Add(enumeratorInfo);
+                    }
+                    fileInfo.EnumGenerationInfos.Add(enumGenInfo);
+                }
+
+                // fileInfo.VariableDeclarationConfigs
+                for (int i = 0; i < fileContext.VariableDeclarationsConfigs.Count; ++i)
+                {
+                    var variableConfig = fileContext.VariableDeclarationsConfigs[i];
+                    var variableGenInfo = new Generator.VariableDeclarationsGenerationInfo();
+
+                    foreach (var variable in variableConfig.VariableDeclarationConfigs)
+                    {
+                        var variableInfo = new Generator.VariableInfo();
+                        SetCommonVariableInfo(variableInfo, variable.VariableConfig);
+                        variableInfo.IsAssignDefaultValue = variable.IsAssignDefaultValue;
+                        variableInfo.DeclarationPrefix = variable.DeclarationPrefix;
+                        variableGenInfo.VariableInfos.Add(variableInfo);
+                    }
+                    fileInfo.VariableDeclarationsGenerationInfos.Add(variableGenInfo);
+                }
+
+                // fileInfo.StructGenerationInfos for StructConfigs
+                for (int i = 0; i < fileContext.StructConfigs.Count; ++i)
+                {
+                    var config = fileContext.StructConfigs[i];
+
+                    var structGenInfo = new Generator.StructGenerationInfo();
+                    structGenInfo.Name = config.Declaration.DefinitionName;
+                    foreach (var memberVariable in config.MemberVariables)
+                    {
+                        var variableInfo = new Generator.VariableInfo();
+                        this.SetCommonVariableInfo(variableInfo, memberVariable);
+                        structGenInfo.MemberVariableInfos.Add(variableInfo);
                     }
 
-                    if ((fileConfig.Namespace != null) && (fileConfig.Namespace != ""))
+                    if (config.Declaration.DefinitionType == "union")
                     {
-                        string[] namespaces = fileConfig.Namespace.Replace("::", ":").Split(':');
-                        fileInfo.NameSpaces = namespaces;
+                        structGenInfo.StructureType = "union";
+                    }
+                    else
+                    {
+                        structGenInfo.StructureType = "struct";
                     }
 
-                    if ((fileContext.DescriptorConfigs.Count != 0) || (fileContext.StructConfigs.Count != 0))
-                    {
-                        fileInfo.StructGenerationInfos = new List<Tuple<Generator.StructGenerationInfo, Type>>();
-                    }
+                    var structGenTuple =
+                        new Tuple<Generator.StructGenerationInfo, Type>(structGenInfo, null);
+                    fileInfo.StructGenerationInfos.Add(structGenTuple);
+                }
 
-                    if (fileContext.EnumConfigs.Count != 0)
-                    {
-                        fileInfo.EnumGenerationInfos = new List<Generator.EnumGenerationInfo>();
-                    }
+                // fileInfo.StructGenerationInfos for DescriptorConfigs
+                for (int i = 0; i < fileContext.DescriptorConfigs.Count; ++i)
+                {
+                    var descConfig = fileContext.DescriptorConfigs[i];
 
-                    if (fileContext.ClassConfigs.Count != 0)
+                    var structGenInfo = new Generator.StructGenerationInfo();
+                    structGenInfo.Name = descConfig.Item1.Declaration.DefinitionName;
+                    foreach (var memberVariable in descConfig.Item1.memberVariables)
                     {
-                        fileInfo.ClassGenerationInfos = new List<Generator.ClassGenerationInfo>();
-                    }
+                        var variableInfo = new Generator.VariableInfo();
 
-                    if (fileContext.VariableDeclarationsConfigs.Count != 0)
-                    {
-                        fileInfo.VariableDeclarationsGenerationInfos = new List<Generator.VariableDeclarationsGenerationInfo>();
-                    }
+                        this.SetCommonVariableInfo(variableInfo, memberVariable);
 
-                    {
-                        string include = "<";
-                        foreach (var namespaceName in fileInfo.NameSpaces)
+                        if ((memberVariable.WordOffset != null) && (memberVariable.WordOffset != ""))
                         {
-                            include += namespaceName + "/";
-                        }
-                        include += fileInfo.OutputFileName + ">";
-                        fileInfoCpp.Includes = new List<string>();
-                        fileInfoCpp.Includes.Add(include);
-                        fileInfoCpp.NameSpaces = fileInfo.NameSpaces;
-                    }
-
-                    // fileInfo.EnumGenerationInfos
-                    for (int i = 0; i < fileContext.EnumConfigs.Count; ++i)
-                    {
-                        var enumConfig = fileContext.EnumConfigs[i];
-
-                        var enumGenInfo = new Generator.EnumGenerationInfo();
-                        enumGenInfo.EnumName = enumConfig.Declaration.DefinitionName;
-                        enumGenInfo.DoxyBrief = enumConfig.Declaration.DoxyBrief;
-                        enumGenInfo.EnumBase = enumConfig.EnumBase;
-                        enumGenInfo.EnumKey = enumConfig.Declaration.DefinitionType;
-
-                        foreach (var enumerator in enumConfig.Enumerators)
-                        {
-                            var enumeratorInfo = new Generator.EnumeratorInfo();
-                            enumeratorInfo.Name = enumerator.Name;
-                            enumeratorInfo.Value = enumerator.Value;
-                            enumeratorInfo.DoxyBrief = enumerator.DoxyBrief;
-                            enumGenInfo.EnumeratorInfos.Add(enumeratorInfo);
-                        }
-                        fileInfo.EnumGenerationInfos.Add(enumGenInfo);
-                    }
-
-                    // fileInfo.VariableDeclarationConfigs
-                    for (int i = 0; i < fileContext.VariableDeclarationsConfigs.Count; ++i)
-                    {
-                        var variableConfig = fileContext.VariableDeclarationsConfigs[i];
-                        var variableGenInfo = new Generator.VariableDeclarationsGenerationInfo();
-
-                        foreach (var variable in variableConfig.VariableDeclarationConfigs)
-                        {
-                            var variableInfo = new Generator.VariableInfo();
-                            SetCommonVariableInfo(variableInfo, variable.VariableConfig);
-                            variableInfo.IsAssignDefaultValue = variable.IsAssignDefaultValue;
-                            variableInfo.DeclarationPrefix = variable.DeclarationPrefix;
-                            variableGenInfo.VariableInfos.Add(variableInfo);
-                        }
-                        fileInfo.VariableDeclarationsGenerationInfos.Add(variableGenInfo);
-                    }
-
-                    // fileInfo.StructGenerationInfos for StructConfigs
-                    for (int i = 0; i < fileContext.StructConfigs.Count; ++i)
-                    {
-                        var config = fileContext.StructConfigs[i];
-
-                        var structGenInfo = new Generator.StructGenerationInfo();
-                        structGenInfo.Name = config.Declaration.DefinitionName;
-                        foreach (var memberVariable in config.MemberVariables)
-                        {
-                            var variableInfo = new Generator.VariableInfo();
-                            this.SetCommonVariableInfo(variableInfo, memberVariable);
-                            structGenInfo.MemberVariableInfos.Add(variableInfo);
-                        }
-
-                        if (config.Declaration.DefinitionType == "union")
-                        {
-                            structGenInfo.StructureType = "union";
-                        }
-                        else
-                        {
-                            structGenInfo.StructureType = "struct";
-                        }
-
-                        var structGenTuple =
-                            new Tuple<Generator.StructGenerationInfo, Type>(structGenInfo, null);
-                        fileInfo.StructGenerationInfos.Add(structGenTuple);
-                    }
-
-                    // fileInfo.StructGenerationInfos for DescriptorConfigs
-                    for (int i = 0; i < fileContext.DescriptorConfigs.Count; ++i)
-                    {
-                        var descConfig = fileContext.DescriptorConfigs[i];
-
-                        var structGenInfo = new Generator.StructGenerationInfo();
-                        structGenInfo.Name = descConfig.Item1.Declaration.DefinitionName;
-                        foreach (var memberVariable in descConfig.Item1.memberVariables)
-                        {
-                            var variableInfo = new Generator.VariableInfo();
-
-                            this.SetCommonVariableInfo(variableInfo, memberVariable);
-
-                            if ((memberVariable.WordOffset != null) && (memberVariable.WordOffset != ""))
+                            variableInfo.HasBitWidthDeclaration = true;
+                            var bitRanges = memberVariable.BitRange.Split(':');
+                            if (bitRanges.Length == 1)
                             {
-                                variableInfo.HasBitWidthDeclaration = true;
-                                var bitRanges = memberVariable.BitRange.Split(':');
-                                if (bitRanges.Length == 1)
-                                {
-                                    variableInfo.BitBegin = int.Parse(bitRanges[0]);
-                                    variableInfo.BitEnd = int.Parse(bitRanges[0]);
-                                }
-                                else
-                                {
-                                    variableInfo.BitBegin = int.Parse(bitRanges[1]);
-                                    variableInfo.BitEnd = int.Parse(bitRanges[0]);
-                                }
-
-                                var wordRanges = memberVariable.WordOffset.Split(':');
-                                if (wordRanges.Length == 1)
-                                {
-                                    variableInfo.OffsetIn4ByteUnit = int.Parse(wordRanges[0]);
-                                }
-                                else
-                                {
-                                    if (int.Parse(wordRanges[0]) > int.Parse(wordRanges[1]))
-                                    {
-                                        throw new System.InvalidOperationException("WordOffsetRange must be wordRanges[0] <= wordRanges[1].");
-                                    }
-                                    variableInfo.OffsetIn4ByteUnit = int.Parse(wordRanges[0]);
-                                }
-                                
-                                variableInfo.Modifier = memberVariable.Modifier;
+                                variableInfo.BitBegin = int.Parse(bitRanges[0]);
+                                variableInfo.BitEnd = int.Parse(bitRanges[0]);
+                            }
+                            else
+                            {
+                                variableInfo.BitBegin = int.Parse(bitRanges[1]);
+                                variableInfo.BitEnd = int.Parse(bitRanges[0]);
                             }
 
-                            structGenInfo.MemberVariableInfos.Add(variableInfo);
+                            var wordRanges = memberVariable.WordOffset.Split(':');
+                            if (wordRanges.Length == 1)
+                            {
+                                variableInfo.OffsetIn4ByteUnit = int.Parse(wordRanges[0]);
+                            }
+                            else
+                            {
+                                if (int.Parse(wordRanges[0]) > int.Parse(wordRanges[1]))
+                                {
+                                    throw new System.InvalidOperationException("WordOffsetRange must be wordRanges[0] <= wordRanges[1].");
+                                }
+                                variableInfo.OffsetIn4ByteUnit = int.Parse(wordRanges[0]);
+                            }
+                                
+                            variableInfo.Modifier = memberVariable.Modifier;
                         }
 
-                        var structGenTuple =
-                            new Tuple<Generator.StructGenerationInfo, Type>(structGenInfo, descConfig.Item2);
-                        fileInfo.StructGenerationInfos.Add(structGenTuple);
+                        structGenInfo.MemberVariableInfos.Add(variableInfo);
                     }
 
-                    // fileInfo.ClassGenerationInfos
-                    for (int i = 0; i < fileContext.ClassConfigs.Count; ++i)
+                    var structGenTuple =
+                        new Tuple<Generator.StructGenerationInfo, Type>(structGenInfo, descConfig.Item2);
+                    fileInfo.StructGenerationInfos.Add(structGenTuple);
+                }
+
+                // fileInfo.ClassGenerationInfos
+                for (int i = 0; i < fileContext.ClassConfigs.Count; ++i)
+                {
+                    var classConfig = fileContext.ClassConfigs[i];
+
+                    var classGenInfo = new Generator.ClassGenerationInfo();
+                    classGenInfo.Name = classConfig.Declaration.DefinitionName;
+                    classGenInfo.DoxyBrief = classConfig.Declaration.DoxyBrief;
+
+                    foreach (var config in classConfig.MemberFunctionConfigs)
                     {
-                        var classConfig = fileContext.ClassConfigs[i];
+                        var memberFunctionInfo = new Generator.MemberFunctionInfo();
+                        memberFunctionInfo.AccessModifier = config.AccessModifier;
+                        memberFunctionInfo.DoxyBrief = config.FunctionConfig.DoxyBrief;
+                        memberFunctionInfo.FunctionName = config.FunctionConfig.FunctionName;
+                        memberFunctionInfo.IsInline = config.FunctionConfig.IsInline;
+                        memberFunctionInfo.ReturnType = config.FunctionConfig.ReturnType;
 
-                        var classGenInfo = new Generator.ClassGenerationInfo();
-                        classGenInfo.Name = classConfig.Declaration.DefinitionName;
-                        classGenInfo.DoxyBrief = classConfig.Declaration.DoxyBrief;
-
-                        foreach (var config in classConfig.MemberFunctionConfigs)
+                        foreach (var argConfig in config.FunctionConfig.ArgumentConfigs)
                         {
-                            var memberFunctionInfo = new Generator.MemberFunctionInfo();
-                            memberFunctionInfo.AccessModifier = config.AccessModifier;
-                            memberFunctionInfo.DoxyBrief = config.FunctionConfig.DoxyBrief;
-                            memberFunctionInfo.FunctionName = config.FunctionConfig.FunctionName;
-                            memberFunctionInfo.IsInline = config.FunctionConfig.IsInline;
-                            memberFunctionInfo.ReturnType = config.FunctionConfig.ReturnType;
+                            var argInfo = new Generator.VariableInfo();
+                            this.SetCommonVariableInfo(argInfo, argConfig);
+                            memberFunctionInfo.ArgumentInfos.Add(argInfo);
+                        }
+
+                        classGenInfo.AddMemberFunctionInfo(memberFunctionInfo);
+
+                        if(!memberFunctionInfo.IsInline)
+                        {
+                            var funcGen = new Generator.FunctionGenerationInfo();
+                            funcGen.IsDeclaration = false;
+                            var skeltonDefinition = funcGen.FunctionInfo;
+                            skeltonDefinition.FunctionName =
+                                classGenInfo.Name + "::" + memberFunctionInfo.FunctionName;
+                            skeltonDefinition.StringAfterArgument = memberFunctionInfo.StringAfterArgument;
+                            skeltonDefinition.ReturnType = memberFunctionInfo.ReturnType;
 
                             foreach (var argConfig in config.FunctionConfig.ArgumentConfigs)
                             {
                                 var argInfo = new Generator.VariableInfo();
                                 this.SetCommonVariableInfo(argInfo, argConfig);
-                                memberFunctionInfo.ArgumentInfos.Add(argInfo);
+                                skeltonDefinition.ArgumentInfos.Add(argInfo);
                             }
 
-                            classGenInfo.AddMemberFunctionInfo(memberFunctionInfo);
+                            if (fileInfoCpp.FunctionGenerationInfos == null)
+                            {
+                                fileInfoCpp.FunctionGenerationInfos = new List<Generator.FunctionGenerationInfo>();
+                            }
 
-                            if(!memberFunctionInfo.IsInline)
+                            fileInfoCpp.FunctionGenerationInfos.Add(funcGen);
+                        }
+                    }
+
+                    foreach (var config in classConfig.MemberVariableConfigs)
+                    {
+                        var memberVariableInfo = new Generator.MemberVariableInfo();
+                        this.SetCommonVariableInfo(memberVariableInfo, config.VariableConfig);
+                        memberVariableInfo.AccessModifier = config.AccessModifier;
+                        memberVariableInfo.IsDefineAccessor = config.IsDefineAccessor;
+                        memberVariableInfo.IsInlineAccessor = config.IsInlineAccessor;
+                        memberVariableInfo.IsAccessorReturnThis = config.IsAccessorReturnThis;
+
+                        int idxOfFirstUpperCase = 0;
+                        foreach (Char c in config.VariableConfig.VariableName)
+                        {
+                            if (Char.IsUpper(c)) break;
+                            ++idxOfFirstUpperCase;
+                        }
+                        memberVariableInfo.AccessorName = config.VariableConfig.VariableName.Substring(idxOfFirstUpperCase);
+                        classGenInfo.AddMemberVariableInfo(memberVariableInfo);
+
+                        if(memberVariableInfo.IsDefineAccessor)
+                        {
+                            if (fileInfoCpp.FunctionGenerationInfos == null)
+                            {
+                                fileInfoCpp.FunctionGenerationInfos = new List<Generator.FunctionGenerationInfo>();
+                            }
+
+                            // アクセサ定義を必要としているがインラインじゃない場合は cpp に出力
+                            if(!memberVariableInfo.IsInlineAccessor)
                             {
                                 var funcGen = new Generator.FunctionGenerationInfo();
                                 funcGen.IsDeclaration = false;
                                 var skeltonDefinition = funcGen.FunctionInfo;
                                 skeltonDefinition.FunctionName =
-                                    classGenInfo.Name + "::" + memberFunctionInfo.FunctionName;
-                                skeltonDefinition.StringAfterArgument = memberFunctionInfo.StringAfterArgument;
-                                skeltonDefinition.ReturnType = memberFunctionInfo.ReturnType;
+                                    classGenInfo.Name + "::" + "Get" + memberVariableInfo.AccessorName;
+                                skeltonDefinition.StringAfterArgument = "const";
+                                skeltonDefinition.ReturnType = memberVariableInfo.Type;
+                                // TODO: struct 型はポインタにする
+                                var arg = new Generator.VariableInfo();
+                                SetCommonVariableInfo(arg, config.VariableConfig);
+                                arg.VariableName = char.ToLower(memberVariableInfo.AccessorName[0]) + memberVariableInfo.AccessorName.Substring(1);
+                                skeltonDefinition.ArgumentInfos.Add(arg);
+                                fileInfoCpp.FunctionGenerationInfos.Add(funcGen);
+                            }
 
-                                foreach (var argConfig in config.FunctionConfig.ArgumentConfigs)
-                                {
-                                    var argInfo = new Generator.VariableInfo();
-                                    this.SetCommonVariableInfo(argInfo, argConfig);
-                                    skeltonDefinition.ArgumentInfos.Add(argInfo);
-                                }
-
-                                if (fileInfoCpp.FunctionGenerationInfos == null)
-                                {
-                                    fileInfoCpp.FunctionGenerationInfos = new List<Generator.FunctionGenerationInfo>();
-                                }
-
+                            // setter
+                            if (!memberVariableInfo.IsInlineAccessor)
+                            {
+                                // アクセサについても隠している時点で自分で実装したいのでスケルトンを cpp に出力する。
+                                var funcGen = new Generator.FunctionGenerationInfo();
+                                funcGen.IsDeclaration = false;
+                                var skeltonDefinition = funcGen.FunctionInfo;
+                                skeltonDefinition.FunctionName =
+                                    classGenInfo.Name + "::" + "Set" + memberVariableInfo.AccessorName;
+                                skeltonDefinition.StringAfterArgument = "";
+                                skeltonDefinition.ReturnType = "void";
+                                // TODO: struct 型はポインタにする
+                                var arg = new Generator.VariableInfo();
+                                SetCommonVariableInfo(arg, config.VariableConfig);
+                                arg.VariableName = char.ToLower(memberVariableInfo.AccessorName[0]) + memberVariableInfo.AccessorName.Substring(1);
+                                skeltonDefinition.ArgumentInfos.Add(arg);
                                 fileInfoCpp.FunctionGenerationInfos.Add(funcGen);
                             }
                         }
-
-                        foreach (var config in classConfig.MemberVariableConfigs)
-                        {
-                            var memberVariableInfo = new Generator.MemberVariableInfo();
-                            this.SetCommonVariableInfo(memberVariableInfo, config.VariableConfig);
-                            memberVariableInfo.AccessModifier = config.AccessModifier;
-                            memberVariableInfo.IsDefineAccessor = config.IsDefineAccessor;
-                            memberVariableInfo.IsInlineAccessor = config.IsInlineAccessor;
-                            memberVariableInfo.IsAccessorReturnThis = config.IsAccessorReturnThis;
-
-                            int idxOfFirstUpperCase = 0;
-                            foreach (Char c in config.VariableConfig.VariableName)
-                            {
-                                if (Char.IsUpper(c)) break;
-                                ++idxOfFirstUpperCase;
-                            }
-                            memberVariableInfo.AccessorName = config.VariableConfig.VariableName.Substring(idxOfFirstUpperCase);
-                            classGenInfo.AddMemberVariableInfo(memberVariableInfo);
-
-                            if(memberVariableInfo.IsDefineAccessor)
-                            {
-                                if (fileInfoCpp.FunctionGenerationInfos == null)
-                                {
-                                    fileInfoCpp.FunctionGenerationInfos = new List<Generator.FunctionGenerationInfo>();
-                                }
-
-                                // アクセサ定義を必要としているがインラインじゃない場合は cpp に出力
-                                if(!memberVariableInfo.IsInlineAccessor)
-                                {
-                                    var funcGen = new Generator.FunctionGenerationInfo();
-                                    funcGen.IsDeclaration = false;
-                                    var skeltonDefinition = funcGen.FunctionInfo;
-                                    skeltonDefinition.FunctionName =
-                                        classGenInfo.Name + "::" + "Get" + memberVariableInfo.AccessorName;
-                                    skeltonDefinition.StringAfterArgument = "const";
-                                    skeltonDefinition.ReturnType = memberVariableInfo.Type;
-                                    // TODO: struct 型はポインタにする
-                                    var arg = new Generator.VariableInfo();
-                                    SetCommonVariableInfo(arg, config.VariableConfig);
-                                    arg.VariableName = char.ToLower(memberVariableInfo.AccessorName[0]) + memberVariableInfo.AccessorName.Substring(1);
-                                    skeltonDefinition.ArgumentInfos.Add(arg);
-                                    fileInfoCpp.FunctionGenerationInfos.Add(funcGen);
-                                }
-
-                                // setter
-                                if (!memberVariableInfo.IsInlineAccessor)
-                                {
-                                    // アクセサについても隠している時点で自分で実装したいのでスケルトンを cpp に出力する。
-                                    var funcGen = new Generator.FunctionGenerationInfo();
-                                    funcGen.IsDeclaration = false;
-                                    var skeltonDefinition = funcGen.FunctionInfo;
-                                    skeltonDefinition.FunctionName =
-                                        classGenInfo.Name + "::" + "Set" + memberVariableInfo.AccessorName;
-                                    skeltonDefinition.StringAfterArgument = "";
-                                    skeltonDefinition.ReturnType = "void";
-                                    // TODO: struct 型はポインタにする
-                                    var arg = new Generator.VariableInfo();
-                                    SetCommonVariableInfo(arg, config.VariableConfig);
-                                    arg.VariableName = char.ToLower(memberVariableInfo.AccessorName[0]) + memberVariableInfo.AccessorName.Substring(1);
-                                    skeltonDefinition.ArgumentInfos.Add(arg);
-                                    fileInfoCpp.FunctionGenerationInfos.Add(funcGen);
-                                }
-                            }
-                        }
-
-                        fileInfo.ClassGenerationInfos.Add(classGenInfo);
                     }
 
-                    fileInfos.Add(fileInfo);
-                    if (!fileInfoCpp.IsEmpty())
-                    {
-                        fileInfos.Add(fileInfoCpp);
-                    }
+                    fileInfo.ClassGenerationInfos.Add(classGenInfo);
+                }
+
+                fileInfos.Add(fileInfo);
+                if (!fileInfoCpp.IsEmpty())
+                {
+                    fileInfos.Add(fileInfoCpp);
                 }
             }
         }
