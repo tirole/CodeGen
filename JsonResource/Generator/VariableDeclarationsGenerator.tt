@@ -10,14 +10,22 @@
         {
             variableName += "[" + variableInfo.ArrayLength + "]";
         }
+
+        string typeString = "";
+        if(variableInfo.TypePrefix != null && variableInfo.TypePrefix != "")
+        {
+            typeString += variableInfo.TypePrefix + " ";
+        }
+        typeString += variableInfo.Type;
+        if(variableInfo.TypeSuffix != null && variableInfo.TypeSuffix != "")
+        {
+            typeString += variableInfo.TypeSuffix;
+        }
 #>
 <#        if (variableInfo.DoxyBrief != null && variableInfo.DoxyBrief != "") { #>
 //// @brief    <#=                variableInfo.DoxyBrief#>
 <#        } #>
-<#        if(variableInfo.TypePrefix != null && variableInfo.TypePrefix != "") { #>
-<#=                variableInfo.TypePrefix #>
-<#        } #>
-<#=            variableInfo.Type #> <#=            variableName #><#
+<#=            typeString #> <#=            variableName #><#
         if(variableInfo.IsAssignDefaultValue){#>
 <#            if(variableInfo.ArrayLength > 0) { #>
  = 
