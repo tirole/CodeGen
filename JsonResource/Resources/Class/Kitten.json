@@ -19,6 +19,21 @@
                         "typePrefix": "const",
                         "typeSuffix": "*",
                         "variable": {
+                            "variableName": "pObj",
+                            "type": "Class.json",
+                            "defaultValue": "",
+                            "nameAlias": "",
+                            "doxyBrief": "",
+                            "requirements": [
+                                "NOTNULL"
+                            ]
+                        }
+                    },
+                    {
+                        "isAssignDefaultValue": false,
+                        "typePrefix": "const",
+                        "typeSuffix": "*",
+                        "variable": {
                             "variableName": "gpuAddr",
                             "type": "GpuAddress",
                             "defaultValue": "",

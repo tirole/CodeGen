@@ -160,6 +160,21 @@ namespace JsonResource
                             variableConfig.DefaultValues[0] = Path.GetDirectoryName(jsonFilePath) + "/" + variableConfig.DefaultValues[0];
                         }
                     }
+                    foreach (var member in config.MemberFunctionConfigs)
+                    {
+                        foreach (var arg in member.FunctionConfig.ArgumentConfigs)
+                        {
+                            var variableConfig = arg.VariableConfig;
+                            if (variableConfig.Type.Split('.').Length > 1)
+                            {
+                                variableConfig.Type = Path.GetDirectoryName(jsonFilePath) + "/" + variableConfig.Type;
+                            }
+                            if (variableConfig.DefaultValues != null && variableConfig.DefaultValues[0].Split('.').Length > 1)
+                            {
+                                variableConfig.DefaultValues[0] = Path.GetDirectoryName(jsonFilePath) + "/" + variableConfig.DefaultValues[0];
+                            }
+                        }
+                    }
                 }
                 else if (type == typeof(StructConfig))
                 {
