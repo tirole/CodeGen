@@ -36,6 +36,7 @@ namespace JsonResource.Generator
             Add,
             Mul,
             Func,
+            RightShift,
             Count
         };
         public string[] Modifiers = new string[(int)ModifierType.Count]
@@ -43,6 +44,7 @@ namespace JsonResource.Generator
             "add",
             "mul",
             "func",
+            "rshift",
         };
 
         public string InputTempVariableName = "inputVal";
@@ -64,6 +66,9 @@ namespace JsonResource.Generator
                     break;
                 case "func":
                     retString = InputTempVariableName + " = " + modifierVal + "(" + InputTempVariableName + ")";
+                    break;
+                case "rshift":
+                    retString = InputTempVariableName + " >>= " + modifierVal;
                     break;
                 default:
                     throw new System.InvalidOperationException("Illegal modifier type.");
