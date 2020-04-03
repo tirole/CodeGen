@@ -10,7 +10,8 @@
         string inputType = member.Type;
         string inputVariableName = member.VariableName;
         string memcpySize = "";
-        string memcpySrcVariableName = "";
+        string memcpySrcDstVariableName = "";
+        string pointerGetterReturnType = "";
         bool isInputTypePointer = false;
         bool isArray = member.ArrayLength > 0;
         if(member.TypeSuffix != null && member.TypeSuffix != "")
@@ -23,13 +24,15 @@
         {
             inputVariableName = "p" + upperCamelVariableName;
             memcpySize = "sizeof(" + member.Type + ")";
-            memcpySrcVariableName = inputVariableName;
+            memcpySrcDstVariableName = inputVariableName;
+            pointerGetterReturnType = inputType;
         }
         else if(isArray)
         {
             inputVariableName = member.VariableName + "[" + member.ArrayLength + "]";
             memcpySize = "sizeof(" + member.Type  + ")" + " * " + member.ArrayLength;
-            memcpySrcVariableName = member.VariableName;
+            memcpySrcDstVariableName = member.VariableName;
+            pointerGetterReturnType = inputType + "*";
         }
 
         bool isNeedsMemcpy = ((member.BitEnd - member.BitBegin) > 63) || isInputTypePointer;
@@ -39,7 +42,7 @@ inline
 void Set<#=functionNameSuffix#>(<#=Info.Name#>* pDesc, const <#=inputType#> <#=inputVariableName#>)
 {
     constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
-    memcpy(&pDesc->data[uint32ArrayIndex], <#=memcpySrcVariableName#>, <#=memcpySize #>);
+    memcpy(&pDesc->data[uint32ArrayIndex], <#=memcpySrcDstVariableName#>, <#=memcpySize #>);
 }
 <#        }else {#>
 inline
@@ -92,16 +95,23 @@ void Set<#=functionNameSuffix#>(<#=Info.Name#>* pDesc, <#=inputType#> <#=inputVa
 }
 <#        } #>
 
-<#        if((member.BitEnd - member.BitBegin) > 63) { #>
+<#        if(isNeedsMemcpy) { #>
 inline
-void Get<#=                Info.Name #><#=                char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(<#=                member.Type #> <#=                member.VariableName #>[<#=                member.ArrayLength #>], const <#=                Info.Name #>* pDesc)
+void Get<#=functionNameSuffix#>(<#=inputType#> <#=inputVariableName#>, const <#=Info.Name #>* pDesc)
 {
-    constexpr int uint32ArrayIndex = <#=                member.OffsetIn4ByteUnit #>;
-    memcpy(<#=                member.VariableName#>, &pDesc->data[uint32ArrayIndex], sizeof(<#=                member.Type #>) * <#=                member.ArrayLength #>);
+    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
+    memcpy(<#=memcpySrcDstVariableName#>, &pDesc->data[uint32ArrayIndex], <#=memcpySize #>);
+}
+
+inline
+<#=pointerGetterReturnType#> Get<#=functionNameSuffix#>Pointer(<#=Info.Name #>* pDesc)
+{
+    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
+    return reinterpret_cast<<#=pointerGetterReturnType#>>(&pDesc->data[uint32ArrayIndex]);
 }
 <#        }else {#>
 inline
-<#=                member.Type #> Get<#=                Info.Name #><#=                char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(const <#=                Info.Name #>* pDesc)
+<#=member.Type #> Get<#=functionNameSuffix#>(const <#=Info.Name #>* pDesc)
 {
 <#            if((member.BitEnd - member.BitBegin) == 63) { #>
     constexpr int uint32ArrayIndex = <#=                    member.OffsetIn4ByteUnit #>;

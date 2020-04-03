@@ -160,6 +160,13 @@ namespace JsonResource
 
                         this.SetCommonVariableInfo(variableInfo, memberVariable);
 
+                        // json の場合はポインタ渡しとする。
+                        bool isJson = memberVariable.Type.IndexOf(".json") != -1;
+                        if (isJson)
+                        {
+                            variableInfo.TypeSuffix = "*";
+                        }
+
                         if ((memberVariable.WordOffset != null) && (memberVariable.WordOffset != ""))
                         {
                             variableInfo.HasBitWidthDeclaration = true;
