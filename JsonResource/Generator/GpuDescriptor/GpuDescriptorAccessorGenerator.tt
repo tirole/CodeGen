@@ -4,38 +4,67 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <# // セッター・ゲッター定義 #>
-<#  foreach(var member in Info.MemberVariableInfos) { #>
-<#if((member.BitEnd - member.BitBegin) > 63) { #>
+<#foreach(var member in Info.MemberVariableInfos) { 
+        string upperCamelVariableName = char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1);
+        string functionNameSuffix = Info.Name + upperCamelVariableName;
+        string inputType = member.Type;
+        string inputVariableName = member.VariableName;
+        string memcpySize = "";
+        string memcpySrcVariableName = "";
+        bool isInputTypePointer = false;
+        bool isArray = member.ArrayLength > 0;
+        if(member.TypeSuffix != null && member.TypeSuffix != "")
+        {
+            inputType += " " + member.TypeSuffix;
+            isInputTypePointer = member.TypeSuffix == "*";
+        }
+
+        if(isInputTypePointer)
+        {
+            inputVariableName = "p" + upperCamelVariableName;
+            memcpySize = "sizeof(" + member.Type + ")";
+            memcpySrcVariableName = inputVariableName;
+        }
+        else if(isArray)
+        {
+            inputVariableName = member.VariableName + "[" + member.ArrayLength + "]";
+            memcpySize = "sizeof(" + member.Type  + ")" + " * " + member.ArrayLength;
+            memcpySrcVariableName = member.VariableName;
+        }
+
+        bool isNeedsMemcpy = ((member.BitEnd - member.BitBegin) > 63) || isInputTypePointer;
+#>
+<#        if(isNeedsMemcpy) { #>
 inline
-void Set<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(<#=Info.Name#>* pDesc, const <#=member.Type#> <#=member.VariableName#>[<#=member.ArrayLength #>])
+void Set<#=functionNameSuffix#>(<#=Info.Name#>* pDesc, const <#=inputType#> <#=inputVariableName#>)
 {
     constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
-    memcpy(&pDesc->data[uint32ArrayIndex], <#=member.VariableName#>, sizeof(<#=member.Type #>) * <#=member.ArrayLength #>);
+    memcpy(&pDesc->data[uint32ArrayIndex], <#=memcpySrcVariableName#>, <#=memcpySize #>);
 }
-<#}else {#>
+<#        }else {#>
 inline
-void Set<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(<#=Info.Name#>* pDesc, <#=member.Type#> <#=member.VariableName#>)
+void Set<#=functionNameSuffix#>(<#=Info.Name#>* pDesc, <#=inputType#> <#=inputVariableName#>)
 {
-<#if(member.RequirementInfos != null) { #>
-<#foreach(var info in member.RequirementInfos) { #>
-<#if(info.Type != RequirementInfo.RequirementType.NoRequirement) { #>
-    <#=info.GetString(member.VariableName) #>
-<#} #>
-<#} #>
-<#} #>
-<#if((member.BitEnd - member.BitBegin) == 63) { #>
-    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
-    auto pOut = reinterpret_cast<<#=member.Type #>*>(&pDesc->data[uint32ArrayIndex]);
-    *pOut = <#=member.VariableName #>;
-<#} else if((member.BitEnd - member.BitBegin) >= 32 && (member.BitBegin != 0)) { #>
-    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
-    constexpr int bitOffset = <#=member.BitBegin #>;
+<#            if(member.RequirementInfos != null) { #>
+<#                foreach(var info in member.RequirementInfos) { #>
+<#                    if(info.Type != RequirementInfo.RequirementType.NoRequirement) { #>
+    <#=                            info.GetString(member.VariableName) #>
+<#                    } #>
+<#                } #>
+<#            } #>
+<#            if((member.BitEnd - member.BitBegin) == 63) { #>
+    constexpr int uint32ArrayIndex = <#=                    member.OffsetIn4ByteUnit #>;
+    auto pOut = reinterpret_cast<<#=                    member.Type #>*>(&pDesc->data[uint32ArrayIndex]);
+    *pOut = <#=                    member.VariableName #>;
+<#            } else if((member.BitEnd - member.BitBegin) >= 32 && (member.BitBegin != 0)) { #>
+    constexpr int uint32ArrayIndex = <#=                    member.OffsetIn4ByteUnit #>;
+    constexpr int bitOffset = <#=                    member.BitBegin #>;
     constexpr int lowBitLength = 32 - bitOffset;
     constexpr int lowBitMask = static_cast<int>(~(static_cast<int64_t>(-1) << lowBitLength ));
-    constexpr int highBitLength = (<#=member.BitEnd #> - <#=member.BitBegin#> + 1) - lowBitLength;
+    constexpr int highBitLength = (<#=                    member.BitEnd #> - <#=                    member.BitBegin#> + 1) - lowBitLength;
     constexpr int highBitMask = static_cast<int>(~(-1LL << highBitLength));
 
-    uint64_t inputVal = static_cast<uint64_t>(<#=member.VariableName #>);
+    uint64_t inputVal = static_cast<uint64_t>(<#=                    member.VariableName #>);
 <#                if(member.Modifier != null && member.Modifier != "") { #>
     <#=                        member.GetModifierString() #>;
 <#                } #>
@@ -49,56 +78,56 @@ void Set<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.Variable
     pDesc->data[uint32ArrayIndex + 1] &= ~highBitMask;
     pDesc->data[uint32ArrayIndex + 1] |= highVal;
     
-<#} else { #>
-    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
-    constexpr int bitOffset = <#=member.BitBegin #>;
-    constexpr int bitLength = (<#=member.BitEnd #> - bitOffset) + 1;
+<#            } else { #>
+    constexpr int uint32ArrayIndex = <#=                    member.OffsetIn4ByteUnit #>;
+    constexpr int bitOffset = <#=                    member.BitBegin #>;
+    constexpr int bitLength = (<#=                    member.BitEnd #> - bitOffset) + 1;
     constexpr int mask = static_cast<int>(~(static_cast<int64_t>(-1) << bitLength ));
-    int inputVal = static_cast<int>(<#=member.VariableName #>);
+    int inputVal = static_cast<int>(<#=                    member.VariableName #>);
 <#                if(member.Modifier != null && member.Modifier != "") { #>
     <#=                        member.GetModifierString() #>;
 <#                } #>
     pDesc->data[uint32ArrayIndex] |= (inputVal & mask) << bitOffset;
-<#} #>
+<#            } #>
 }
-<#} #>
+<#        } #>
 
-<#if((member.BitEnd - member.BitBegin) > 63) { #>
+<#        if((member.BitEnd - member.BitBegin) > 63) { #>
 inline
-void Get<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(<#=member.Type #> <#=member.VariableName #>[<#=member.ArrayLength #>], const <#=Info.Name #>* pDesc)
+void Get<#=                Info.Name #><#=                char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(<#=                member.Type #> <#=                member.VariableName #>[<#=                member.ArrayLength #>], const <#=                Info.Name #>* pDesc)
 {
-    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
-    memcpy(<#=member.VariableName#>, &pDesc->data[uint32ArrayIndex], sizeof(<#=member.Type #>) * <#=member.ArrayLength #>);
+    constexpr int uint32ArrayIndex = <#=                member.OffsetIn4ByteUnit #>;
+    memcpy(<#=                member.VariableName#>, &pDesc->data[uint32ArrayIndex], sizeof(<#=                member.Type #>) * <#=                member.ArrayLength #>);
 }
-<#}else {#>
+<#        }else {#>
 inline
-<#=member.Type #> Get<#=Info.Name #><#=char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(const <#=Info.Name #>* pDesc)
+<#=                member.Type #> Get<#=                Info.Name #><#=                char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1) #>(const <#=                Info.Name #>* pDesc)
 {
-<#if((member.BitEnd - member.BitBegin) == 63) { #>
-    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
-    auto pOut = reinterpret_cast<const <#=member.Type #>*>(&pDesc->data[uint32ArrayIndex]);
+<#            if((member.BitEnd - member.BitBegin) == 63) { #>
+    constexpr int uint32ArrayIndex = <#=                    member.OffsetIn4ByteUnit #>;
+    auto pOut = reinterpret_cast<const <#=                    member.Type #>*>(&pDesc->data[uint32ArrayIndex]);
     return *pOut;
-<#} else if((member.BitEnd - member.BitBegin) >= 32 && (member.BitBegin != 0)) { #>
-    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
-    constexpr int bitOffset = <#=member.BitBegin #>;
+<#            } else if((member.BitEnd - member.BitBegin) >= 32 && (member.BitBegin != 0)) { #>
+    constexpr int uint32ArrayIndex = <#=                    member.OffsetIn4ByteUnit #>;
+    constexpr int bitOffset = <#=                    member.BitBegin #>;
     constexpr int lowBitLength = 32 - bitOffset;
     constexpr int lowBitMask = static_cast<int>(~(-1LL << lowBitLength));
-    constexpr int highBitLength = (<#=member.BitEnd #> - <#=member.BitBegin #> + 1) - lowBitLength;
+    constexpr int highBitLength = (<#=                    member.BitEnd #> - <#=                    member.BitBegin #> + 1) - lowBitLength;
     constexpr int highBitMask = static_cast<int>(~(-1LL << highBitLength));
 
-    <#=member.Type #> outputVal = 0;
+    <#=                    member.Type #> outputVal = 0;
     outputVal = (pDesc->data[uint32ArrayIndex] & (lowBitMask << bitOffset)) >> bitOffset;
     outputVal |= static_cast<uint64_t>((pDesc->data[uint32ArrayIndex + 1] & highBitMask)) << lowBitLength;
     return outputVal;
-<#} else { #>
-    constexpr int uint32ArrayIndex = <#=member.OffsetIn4ByteUnit #>;
-    constexpr int bitOffset = <#=member.BitBegin #>;
-    constexpr int bitLength = (<#=member.BitEnd #> - bitOffset) + 1;
+<#            } else { #>
+    constexpr int uint32ArrayIndex = <#=                    member.OffsetIn4ByteUnit #>;
+    constexpr int bitOffset = <#=                    member.BitBegin #>;
+    constexpr int bitLength = (<#=                    member.BitEnd #> - bitOffset) + 1;
     constexpr int mask = static_cast<int>(~(static_cast<int64_t>(-1) << bitLength )) << bitOffset;
-    <#=member.Type #> outputVal = static_cast<<#=member.Type #>>((pDesc->data[uint32ArrayIndex] & mask) >> bitOffset);
+    <#=                    member.Type #> outputVal = static_cast<<#=                    member.Type #>>((pDesc->data[uint32ArrayIndex] & mask) >> bitOffset);
     return outputVal;
-<#} #>
+<#            } #>
 }
-<#} #>
+<#        } #>
 
-<#  } #>
+<#    } #>
