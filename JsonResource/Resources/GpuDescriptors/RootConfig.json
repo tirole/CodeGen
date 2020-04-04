@@ -24,6 +24,18 @@
             "outputFileName": "my_RenderTargetDescriptor",
             "definitions": [
                 {
+                    "name": "",
+                    "path": "Definitions/Simple32bitStruct.json"
+                },
+                {
+                    "name": "gpuDescriptorStruct",
+                    "path": "Definitions/Simple64bitDescriptor.json"
+                },
+                {
+                    "name": "gpuDescriptorAccessor",
+                    "path": "Definitions/Simple64bitDescriptor.json"
+                },
+                {
                     "name": "gpuDescriptorStruct",
                     "path": "Definitions/RenderTargetDescriptor.json"
                 },

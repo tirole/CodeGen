@@ -1,0 +1,36 @@
+{
+    "declaration": {
+        "doxyBrief": "This is Simple64bitDescriptor.",
+        "definitionType": "struct",
+        "definitionName": "Simple64bitDescriptor",
+        "nameAlias": "64bit デスクリプター"
+    },
+    "memberVariables": [
+        {
+            "variableName": "rendertargetIndex",
+            "type": "int",
+            "defaultValue": "",
+            "nameAlias": "",
+            "doxyBrief": "",
+            "requirements": [
+                ""
+            ],
+            "wordOffset": "0",
+            "bitRange": "19:16",
+            "modifier": ""
+        },
+        {
+            "variableName": "simple32bitStruct",
+            "type": "Simple32bitStruct.json",
+            "defaultValue": "",
+            "nameAlias": "",
+            "doxyBrief": "",
+            "requirements": [
+                ""
+            ],
+            "wordOffset": "1",
+            "bitRange": "31:10",
+            "modifier": ""
+        }
+    ]
+}

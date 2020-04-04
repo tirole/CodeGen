@@ -75,6 +75,8 @@ foreach(var member in Info.MemberVariableInfos) {
         
         string inputTempValueString = "";
         string inputTempValueType = "";
+        string returnValueString = "";
+        string outputTempValueType = "";
 
         if(isGreaterThan32bit)
         {
@@ -87,11 +89,15 @@ foreach(var member in Info.MemberVariableInfos) {
 
         if(isInputTypePointer)
         {
-            inputTempValueString = "*reinterpret_cast<" + inputTempValueType + "*>(" + member.VariableName + ")";
+            inputTempValueString = "*reinterpret_cast<" + inputTempValueType + "*>(" + inputVariableName + ")";
+            returnValueString = "*reinterpret_cast<" + inputType + ">(&outputVal)";
+            outputTempValueType = inputTempValueType;
         }
         else
         {
             inputTempValueString = "static_cast<" + inputTempValueType + ">(" + member.VariableName + ")";
+            returnValueString = "outputVal";
+            outputTempValueType = member.Type;
         }
 
 
@@ -250,7 +256,9 @@ foreach(var member in Info.MemberVariableInfos) {
             this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
             this.Write(" outputVal = 0;\r\n    outputVal = (pDesc->data[uint32ArrayIndex] & (lowBitMask << " +
                     "bitOffset)) >> bitOffset;\r\n    outputVal |= static_cast<uint64_t>((pDesc->data[u" +
-                    "int32ArrayIndex + 1] & highBitMask)) << lowBitLength;\r\n    return outputVal;\r\n");
+                    "int32ArrayIndex + 1] & highBitMask)) << lowBitLength;\r\n    return ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(returnValueString));
+            this.Write(";\r\n");
             } else { 
             this.Write("    constexpr int uint32ArrayIndex = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.OffsetIn4ByteUnit));
@@ -260,10 +268,12 @@ foreach(var member in Info.MemberVariableInfos) {
             this.Write(this.ToStringHelper.ToStringWithCulture(member.BitEnd));
             this.Write(" - bitOffset) + 1;\r\n    constexpr int mask = static_cast<int>(~(static_cast<int64" +
                     "_t>(-1) << bitLength )) << bitOffset;\r\n    ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
+            this.Write(this.ToStringHelper.ToStringWithCulture(outputTempValueType));
             this.Write(" outputVal = static_cast<");
-            this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
-            this.Write(">((pDesc->data[uint32ArrayIndex] & mask) >> bitOffset);\r\n    return outputVal;\r\n");
+            this.Write(this.ToStringHelper.ToStringWithCulture(outputTempValueType));
+            this.Write(">((pDesc->data[uint32ArrayIndex] & mask) >> bitOffset);\r\n    return ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(returnValueString));
+            this.Write(";\r\n");
             } 
             this.Write("}\r\n");
         } 

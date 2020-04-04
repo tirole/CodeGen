@@ -1,0 +1,21 @@
+{
+    "declaration": {
+        "doxyBrief": "This is simple structure.",
+        "definitionType": "struct",
+        "definitionName": "Simple32bitStruct",
+        "nameAlias": "シンプルな構造体"
+    },
+    "memberVariables": [
+        {
+            "variableName": "intVal",
+            "type": "int32_t",
+            "defaultValue": "",
+            "nameAlias": "整数値",
+            "doxyBrief": "int value",
+            "requirements": [
+                "MINMAX,0,7",
+                "NOTNULL"
+            ]
+        }
+    ]
+}
