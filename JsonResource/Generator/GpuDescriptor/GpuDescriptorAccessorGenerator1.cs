@@ -57,7 +57,13 @@ foreach(var member in Info.MemberVariableInfos) {
             pointerGetterReturnType = inputType + "*";
         }
 
-        bool isNeedsMemcpy = ((member.BitEnd - member.BitBegin) > 63) || isInputTypePointer;
+        // 配列は常に memcpy とする
+        bool isNeedsMemcpy = isArray || isInputTypePointer;
+        int bitLength = member.BitEnd - member.BitBegin + 1;
+        if(isNeedsMemcpy && ((bitLength % 32) != 0))
+        {
+            throw new System.InvalidOperationException("Invalid bit length, cannot perform memcpy.\n");
+        }
 
         if(isNeedsMemcpy) { 
             this.Write("inline\r\nvoid Set");
