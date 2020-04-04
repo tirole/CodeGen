@@ -160,11 +160,17 @@ namespace JsonResource
 
                         this.SetCommonVariableInfo(variableInfo, memberVariable);
 
-                        // json の場合はポインタ渡しとする。
+                        // json かつ EnumConfig じゃない場合はポインタ渡しとする。
                         bool isJson = memberVariable.Type.IndexOf(".json") != -1;
                         if (isJson)
                         {
-                            variableInfo.TypeSuffix = "*";
+                            string jsonPath = memberVariable.Type;
+                            var typeDeclConfig = RootContext.Deserialize<DeclarationConfig>(jsonPath);
+                            var configType = RootContext.GetGenericDeserializerType(typeDeclConfig.Declaration.DefinitionType);
+                            if (configType != typeof(EnumConfig))
+                            {
+                                variableInfo.TypeSuffix = "*";
+                            }
                         }
 
                         if ((memberVariable.WordOffset != null) && (memberVariable.WordOffset != ""))
