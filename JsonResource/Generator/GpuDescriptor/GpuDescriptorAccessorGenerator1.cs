@@ -57,13 +57,43 @@ foreach(var member in Info.MemberVariableInfos) {
             pointerGetterReturnType = inputType + "*";
         }
 
-        // 配列は常に memcpy とする
-        bool isNeedsMemcpy = isArray || isInputTypePointer;
         int bitLength = member.BitEnd - member.BitBegin + 1;
-        if(isNeedsMemcpy && ((bitLength % 32) != 0))
+
+        // 配列は常に memcpy とする
+        bool isNeedsMemcpy = (isArray || isInputTypePointer) && ((bitLength % 32) == 0);
+        if(isNeedsMemcpy && (member.BitBegin != 0))
         {
-            throw new System.InvalidOperationException("Invalid bit length, cannot perform memcpy.\n");
+            throw new System.InvalidOperationException("Invalid bit begin, cannot perform memcpy.\n");
         }
+
+        bool isExact32bitVariable = (member.BitEnd - member.BitBegin) == 31;
+        bool isExact64bitVariable = (member.BitEnd - member.BitBegin) == 61;
+        bool isGreaterThan32bit = (member.BitEnd - member.BitBegin) >= 32;
+        bool isZeroStartVariable = (member.BitBegin == 0);
+        // 現状は 33bit 以上でしか存在しないので条件を決め打ち
+        bool isCrossingVariable =  isGreaterThan32bit && !isZeroStartVariable;
+        
+        string inputTempValueString = "";
+        string inputTempValueType = "";
+
+        if(isGreaterThan32bit)
+        {
+            inputTempValueType = "uint64_t";
+        }
+        else
+        {
+            inputTempValueType = "uint32_t";
+        }
+
+        if(isInputTypePointer)
+        {
+            inputTempValueString = "*reinterpret_cast<" + inputTempValueType + "*>(" + member.VariableName + ")";
+        }
+        else
+        {
+            inputTempValueString = "static_cast<" + inputTempValueType + ">(" + member.VariableName + ")";
+        }
+
 
         if(isNeedsMemcpy) { 
             this.Write("inline\r\nvoid Set");
@@ -100,7 +130,7 @@ foreach(var member in Info.MemberVariableInfos) {
                     } 
                 } 
             } 
-            if((member.BitEnd - member.BitBegin) == 63) { 
+            if((isExact64bitVariable || isExact32bitVariable) && isZeroStartVariable) { 
             this.Write("    constexpr int uint32ArrayIndex = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.OffsetIn4ByteUnit));
             this.Write(";\r\n    auto pOut = reinterpret_cast<");
@@ -108,7 +138,7 @@ foreach(var member in Info.MemberVariableInfos) {
             this.Write("*>(&pDesc->data[uint32ArrayIndex]);\r\n    *pOut = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
             this.Write(";\r\n");
-            } else if((member.BitEnd - member.BitBegin) >= 32 && (member.BitBegin != 0)) { 
+            } else if(isCrossingVariable) { 
             this.Write("    constexpr int uint32ArrayIndex = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.OffsetIn4ByteUnit));
             this.Write(";\r\n    constexpr int bitOffset = ");
@@ -120,9 +150,11 @@ foreach(var member in Info.MemberVariableInfos) {
             this.Write(" - ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.BitBegin));
             this.Write(" + 1) - lowBitLength;\r\n    constexpr int highBitMask = static_cast<int>(~(-1LL <<" +
-                    " highBitLength));\r\n\r\n    uint64_t inputVal = static_cast<uint64_t>(");
-            this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
-            this.Write(");\r\n");
+                    " highBitLength));\r\n\r\n    ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(inputTempValueType));
+            this.Write(" inputVal = ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(inputTempValueString));
+            this.Write(";\r\n");
                 if(member.Modifier != null && member.Modifier != "") { 
             this.Write("    ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.GetModifierString()));
@@ -147,9 +179,11 @@ foreach(var member in Info.MemberVariableInfos) {
             this.Write(";\r\n    constexpr int bitLength = (");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.BitEnd));
             this.Write(" - bitOffset) + 1;\r\n    constexpr int mask = static_cast<int>(~(static_cast<int64" +
-                    "_t>(-1) << bitLength ));\r\n    int inputVal = static_cast<int>(");
-            this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
-            this.Write(");\r\n");
+                    "_t>(-1) << bitLength ));\r\n    ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(inputTempValueType));
+            this.Write(" inputVal = ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(inputTempValueString));
+            this.Write(";\r\n");
                 if(member.Modifier != null && member.Modifier != "") { 
             this.Write("    ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.GetModifierString()));

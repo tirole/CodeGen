@@ -4,8 +4,8 @@
 #include "../../CommaSeparatedResource\Output/SamplerDescriptor.h"
 #include "../../CommaSeparatedResource\Output/TextureDescriptor.h"
 #include "../../JsonResource/Outputs/my_SimpleStruct.h"
-#include "../../JsonResource/Outputs/my_RenderTargetDescriptor.h"
 #include "../../JsonResource/Outputs/my_Enum.h"
+#include "../../JsonResource/Outputs/my_RenderTargetDescriptor.h"
 #include "../../JsonResource/Outputs/my_GpuCommand.h"
 
 #define TEST_EQ(val1, val2)\
@@ -45,7 +45,7 @@ int main()
 		my::detail::SetRendeerTargetDescriptorSrcBufOsset( pDesc, 5 );
 		my::detail::SetRendeerTargetDescriptorSrcBufOsset2( pDesc, 6 );
 		my::detail::SetRendeerTargetDescriptorSrcBufOsset3( pDesc, my::detail::CompressionMode::Block );
-		my::detail::SetRendeerTargetDescriptorFormatDescriptorUnion( pDesc, simpleUnion);
+		my::detail::SetRendeerTargetDescriptorFormatDescriptorUnion( pDesc, &simpleUnion);
 		uint64_t pointer = 0xdeLL << 50;
 		pointer |= 0xdead;
 		my::detail::SetRendeerTargetDescriptorPointer( pDesc, pointer);
@@ -61,7 +61,8 @@ int main()
 
 		// modifiler ‚Å 2 ”{‚³‚ê‚Ä‚¢‚é‚Ì‚Å 2 * pointer
 		TEST_EQ( my::detail::GetRendeerTargetDescriptorPointer( pDesc ), (2 * pointer) & (~(-1LL << 58)) );
-		my::detail::SimpleUnion out = my::detail::GetRendeerTargetDescriptorFormatDescriptorUnion( pDesc );
+		my::detail::SimpleUnion out;
+		my::detail::GetRendeerTargetDescriptorFormatDescriptorUnion(&out, pDesc );
 		TEST_EQ( out.intVal, simpleUnion.intVal );
 	}
 
@@ -70,5 +71,6 @@ int main()
 		int index = 0;
 		GpuCommand cmd = my::detail::MakeMove(value, index);
 	}
+
 	return 0;
 }

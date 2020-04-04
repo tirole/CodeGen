@@ -35,13 +35,43 @@
             pointerGetterReturnType = inputType + "*";
         }
 
-        // 配列は常に memcpy とする
-        bool isNeedsMemcpy = isArray || isInputTypePointer;
         int bitLength = member.BitEnd - member.BitBegin + 1;
-        if(isNeedsMemcpy && ((bitLength % 32) != 0))
+
+        // 配列は常に memcpy とする
+        bool isNeedsMemcpy = (isArray || isInputTypePointer) && ((bitLength % 32) == 0);
+        if(isNeedsMemcpy && (member.BitBegin != 0))
         {
-            throw new System.InvalidOperationException("Invalid bit length, cannot perform memcpy.\n");
+            throw new System.InvalidOperationException("Invalid bit begin, cannot perform memcpy.\n");
         }
+
+        bool isExact32bitVariable = (member.BitEnd - member.BitBegin) == 31;
+        bool isExact64bitVariable = (member.BitEnd - member.BitBegin) == 61;
+        bool isGreaterThan32bit = (member.BitEnd - member.BitBegin) >= 32;
+        bool isZeroStartVariable = (member.BitBegin == 0);
+        // 現状は 33bit 以上でしか存在しないので条件を決め打ち
+        bool isCrossingVariable =  isGreaterThan32bit && !isZeroStartVariable;
+        
+        string inputTempValueString = "";
+        string inputTempValueType = "";
+
+        if(isGreaterThan32bit)
+        {
+            inputTempValueType = "uint64_t";
+        }
+        else
+        {
+            inputTempValueType = "uint32_t";
+        }
+
+        if(isInputTypePointer)
+        {
+            inputTempValueString = "*reinterpret_cast<" + inputTempValueType + "*>(" + member.VariableName + ")";
+        }
+        else
+        {
+            inputTempValueString = "static_cast<" + inputTempValueType + ">(" + member.VariableName + ")";
+        }
+
 #>
 <#        if(isNeedsMemcpy) { #>
 inline
@@ -61,11 +91,11 @@ void Set<#=functionNameSuffix#>(<#=Info.Name#>* pDesc, <#=inputType#> <#=inputVa
 <#                    } #>
 <#                } #>
 <#            } #>
-<#            if((member.BitEnd - member.BitBegin) == 63) { #>
+<#            if((isExact64bitVariable || isExact32bitVariable) && isZeroStartVariable) { #>
     constexpr int uint32ArrayIndex = <#=                    member.OffsetIn4ByteUnit #>;
     auto pOut = reinterpret_cast<<#=                    member.Type #>*>(&pDesc->data[uint32ArrayIndex]);
     *pOut = <#=                    member.VariableName #>;
-<#            } else if((member.BitEnd - member.BitBegin) >= 32 && (member.BitBegin != 0)) { #>
+<#            } else if(isCrossingVariable) { #>
     constexpr int uint32ArrayIndex = <#=                    member.OffsetIn4ByteUnit #>;
     constexpr int bitOffset = <#=                    member.BitBegin #>;
     constexpr int lowBitLength = 32 - bitOffset;
@@ -73,7 +103,7 @@ void Set<#=functionNameSuffix#>(<#=Info.Name#>* pDesc, <#=inputType#> <#=inputVa
     constexpr int highBitLength = (<#=                    member.BitEnd #> - <#=                    member.BitBegin#> + 1) - lowBitLength;
     constexpr int highBitMask = static_cast<int>(~(-1LL << highBitLength));
 
-    uint64_t inputVal = static_cast<uint64_t>(<#=                    member.VariableName #>);
+    <#=inputTempValueType #> inputVal = <#=inputTempValueString #>;
 <#                if(member.Modifier != null && member.Modifier != "") { #>
     <#=                        member.GetModifierString() #>;
 <#                } #>
@@ -92,7 +122,7 @@ void Set<#=functionNameSuffix#>(<#=Info.Name#>* pDesc, <#=inputType#> <#=inputVa
     constexpr int bitOffset = <#=                    member.BitBegin #>;
     constexpr int bitLength = (<#=                    member.BitEnd #> - bitOffset) + 1;
     constexpr int mask = static_cast<int>(~(static_cast<int64_t>(-1) << bitLength ));
-    int inputVal = static_cast<int>(<#=                    member.VariableName #>);
+    <#=inputTempValueType #> inputVal = <#=inputTempValueString #>;
 <#                if(member.Modifier != null && member.Modifier != "") { #>
     <#=                        member.GetModifierString() #>;
 <#                } #>
