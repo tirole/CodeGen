@@ -203,7 +203,7 @@ namespace JsonResource
                             var dependedDescPath = Path.GetDirectoryName(jsonFilePath) + "/" + variable.VariableConfig.Type;
                             variable.VariableConfig.Type = dependedDescPath;
                         }
-                        if (variable.VariableConfig.DefaultValues != null && variable.VariableConfig.DefaultValues[0].Split('.').Length > 1)
+                        if (variable.VariableConfig.IsCsvDefaultValue())
                         {
                             variable.VariableConfig.DefaultValues[0] = Path.GetDirectoryName(jsonFilePath) + "/" + variable.VariableConfig.DefaultValues[0];
                         }

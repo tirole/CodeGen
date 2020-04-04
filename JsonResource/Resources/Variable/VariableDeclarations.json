@@ -8,6 +8,21 @@
     "variableDeclarations": [
         {
             "isAssignDefaultValue": true,
+            "typePrefix": "constexpr",
+            "typeSuffix": "",
+            "variable": {
+                "variableName": "TextureMinAlignment",
+                "type": "size_t",
+                "defaultValues": [
+                    "128"
+                ],
+                "nameAlias": "最小アライメント",
+                "doxyBrief": "最小アライメントです。",
+                "requirements": []
+            }
+        },
+        {
+            "isAssignDefaultValue": true,
             "typePrefix": "",
             "typeSuffix": "",
             "variable": {
@@ -22,24 +37,9 @@
             }
         },
         {
-            "isAssignDefaultValue": true,
-            "typePrefix": "constexpr",
-            "typeSuffix": "constexpr",
-            "variable": {
-                "variableName": "TextureMinAlignment",
-                "type": "size_t",
-                "defaultValues": [
-                    "64"
-                ],
-                "nameAlias": "最小アライメント",
-                "doxyBrief": "最小アライメントです。",
-                "requirements": []
-            }
-        },
-        {
             "isAssignDefaultValue": false,
             "typePrefix": "constexpr",
-            "typeSuffix": "constexpr",
+            "typeSuffix": "",
             "variable": {
                 "variableName": "VertexBufferMinAlignment",
                 "type": "size_t",

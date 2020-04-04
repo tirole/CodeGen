@@ -348,7 +348,7 @@ namespace JsonResource
             {
                 variableInfo.ArrayLength = int.Parse(config.Type.Split('[')[1].Split(']')[0]);
             }
-            else if(config.DefaultValues != null && (config.DefaultValues[0].IndexOf(".csv") != -1))
+            else if(config.IsCsvDefaultValue())
             {
                 var file = new StreamReader(config.DefaultValues[0]).ReadToEnd();
                 var lines = file.Split(new char[] { '\n' });
@@ -403,7 +403,7 @@ namespace JsonResource
         {
             if (config.DefaultValues != null)
             {
-                if ((config.DefaultValues[0].Length - config.DefaultValues[0].LastIndexOf(".csv")) == 4)
+                if (config.IsCsvDefaultValue())
                 {
                     // TODO: csv を read していい感じに {} を挿入する。
                     //      -> でもこの時に結局 struct の情報が必要になる。

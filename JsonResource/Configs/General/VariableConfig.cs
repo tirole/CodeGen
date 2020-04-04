@@ -28,5 +28,17 @@ namespace JsonResource
 
         [DataMember(Name = "requirements")]
         public string[] Requirements;
+
+        public bool IsCsvDefaultValue()
+        {
+            if (DefaultValues != null && DefaultValues.Length > 0)
+            {
+                if (DefaultValues[0].LastIndexOf(".csv") != -1)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
