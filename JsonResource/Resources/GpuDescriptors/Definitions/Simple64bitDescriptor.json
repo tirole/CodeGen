@@ -7,6 +7,19 @@
     },
     "memberVariables": [
         {
+            "variableName": "compMode",
+            "type": "../../GpuEnum/Definitions/CompressionMode.json",
+            "defaultValue": "",
+            "nameAlias": "",
+            "doxyBrief": "",
+            "requirements": [
+                ""
+            ],
+            "wordOffset": "0",
+            "bitRange": "15:0",
+            "modifier": ""
+        },
+        {
             "variableName": "rendertargetIndex",
             "type": "int",
             "defaultValue": "",
