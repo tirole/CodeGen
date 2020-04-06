@@ -62,6 +62,8 @@
         string inputTempValueType = "";
         string returnValueString = "";
         string outputTempValueType = "";
+        // for general case
+        string outputValueString = "";
 
         if(isGreaterThan32bit)
         {
@@ -83,6 +85,14 @@
             inputTempValueString = "static_cast<" + inputTempValueType + ">(" + member.VariableName + ")";
             returnValueString = "outputVal";
             outputTempValueType = member.Type;
+            if(inputType == "bool")
+            {
+                outputValueString = "((pDesc->data[uint32ArrayIndex] & mask) >> bitOffset) != 0";
+            }
+            else
+            {
+                outputValueString = "static_cast<" + outputTempValueType + ">((pDesc->data[uint32ArrayIndex] & mask) >> bitOffset)";
+            }
         }
 
 #>
@@ -186,7 +196,7 @@ inline
     constexpr int bitOffset = <#=                    member.BitBegin #>;
     constexpr int bitLength = (<#=                    member.BitEnd #> - bitOffset) + 1;
     constexpr uint32_t mask = static_cast<uint32_t>(~(-1LL << bitLength )) << bitOffset;
-    <#=outputTempValueType #> outputVal = static_cast<<#=outputTempValueType #>>((pDesc->data[uint32ArrayIndex] & mask) >> bitOffset);
+    <#=outputTempValueType #> outputVal = <#=outputValueString #>;
     return <#=returnValueString #>;
 <#            } #>
 }

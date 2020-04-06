@@ -84,6 +84,8 @@ foreach(var member in Info.MemberVariableInfos) {
         string inputTempValueType = "";
         string returnValueString = "";
         string outputTempValueType = "";
+        // for general case
+        string outputValueString = "";
 
         if(isGreaterThan32bit)
         {
@@ -105,6 +107,14 @@ foreach(var member in Info.MemberVariableInfos) {
             inputTempValueString = "static_cast<" + inputTempValueType + ">(" + member.VariableName + ")";
             returnValueString = "outputVal";
             outputTempValueType = member.Type;
+            if(inputType == "bool")
+            {
+                outputValueString = "((pDesc->data[uint32ArrayIndex] & mask) >> bitOffset) != 0";
+            }
+            else
+            {
+                outputValueString = "static_cast<" + outputTempValueType + ">((pDesc->data[uint32ArrayIndex] & mask) >> bitOffset)";
+            }
         }
 
 
@@ -281,9 +291,9 @@ foreach(var member in Info.MemberVariableInfos) {
             this.Write(" - bitOffset) + 1;\r\n    constexpr uint32_t mask = static_cast<uint32_t>(~(-1LL <<" +
                     " bitLength )) << bitOffset;\r\n    ");
             this.Write(this.ToStringHelper.ToStringWithCulture(outputTempValueType));
-            this.Write(" outputVal = static_cast<");
-            this.Write(this.ToStringHelper.ToStringWithCulture(outputTempValueType));
-            this.Write(">((pDesc->data[uint32ArrayIndex] & mask) >> bitOffset);\r\n    return ");
+            this.Write(" outputVal = ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(outputValueString));
+            this.Write(";\r\n    return ");
             this.Write(this.ToStringHelper.ToStringWithCulture(returnValueString));
             this.Write(";\r\n");
             } 
