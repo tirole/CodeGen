@@ -121,7 +121,7 @@ void Set<#=functionNameSuffix#>(<#=Info.Name#>* pDesc, <#=inputType#> <#=inputVa
 <#                if(member.HasModifier()) { #>
     <#=member.GetModifierString("*pOut") #>;
 <#                } #>
-<#            } else if(isCrossingVariable) { #>
+<#            } else if(isCrossingVariable || (isZeroStartVariable && isGreaterThan32bit)) { #>
     constexpr int uint32ArrayIndex = <#=                    member.OffsetIn4ByteUnit #>;
     constexpr int bitOffset = <#=                    member.BitBegin #>;
     constexpr int lowBitLength = 32 - bitOffset;
@@ -179,7 +179,7 @@ inline
     constexpr int uint32ArrayIndex = <#=                    member.OffsetIn4ByteUnit #>;
     auto pOut = reinterpret_cast<const <#=                    member.Type #>*>(&pDesc->data[uint32ArrayIndex]);
     return *pOut;
-<#            } else if((member.BitEnd - member.BitBegin) >= 32 && (member.BitBegin != 0)) { #>
+<#            } else if(isGreaterThan32bit) { #>
     constexpr int uint32ArrayIndex = <#=                    member.OffsetIn4ByteUnit #>;
     constexpr int bitOffset = <#=                    member.BitBegin #>;
     constexpr int lowBitLength = 32 - bitOffset;

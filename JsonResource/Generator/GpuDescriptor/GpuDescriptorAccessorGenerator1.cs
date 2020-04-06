@@ -166,7 +166,7 @@ foreach(var member in Info.MemberVariableInfos) {
             this.Write(this.ToStringHelper.ToStringWithCulture(member.GetModifierString("*pOut")));
             this.Write(";\r\n");
                 } 
-            } else if(isCrossingVariable) { 
+            } else if(isCrossingVariable || (isZeroStartVariable && isGreaterThan32bit)) { 
             this.Write("    constexpr int uint32ArrayIndex = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.OffsetIn4ByteUnit));
             this.Write(";\r\n    constexpr int bitOffset = ");
@@ -262,7 +262,7 @@ foreach(var member in Info.MemberVariableInfos) {
             this.Write(";\r\n    auto pOut = reinterpret_cast<const ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.Type));
             this.Write("*>(&pDesc->data[uint32ArrayIndex]);\r\n    return *pOut;\r\n");
-            } else if((member.BitEnd - member.BitBegin) >= 32 && (member.BitBegin != 0)) { 
+            } else if(isGreaterThan32bit) { 
             this.Write("    constexpr int uint32ArrayIndex = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.OffsetIn4ByteUnit));
             this.Write(";\r\n    constexpr int bitOffset = ");
