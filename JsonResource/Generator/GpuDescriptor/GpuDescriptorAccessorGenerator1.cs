@@ -184,8 +184,8 @@ foreach(var member in Info.MemberVariableInfos) {
             this.Write(this.ToStringHelper.ToStringWithCulture(member.BitBegin));
             this.Write(";\r\n    constexpr int bitLength = (");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.BitEnd));
-            this.Write(" - bitOffset) + 1;\r\n    constexpr int mask = static_cast<int>(~(static_cast<int64" +
-                    "_t>(-1) << bitLength ));\r\n    ");
+            this.Write(" - bitOffset) + 1;\r\n    constexpr uint32_t mask = static_cast<uint32_t>(~(-1LL <<" +
+                    " bitLength ));\r\n    ");
             this.Write(this.ToStringHelper.ToStringWithCulture(inputTempValueType));
             this.Write(" inputVal = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(inputTempValueString));
@@ -266,8 +266,8 @@ foreach(var member in Info.MemberVariableInfos) {
             this.Write(this.ToStringHelper.ToStringWithCulture(member.BitBegin));
             this.Write(";\r\n    constexpr int bitLength = (");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.BitEnd));
-            this.Write(" - bitOffset) + 1;\r\n    constexpr int mask = static_cast<int>(~(static_cast<int64" +
-                    "_t>(-1) << bitLength )) << bitOffset;\r\n    ");
+            this.Write(" - bitOffset) + 1;\r\n    constexpr uint32_t mask = static_cast<uint32_t>(~(-1LL <<" +
+                    " bitLength )) << bitOffset;\r\n    ");
             this.Write(this.ToStringHelper.ToStringWithCulture(outputTempValueType));
             this.Write(" outputVal = static_cast<");
             this.Write(this.ToStringHelper.ToStringWithCulture(outputTempValueType));
