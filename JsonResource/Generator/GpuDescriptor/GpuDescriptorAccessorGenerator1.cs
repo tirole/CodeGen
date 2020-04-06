@@ -101,6 +101,7 @@ foreach(var member in Info.MemberVariableInfos) {
             inputTempValueString = "*reinterpret_cast<" + inputTempValueType + "*>(" + inputVariableName + ")";
             returnValueString = "*reinterpret_cast<" + inputType + ">(&outputVal)";
             outputTempValueType = inputTempValueType;
+            outputValueString = "static_cast<" + outputTempValueType + ">((pDesc->data[uint32ArrayIndex] & mask) >> bitOffset)";
         }
         else
         {
