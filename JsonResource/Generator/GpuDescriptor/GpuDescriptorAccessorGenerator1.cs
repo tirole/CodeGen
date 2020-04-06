@@ -67,7 +67,7 @@ foreach(var member in Info.MemberVariableInfos) {
         }
 
         bool isExact32bitVariable = (member.BitEnd - member.BitBegin) == 31;
-        bool isExact64bitVariable = (member.BitEnd - member.BitBegin) == 61;
+        bool isExact64bitVariable = (member.BitEnd - member.BitBegin) == 63;
         bool isGreaterThan32bit = (member.BitEnd - member.BitBegin) >= 32;
         bool isZeroStartVariable = (member.BitBegin == 0);
         // 現状は 33bit 以上でしか存在しないので条件を決め打ち

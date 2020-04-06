@@ -111,9 +111,19 @@
             "defaultValue": "",
             "nameAlias": "フォーマットデスクリプター",
             "doxyBrief": "",
-            "requirements": [
-            ],
+            "requirements": [],
             "wordOffset": "9:10",
+            "bitRange": "63:0",
+            "modifier": ""
+        },
+        {
+            "variableName": "pointer2",
+            "type": "GpuAddress",
+            "defaultValue": "",
+            "nameAlias": "ポインター2",
+            "doxyBrief": "",
+            "requirements": [],
+            "wordOffset": "11:12",
             "bitRange": "63:0",
             "modifier": ""
         }
