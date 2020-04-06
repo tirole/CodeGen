@@ -39,9 +39,16 @@
 
         // 配列は常に memcpy とする
         bool isNeedsMemcpy = (isArray || isInputTypePointer) && ((bitLength % 32) == 0);
-        if(isNeedsMemcpy && (member.BitBegin != 0))
+        if(isNeedsMemcpy)
         {
-            throw new System.InvalidOperationException("Invalid bit begin, cannot perform memcpy.\n");
+            if(member.HasModifier())
+            {
+                throw new System.InvalidOperationException("Cannot handle modifier for memcpy.\n");
+            }
+            if(member.BitBegin != 0)
+            {
+                throw new System.InvalidOperationException("Invalid bit begin, cannot perform memcpy.\n");
+            }
         }
 
         bool isExact32bitVariable = (member.BitEnd - member.BitBegin) == 31;
@@ -100,7 +107,10 @@ void Set<#=functionNameSuffix#>(<#=Info.Name#>* pDesc, <#=inputType#> <#=inputVa
 <#            if((isExact64bitVariable || isExact32bitVariable) && isZeroStartVariable) { #>
     constexpr int uint32ArrayIndex = <#=                    member.OffsetIn4ByteUnit #>;
     auto pOut = reinterpret_cast<<#=                    member.Type #>*>(&pDesc->data[uint32ArrayIndex]);
-    *pOut = <#=                    member.VariableName #>;
+    *pOut = <#=member.VariableName #>;
+<#                if(member.HasModifier()) { #>
+    <#=member.GetModifierString("*pOut") #>;
+<#                } #>
 <#            } else if(isCrossingVariable) { #>
     constexpr int uint32ArrayIndex = <#=                    member.OffsetIn4ByteUnit #>;
     constexpr int bitOffset = <#=                    member.BitBegin #>;
@@ -110,7 +120,7 @@ void Set<#=functionNameSuffix#>(<#=Info.Name#>* pDesc, <#=inputType#> <#=inputVa
     constexpr int highBitMask = static_cast<int>(~(-1LL << highBitLength));
 
     <#=inputTempValueType #> inputVal = <#=inputTempValueString #>;
-<#                if(member.Modifier != null && member.Modifier != "") { #>
+<#                if(member.HasModifier()) { #>
     <#=                        member.GetModifierString() #>;
 <#                } #>
     int lowVal = inputVal & lowBitMask;
@@ -129,7 +139,7 @@ void Set<#=functionNameSuffix#>(<#=Info.Name#>* pDesc, <#=inputType#> <#=inputVa
     constexpr int bitLength = (<#=                    member.BitEnd #> - bitOffset) + 1;
     constexpr uint32_t mask = static_cast<uint32_t>(~(-1LL << bitLength ));
     <#=inputTempValueType #> inputVal = <#=inputTempValueString #>;
-<#                if(member.Modifier != null && member.Modifier != "") { #>
+<#                if(member.HasModifier()) { #>
     <#=                        member.GetModifierString() #>;
 <#                } #>
     pDesc->data[uint32ArrayIndex] |= (inputVal & mask) << bitOffset;

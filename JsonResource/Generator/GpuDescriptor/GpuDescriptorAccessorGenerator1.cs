@@ -61,9 +61,16 @@ foreach(var member in Info.MemberVariableInfos) {
 
         // 配列は常に memcpy とする
         bool isNeedsMemcpy = (isArray || isInputTypePointer) && ((bitLength % 32) == 0);
-        if(isNeedsMemcpy && (member.BitBegin != 0))
+        if(isNeedsMemcpy)
         {
-            throw new System.InvalidOperationException("Invalid bit begin, cannot perform memcpy.\n");
+            if(member.HasModifier())
+            {
+                throw new System.InvalidOperationException("Cannot handle modifier for memcpy.\n");
+            }
+            if(member.BitBegin != 0)
+            {
+                throw new System.InvalidOperationException("Invalid bit begin, cannot perform memcpy.\n");
+            }
         }
 
         bool isExact32bitVariable = (member.BitEnd - member.BitBegin) == 31;
@@ -144,6 +151,11 @@ foreach(var member in Info.MemberVariableInfos) {
             this.Write("*>(&pDesc->data[uint32ArrayIndex]);\r\n    *pOut = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.VariableName));
             this.Write(";\r\n");
+                if(member.HasModifier()) { 
+            this.Write("    ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.GetModifierString("*pOut")));
+            this.Write(";\r\n");
+                } 
             } else if(isCrossingVariable) { 
             this.Write("    constexpr int uint32ArrayIndex = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.OffsetIn4ByteUnit));
@@ -161,7 +173,7 @@ foreach(var member in Info.MemberVariableInfos) {
             this.Write(" inputVal = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(inputTempValueString));
             this.Write(";\r\n");
-                if(member.Modifier != null && member.Modifier != "") { 
+                if(member.HasModifier()) { 
             this.Write("    ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.GetModifierString()));
             this.Write(";\r\n");
@@ -190,7 +202,7 @@ foreach(var member in Info.MemberVariableInfos) {
             this.Write(" inputVal = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(inputTempValueString));
             this.Write(";\r\n");
-                if(member.Modifier != null && member.Modifier != "") { 
+                if(member.HasModifier()) { 
             this.Write("    ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.GetModifierString()));
             this.Write(";\r\n");

@@ -34,6 +34,7 @@ namespace JsonResource.Generator
         public enum ModifierType
         {
             Add,
+            Minus,
             Mul,
             Func,
             RightShift,
@@ -42,6 +43,7 @@ namespace JsonResource.Generator
         public string[] Modifiers = new string[(int)ModifierType.Count]
         {
             "add",
+            "minus",
             "mul",
             "func",
             "rshift",
@@ -50,7 +52,16 @@ namespace JsonResource.Generator
         public string InputTempVariableName = "inputVal";
         public string OutputTempVariableName = "outputVal";
 
-        public string GetModifierString()
+        public bool HasModifier()
+        {
+            if (Modifier != null && Modifier != "")
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public string GetModifierString(string tempVariableName)
         {
             var modifierStrings = Modifier.Split(',');
             string modifierName = modifierStrings[0];
@@ -59,22 +70,30 @@ namespace JsonResource.Generator
             switch (modifierName)
             {
                 case "add":
-                    retString = InputTempVariableName + " += " + modifierVal;
+                    retString = tempVariableName + " += " + modifierVal;
+                    break;
+                case "minus":
+                    retString = tempVariableName + " -= " + modifierVal;
                     break;
                 case "mul":
-                    retString = InputTempVariableName + " *= " + modifierVal;
+                    retString = tempVariableName + " *= " + modifierVal;
                     break;
                 case "func":
-                    retString = InputTempVariableName + " = " + modifierVal + "(" + InputTempVariableName + ")";
+                    retString = tempVariableName + " = " + modifierVal + "(" + tempVariableName + ")";
                     break;
                 case "rshift":
-                    retString = InputTempVariableName + " >>= " + modifierVal;
+                    retString = tempVariableName + " >>= " + modifierVal;
                     break;
                 default:
                     throw new System.InvalidOperationException("Illegal modifier type.");
             }
 
             return retString;
+        }
+
+        public string GetModifierString()
+        {
+            return GetModifierString(InputTempVariableName);
         }
     }
 }
