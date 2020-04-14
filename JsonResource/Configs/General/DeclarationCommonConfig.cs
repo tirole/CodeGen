@@ -22,7 +22,32 @@ namespace JsonResource
         public string DefinitionName;
         [DataMember(Name = "doxyBrief")]
         public string DoxyBrief;
+        [DataMember(Name = "doxyDetails")]
+        public string[] DoxyDetails;
         [DataMember(Name = "nameAlias")]
         public string NameAlias;
+
+        public string GetDoxyBrief()
+        {
+            if (DoxyBrief == "")
+            {
+                return NameAlias + "です。";
+            }
+            else
+            {
+                return DoxyBrief;
+            }
+        }
+
+        public void GetDoxyDetails(List<string> outStr)
+        {
+            if(outStr != null)
+            {
+                foreach(string str in DoxyDetails)
+                {
+                    outStr.Add(str);
+                }
+            }
+        }
     }
 }

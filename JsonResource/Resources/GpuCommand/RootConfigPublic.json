@@ -20,21 +20,12 @@
     },
     "fileConfigs": [
         {
-            "outputFileName": "my_GpuCommand.h",
-            "definitions": [
-                {
-                    "name": "gpuCommand",
-                    "path": "Move.json"
-                },
-                {
-                    "name": "",
-                    "path": "Opcode.json"
-                }
-            ]
-        },
-        {
             "outputFileName": "my_GpuCommandPublic.h",
             "definitions": [
+                {
+                    "name": "gpuCommandPublic",
+                    "path": "Move.json"
+                },
                 {
                     "name": "gpuCommandPublic",
                     "path": "Move.json"

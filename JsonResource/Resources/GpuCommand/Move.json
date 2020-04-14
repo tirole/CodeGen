@@ -1,6 +1,10 @@
 {
     "declaration": {
         "doxyBrief": "",
+        "doxyDetails":[
+            "ムーブコマンドです。",
+            "32bit レジスタに対するムーブコマンドです。"
+        ],
         "definitionType": "struct",
         "definitionName": "Move",
         "nameAlias": "ムーブコマンド"

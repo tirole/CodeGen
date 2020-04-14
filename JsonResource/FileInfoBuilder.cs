@@ -126,6 +126,15 @@ namespace JsonResource
 
                     var structGenInfo = new Generator.StructGenerationInfo();
                     structGenInfo.Name = config.Declaration.DefinitionName;
+                    if(config.Declaration.DoxyBrief != "")
+                    {
+                        structGenInfo.DoxyBrief = config.Declaration.DoxyBrief;
+                    }
+                    else
+                    {
+                        structGenInfo.DoxyBrief = config.Declaration.NameAlias + "です。";
+                    }
+
                     foreach (var memberVariable in config.MemberVariables)
                     {
                         var variableInfo = new Generator.VariableInfo();
@@ -154,6 +163,9 @@ namespace JsonResource
 
                     var structGenInfo = new Generator.StructGenerationInfo();
                     structGenInfo.Name = descConfig.Item1.Declaration.DefinitionName;
+                    structGenInfo.DoxyBrief = descConfig.Item1.Declaration.GetDoxyBrief();
+                    descConfig.Item1.Declaration.GetDoxyDetails(structGenInfo.DoxyDetails);
+
                     foreach (var memberVariable in descConfig.Item1.memberVariables)
                     {
                         var variableInfo = new Generator.VariableInfo();
