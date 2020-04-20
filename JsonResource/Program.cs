@@ -145,7 +145,8 @@ namespace JsonResource
             // RootContext and FileInfoBuilder Test
             List<string> RootConfigPaths = new List<string>
             {
-                @"D:\prj\software\codegeneration\JsonResource\Resources\GpuCommand\RootConfigPublic.json",
+                @"D:\prj\software\codegeneration\JsonResource\Resources\GpuCommand\RootConfig.json",
+                //@"D:\prj\software\codegeneration\JsonResource\Resources\GpuCommand\RootConfigPublic.json",
                 //@"D:\prj\software\codegeneration\JsonResource\Resources\GpuDescriptors\RootConfigTest.json",
                 //@"D:\prj\software\codegeneration\JsonResource\Resources\SimpleStruct\RootConfig.json",
                 //@"D:\prj\software\codegeneration\JsonResource\Resources\GpuCommand\RootConfig.json",

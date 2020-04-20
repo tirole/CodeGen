@@ -26,8 +26,11 @@ namespace JsonResource.Generator
         public virtual string TransformText()
         {
 
-    string retValue = "";
+    string constructorArg = "";
     string argument = "";
+    string opCodeVal = "";
+    const string cmdDataVariable = "this->data";
+
     for(int i = 0; i < Info.MemberVariableInfos.Count; ++i)
     {
         var member = Info.MemberVariableInfos[i];
@@ -36,7 +39,7 @@ namespace JsonResource.Generator
 
         if(i != 0)
         {
-            retValue += " | ";
+            constructorArg += " | ";
         }
         // opcode
         if(member.BitBegin == 56)
@@ -46,7 +49,8 @@ namespace JsonResource.Generator
                 "static_cast<uint64_t>(" +
                 reqInfo.Values[0] + ")" +
                 " << " + member.BitBegin + ")";
-            retValue += val;
+            constructorArg += val;
+            opCodeVal = val;
         }
         else
         {
@@ -54,7 +58,7 @@ namespace JsonResource.Generator
                 "static_cast<uint64_t>(" +
                 inputVariableName + ")" +
                 " << " + member.BitBegin + ")";
-            retValue += val;
+            constructorArg += val;
 
             argument += member.Type + " " + member.VariableName;
 
@@ -65,13 +69,54 @@ namespace JsonResource.Generator
         }
     }
  
-            this.Write("constexpr\r\nGpuCommand Make");
+            this.Write("class ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
+            this.Write(" : public CommandBase\r\n{\r\n    constexpr ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
+            this.Write("() :\r\n        CommandBase(");
+            this.Write(this.ToStringHelper.ToStringWithCulture(opCodeVal));
+            this.Write(")\r\n    {\r\n    }\r\n    constexpr ");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
             this.Write("(");
             this.Write(this.ToStringHelper.ToStringWithCulture(argument));
-            this.Write(")\r\n{\r\n    return ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(retValue));
-            this.Write(";\r\n}");
+            this.Write(") :\r\n        CommandBase(");
+            this.Write(this.ToStringHelper.ToStringWithCulture(constructorArg));
+            this.Write(")\r\n    {\r\n    }\r\n");
+    foreach(var member in Info.MemberVariableInfos) { 
+        string functionNameSuffix = char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1);
+        string inputType = member.Type;
+        string inputVariableName = member.VariableName;
+        int bitCount = member.BitEnd - member.BitBegin + 1;
+        ulong mask = (((ulong)1 << bitCount) - 1) << member.BitBegin;
+        string maskStr = "0x" + mask.ToString("X");
+
+            this.Write("    ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
+            this.Write("& Set");
+            this.Write(this.ToStringHelper.ToStringWithCulture(functionNameSuffix));
+            this.Write("(");
+            this.Write(this.ToStringHelper.ToStringWithCulture(inputType));
+            this.Write(" val)\r\n    {\r\n");
+        if(member.RequirementInfos != null) { 
+            foreach(var info in member.RequirementInfos) { 
+                if(info.Type != RequirementInfo.RequirementType.NoRequirement) { 
+            this.Write("        ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.GetString("val")));
+            this.Write("\r\n");
+                } 
+            } 
+        } 
+            this.Write("        ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(cmdDataVariable));
+            this.Write(" &= ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(maskStr));
+            this.Write(";\r\n        ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(cmdDataVariable));
+            this.Write(" |= static_cast<uint64_t>(val) <<");
+            this.Write(this.ToStringHelper.ToStringWithCulture(member.BitBegin));
+            this.Write(";\r\n        return *this;\r\n    }\r\n");
+    } 
+            this.Write("};");
             return this.GenerationEnvironment.ToString();
         }
     }

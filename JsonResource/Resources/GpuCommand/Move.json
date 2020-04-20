@@ -34,7 +34,7 @@
         },
         {
             "variableName": "opcode",
-            "type": "int",
+            "type": "Opcode.json",
             "defaultValue": "",
             "nameAlias": "オペコード",
             "doxyBrief": "",

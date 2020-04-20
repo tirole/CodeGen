@@ -4,8 +4,11 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#
-    string retValue = "";
+    string constructorArg = "";
     string argument = "";
+    string opCodeVal = "";
+    const string cmdDataVariable = "this->data";
+
     for(int i = 0; i < Info.MemberVariableInfos.Count; ++i)
     {
         var member = Info.MemberVariableInfos[i];
@@ -14,7 +17,7 @@
 
         if(i != 0)
         {
-            retValue += " | ";
+            constructorArg += " | ";
         }
         // opcode
         if(member.BitBegin == 56)
@@ -24,7 +27,8 @@
                 "static_cast<uint64_t>(" +
                 reqInfo.Values[0] + ")" +
                 " << " + member.BitBegin + ")";
-            retValue += val;
+            constructorArg += val;
+            opCodeVal = val;
         }
         else
         {
@@ -32,7 +36,7 @@
                 "static_cast<uint64_t>(" +
                 inputVariableName + ")" +
                 " << " + member.BitBegin + ")";
-            retValue += val;
+            constructorArg += val;
 
             argument += member.Type + " " + member.VariableName;
 
@@ -43,8 +47,36 @@
         }
     }
  #>
-constexpr
-GpuCommand Make<#=        Info.Name #>(<#=argument #>)
+class <#=        Info.Name #> : public CommandBase
 {
-    return <#=retValue #>;
-}
+    constexpr <#=        Info.Name #>() :
+        CommandBase(<#=        opCodeVal #>)
+    {
+    }
+    constexpr <#=        Info.Name #>(<#=        argument #>) :
+        CommandBase(<#=        constructorArg #>)
+    {
+    }
+<#    foreach(var member in Info.MemberVariableInfos) { 
+        string functionNameSuffix = char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1);
+        string inputType = member.Type;
+        string inputVariableName = member.VariableName;
+        int bitCount = member.BitEnd - member.BitBegin + 1;
+        ulong mask = (((ulong)1 << bitCount) - 1) << member.BitBegin;
+        string maskStr = "0x" + mask.ToString("X");
+#>
+    <#=            Info.Name #>& Set<#=            functionNameSuffix #>(<#=            inputType #> val)
+    {
+<#        if(member.RequirementInfos != null) { #>
+<#            foreach(var info in member.RequirementInfos) { #>
+<#                if(info.Type != RequirementInfo.RequirementType.NoRequirement) { #>
+        <#=                        info.GetString("val") #>
+<#                } #>
+<#            } #>
+<#        } #>
+        <#=cmdDataVariable #> &= <#=maskStr #>;
+        <#=cmdDataVariable #> |= static_cast<uint64_t>(val) <<<#=member.BitBegin #>;
+        return *this;
+    }
+<#    } #>
+};
