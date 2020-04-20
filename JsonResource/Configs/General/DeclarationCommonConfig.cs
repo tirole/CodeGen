@@ -29,7 +29,7 @@ namespace JsonResource
 
         public string GetDoxyBrief()
         {
-            if (DoxyBrief == "")
+            if (DoxyBrief == "" || DoxyBrief == null)
             {
                 return NameAlias + "です。";
             }
@@ -41,7 +41,7 @@ namespace JsonResource
 
         public void GetDoxyDetails(List<string> outStr)
         {
-            if(outStr != null)
+            if(outStr != null && DoxyDetails != null)
             {
                 foreach(string str in DoxyDetails)
                 {
