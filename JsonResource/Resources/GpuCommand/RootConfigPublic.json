@@ -15,6 +15,11 @@
                 "definitionConfigName": "gpuCommandPublic",
                 "deserializerType": "DescriptorConfig",
                 "generatorType": "GpuCommandPublicGenerator"
+            },
+            {
+                "definitionConfigName": "gpuCommandPublicCpp",
+                "deserializerType": "DescriptorConfig",
+                "generatorType": "GpuCommandPublicGeneratorCpp"
             }
         ]
     },
@@ -29,10 +34,19 @@
                 {
                     "name": "gpuCommandPublic",
                     "path": "Move.json"
+                }
+            ]
+        },
+        {
+            "outputFileName": "my_GpuCommandPublicCpp",
+            "definitions": [
+                {
+                    "name": "gpuCommandPublicCpp",
+                    "path": "Move.json"
                 },
                 {
-                    "name": "",
-                    "path": "Opcode.json"
+                    "name": "gpuCommandPublicCpp",
+                    "path": "Move.json"
                 }
             ]
         }

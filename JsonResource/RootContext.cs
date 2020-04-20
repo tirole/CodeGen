@@ -270,6 +270,7 @@ namespace JsonResource
                 new Tuple<string, Type>("GpuDescriptorStructGenerator", typeof(Generator.GpuDescriptor.GpuDescriptorStructGenerator)),
                 new Tuple<string, Type>("GpuCommandGenerator", typeof(Generator.GpuCommandGenerator)),
                 new Tuple<string, Type>("GpuCommandPublicGenerator", typeof(Generator.GpuCommandPublicGenerator)),
+                new Tuple<string, Type>("GpuCommandPublicGeneratorCpp", typeof(Generator.GpuCommandPublicGeneratorCpp)),
             };
 
             // early out

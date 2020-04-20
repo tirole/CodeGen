@@ -1,0 +1,82 @@
+﻿<#@ template language="C#" linePragmas="false" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#
+    string retValue = "";
+    string argument = "";
+    string detailFuncName = "detail::" + Info.Name;
+    string detailFuncArg = "";
+    for(int i = 0; i < Info.MemberVariableInfos.Count; ++i)
+    {
+        var member = Info.MemberVariableInfos[i];
+
+        string inputVariableName = member.VariableName;
+
+        if(i != 0)
+        {
+            retValue += " | ";
+        }
+        // opcode
+        if(member.BitBegin == 56)
+        {
+            var reqInfo = member.RequirementInfos[0];
+            string val = "(" + 
+                "static_cast<uint64_t>(" +
+                reqInfo.Values[0] + ")" +
+                " << " + member.BitBegin + ")";
+            retValue += val;
+        }
+        else
+        {
+            string val = "(" + 
+                "static_cast<uint64_t>(" +
+                inputVariableName + ")" +
+                " << " + member.BitBegin + ")";
+            retValue += val;
+
+            argument += member.Type + " " + member.VariableName;
+            detailFuncArg += member.VariableName;
+            if(Info.MemberVariableInfos[i + 1].BitBegin != 56)
+            {
+                argument += ", ";
+                detailFuncArg +=  ", ";
+            }
+        }
+    }
+
+    // doxydetail line
+    string doxyDetail = "";
+    if(Info.DoxyDetails.Count >= 1)
+    {
+        doxyDetail = "*\n";
+        doxyDetail += "     * @detail\n";
+        foreach(string str in Info.DoxyDetails)
+        {
+            doxyDetail += "     *    " + str + "\n";
+        }
+        doxyDetail += "     *";
+    }
+    else
+    {
+        doxyDetail = "*";
+    }
+ #>
+    Result Add<#=        Info.Name #>(<#=argument #>)
+    {
+<#    foreach(var member in Info.MemberVariableInfos) { 
+        string inputVariableName = member.VariableName;
+        if(member.BitBegin == 56) continue;
+#>
+<#        if(member.RequirementInfos != null) { #>
+<#            foreach(var info in member.RequirementInfos) { #>
+<#                if(info.Type != RequirementInfo.RequirementType.NoRequirement) { #>
+        <#=                        info.GetString(inputVariableName) #>
+<#                } #>
+<#            } #>
+<#        } #>
+<#    } #>
+        auto cmd = <#=detailFuncName #>(<#=detailFuncArg #>);
+        return Result::Success;
+    }

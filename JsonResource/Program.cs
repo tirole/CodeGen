@@ -146,12 +146,12 @@ namespace JsonResource
             List<string> RootConfigPaths = new List<string>
             {
                 //@"D:\prj\software\codegeneration\JsonResource\Resources\GpuCommand\RootConfig.json",
-                //@"D:\prj\software\codegeneration\JsonResource\Resources\GpuCommand\RootConfigPublic.json",
+                @"D:\prj\software\codegeneration\JsonResource\Resources\GpuCommand\RootConfigPublic.json",
                 //@"D:\prj\software\codegeneration\JsonResource\Resources\GpuDescriptors\RootConfigTest.json",
                 //@"D:\prj\software\codegeneration\JsonResource\Resources\SimpleStruct\RootConfig.json",
                 //@"D:\prj\software\codegeneration\JsonResource\Resources\GpuCommand\RootConfig.json",
                 //@"D:\prj\software\codegeneration\JsonResource\Resources\Variable\RootConfig.json",
-                @"D:\prj\software\codegeneration\JsonResource\Resources\Class\RootConfig.json",
+                //@"D:\prj\software\codegeneration\JsonResource\Resources\Class\RootConfig.json",
                 //@"D:\prj\software\codegeneration\JsonResource\Resources\GpuDescriptors\RootConfig.json",
                 //@"D:\prj\software\codegeneration\JsonResource\Resources\GpuEnum\RootConfig.json"
             };
@@ -229,6 +229,11 @@ namespace JsonResource
                             else if (serializerType == typeof(Generator.GpuCommandPublicGenerator))
                             {
                                 var generator = new Generator.GpuCommandPublicGenerator(structInfo);
+                                output += generator.TransformText();
+                            }
+                            else if (serializerType == typeof(Generator.GpuCommandPublicGeneratorCpp))
+                            {
+                                var generator = new Generator.GpuCommandPublicGeneratorCpp(structInfo);
                                 output += generator.TransformText();
                             }
                             output += "\n\n";

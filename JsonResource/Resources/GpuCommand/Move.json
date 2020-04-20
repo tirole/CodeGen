@@ -1,7 +1,7 @@
 {
     "declaration": {
         "doxyBrief": "",
-        "doxyDetails":[
+        "doxyDetails": [
             "ムーブコマンドです。",
             "32bit レジスタに対するムーブコマンドです。"
         ],
@@ -16,7 +16,9 @@
             "defaultValue": "",
             "nameAlias": "値",
             "doxyBrief": "",
-            "requirements": [],
+            "requirements": [
+                "LE,8"
+            ],
             "wordOffset": "0",
             "bitRange": "31:0",
             "modifier": ""
@@ -27,7 +29,9 @@
             "defaultValue": "",
             "nameAlias": "インデックス",
             "doxyBrief": "",
-            "requirements": [],
+            "requirements": [
+                "MINMAX,0,8"
+            ],
             "wordOffset": "0",
             "bitRange": "55:48",
             "modifier": ""

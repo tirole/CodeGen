@@ -87,6 +87,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GpuCommandPublicGenerator.tt</DependentUpon>
     </Compile>
+    <Compile Include="Generator\GpuCommandPublicGeneratorCpp.cs" />
+    <Compile Include="Generator\GpuCommandPublicGeneratorCpp1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GpuCommandPublicGeneratorCpp.tt</DependentUpon>
+    </Compile>
     <Compile Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator.cs" />
     <Compile Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator1.cs">
       <AutoGen>True</AutoGen>
@@ -148,6 +154,10 @@
     <Content Include="Generator\GpuCommandPublicGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>GpuCommandPublicGenerator1.cs</LastGenOutput>
+    </Content>
+    <Content Include="Generator\GpuCommandPublicGeneratorCpp.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>GpuCommandPublicGeneratorCpp1.cs</LastGenOutput>
     </Content>
     <Content Include="Generator\GpuDescriptor\GpuDescriptorAccessorGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
