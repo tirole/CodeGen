@@ -29,25 +29,12 @@ namespace JsonResource
 
         public string GetDoxyBrief()
         {
-            if (DoxyBrief == "" || DoxyBrief == null)
-            {
-                return NameAlias + "です。";
-            }
-            else
-            {
-                return DoxyBrief;
-            }
+            return DeserializeUtility.GetDoxyBrief(DoxyBrief, NameAlias);
         }
 
         public void GetDoxyDetails(List<string> outStr)
         {
-            if(outStr != null && DoxyDetails != null)
-            {
-                foreach(string str in DoxyDetails)
-                {
-                    outStr.Add(str);
-                }
-            }
+            DeserializeUtility.GetDoxyDetails(outStr, DoxyDetails);
         }
     }
 }

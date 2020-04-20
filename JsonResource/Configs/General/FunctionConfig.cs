@@ -16,9 +16,21 @@ namespace JsonResource
         public bool IsInline;
         [DataMember(Name = "doxyBrief", IsRequired = true)]
         public string DoxyBrief;
+        [DataMember(Name = "doxyDetails")]
+        public string[] DoxyDetails;
         [DataMember(Name = "returnType")]
         public string ReturnType;
         [DataMember(Name = "arguments", IsRequired = true)]
         public VariableDeclarationConfig[] ArgumentConfigs;
+
+        public string GetDoxyBrief()
+        {
+            return DeserializeUtility.GetDoxyBrief(DoxyBrief, FunctionName);
+        }
+
+        public void GetDoxyDetails(List<string> outStr)
+        {
+            DeserializeUtility.GetDoxyDetails(outStr, DoxyDetails);
+        }
     }
 }

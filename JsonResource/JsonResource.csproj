@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configs\DeserializeUtility.cs" />
     <Compile Include="Configs\General\ClassConfig.cs" />
     <Compile Include="Configs\General\DeclarationCommonConfig.cs" />
     <Compile Include="Configs\General\EnumConfig.cs" />

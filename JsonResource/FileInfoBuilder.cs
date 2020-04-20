@@ -238,7 +238,8 @@ namespace JsonResource
                     {
                         var memberFunctionInfo = new Generator.MemberFunctionInfo();
                         memberFunctionInfo.AccessModifier = config.AccessModifier;
-                        memberFunctionInfo.DoxyBrief = config.FunctionConfig.DoxyBrief;
+                        memberFunctionInfo.DoxyBrief = config.FunctionConfig.GetDoxyBrief();
+                        config.FunctionConfig.GetDoxyDetails(memberFunctionInfo.DoxyDetails);
                         memberFunctionInfo.FunctionName = config.FunctionConfig.FunctionName;
                         memberFunctionInfo.IsInline = config.FunctionConfig.IsInline;
                         memberFunctionInfo.ReturnType = config.FunctionConfig.ReturnType;

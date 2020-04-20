@@ -12,6 +12,10 @@
                 "functionName": "DoSomething",
                 "isInline": false,
                 "doxyBrief": "何かします。",
+                "doxyDetails": [
+                    "入力変数に対して",
+                    "何かします。"
+                ],
                 "returnType": "void",
                 "arguments": [
                     {

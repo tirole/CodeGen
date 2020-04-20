@@ -38,9 +38,27 @@ public:
                 arguments += ", ";
             }
         }
+
+        // doxydetail line
+        string doxyDetail = "";
+        if(info.DoxyDetails.Count >= 1)
+        {
+            doxyDetail = "*\n";
+            doxyDetail += "     * @detail\n";
+            foreach(string str in info.DoxyDetails)
+            {
+                doxyDetail += "     *    " + str + "\n";
+            }
+            doxyDetail += "     *";
+        }
+        else
+        {
+            doxyDetail = "*";
+        }
 #>
-    /*
-     * @brief    <#=            info.DoxyBrief #>
+    /**
+     * @brief    <#=info.DoxyBrief #>
+     <#=doxyDetail #>
      */
     <#=info.ReturnType #> <#=info.FunctionName #>(<#=arguments #>)<#=stringAfterArgument #><#if(info.IsInline) {#>
 

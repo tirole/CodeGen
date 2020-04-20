@@ -61,8 +61,27 @@ namespace JsonResource.Generator
             }
         }
 
-            this.Write("    /*\r\n     * @brief    ");
+        // doxydetail line
+        string doxyDetail = "";
+        if(info.DoxyDetails.Count >= 1)
+        {
+            doxyDetail = "*\n";
+            doxyDetail += "     * @detail\n";
+            foreach(string str in info.DoxyDetails)
+            {
+                doxyDetail += "     *    " + str + "\n";
+            }
+            doxyDetail += "     *";
+        }
+        else
+        {
+            doxyDetail = "*";
+        }
+
+            this.Write("    /**\r\n     * @brief    ");
             this.Write(this.ToStringHelper.ToStringWithCulture(info.DoxyBrief));
+            this.Write("\r\n     ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(doxyDetail));
             this.Write("\r\n     */\r\n    ");
             this.Write(this.ToStringHelper.ToStringWithCulture(info.ReturnType));
             this.Write(" ");
