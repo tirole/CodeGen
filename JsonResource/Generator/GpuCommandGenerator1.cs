@@ -38,7 +38,7 @@ namespace JsonResource.Generator
         string inputVariableName = member.VariableName;
         if(member.TypeSuffix == "*")
         {
-            inputVariableName = "*reinterpret_cast<uint32_t*>(&" + member.VariableName + ")";
+            inputVariableName = member.VariableName + ".data[0]";
         }
 
         if(i != 0)
@@ -103,7 +103,7 @@ namespace JsonResource.Generator
             {
                 throw new System.InvalidOperationException("Cannot handle input variable whose size is over 32bit.\n");
             }
-            inputValStr = "*reinterpret_cast<uint32_t*>(&val)";
+            inputValStr = "val.data[0]";
         }
 
             this.Write("    ");
