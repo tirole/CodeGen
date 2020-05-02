@@ -11,14 +11,12 @@
     },
     "memberVariables": [
         {
-            "variableName": "value",
-            "type": "int",
+            "variableName": "flagDescriptor",
+            "type": "../GpuDescriptors/Definitions/FlagDescriptor.json",
             "defaultValue": "",
             "nameAlias": "値",
             "doxyBrief": "",
-            "requirements": [
-                "LE,8"
-            ],
+            "requirements": [],
             "wordOffset": "0",
             "bitRange": "31:0",
             "modifier": ""

@@ -29,6 +29,10 @@
                 },
                 {
                     "name": "gpuDescriptorStruct",
+                    "path": "Definitions/FlagDescriptor.json"
+                },
+                {
+                    "name": "gpuDescriptorStruct",
                     "path": "Definitions/Simple64bitDescriptor.json"
                 },
                 {

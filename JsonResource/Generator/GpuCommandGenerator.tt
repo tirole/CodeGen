@@ -14,6 +14,10 @@
         var member = Info.MemberVariableInfos[i];
 
         string inputVariableName = member.VariableName;
+        if(member.TypeSuffix == "*")
+        {
+            inputVariableName = "*reinterpret_cast<uint32_t*>(&" + member.VariableName + ")";
+        }
 
         if(i != 0)
         {
@@ -49,14 +53,17 @@
  #>
 class <#=        Info.Name #> : public CommandBase
 {
+public:
     constexpr <#=        Info.Name #>() :
         CommandBase(<#=        opCodeVal #>)
     {
     }
-    constexpr <#=        Info.Name #>(<#=        argument #>) :
-        CommandBase(<#=        constructorArg #>)
+<#    if(Info.MemberVariableInfos.Count > 1){ #>
+    constexpr <#=Info.Name #>(<#=argument #>) :
+        CommandBase(<#=constructorArg #>)
     {
     }
+<#    } #>
 <#    foreach(var member in Info.MemberVariableInfos) { 
         string functionNameSuffix = char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1);
         string inputType = member.Type;
@@ -64,6 +71,15 @@ class <#=        Info.Name #> : public CommandBase
         int bitCount = member.BitEnd - member.BitBegin + 1;
         ulong mask = (((ulong)1 << bitCount) - 1) << member.BitBegin;
         string maskStr = "0x" + mask.ToString("X");
+        string inputValStr = "val";
+        if(member.TypeSuffix == "*")
+        {
+            if(bitCount != 32)
+            {
+                throw new System.InvalidOperationException("Cannot handle input variable whose size is over 32bit.\n");
+            }
+            inputValStr = "*reinterpret_cast<uint32_t*>(&val)";
+        }
 #>
     <#=            Info.Name #>& Set<#=            functionNameSuffix #>(<#=            inputType #> val)
     {
@@ -75,7 +91,7 @@ class <#=        Info.Name #> : public CommandBase
 <#            } #>
 <#        } #>
         <#=cmdDataVariable #> &= <#=maskStr #>;
-        <#=cmdDataVariable #> |= static_cast<uint64_t>(val) <<<#=member.BitBegin #>;
+        <#=cmdDataVariable #> |= static_cast<uint64_t>(<#=inputValStr #>) << <#=member.BitBegin #>;
         return *this;
     }
 <#    } #>

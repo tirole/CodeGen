@@ -36,6 +36,10 @@ namespace JsonResource.Generator
         var member = Info.MemberVariableInfos[i];
 
         string inputVariableName = member.VariableName;
+        if(member.TypeSuffix == "*")
+        {
+            inputVariableName = "*reinterpret_cast<uint32_t*>(&" + member.VariableName + ")";
+        }
 
         if(i != 0)
         {
@@ -71,17 +75,20 @@ namespace JsonResource.Generator
  
             this.Write("class ");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
-            this.Write(" : public CommandBase\r\n{\r\n    constexpr ");
+            this.Write(" : public CommandBase\r\n{\r\npublic:\r\n    constexpr ");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
             this.Write("() :\r\n        CommandBase(");
             this.Write(this.ToStringHelper.ToStringWithCulture(opCodeVal));
-            this.Write(")\r\n    {\r\n    }\r\n    constexpr ");
+            this.Write(")\r\n    {\r\n    }\r\n");
+    if(Info.MemberVariableInfos.Count > 1){ 
+            this.Write("    constexpr ");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
             this.Write("(");
             this.Write(this.ToStringHelper.ToStringWithCulture(argument));
             this.Write(") :\r\n        CommandBase(");
             this.Write(this.ToStringHelper.ToStringWithCulture(constructorArg));
             this.Write(")\r\n    {\r\n    }\r\n");
+    } 
     foreach(var member in Info.MemberVariableInfos) { 
         string functionNameSuffix = char.ToUpper(member.VariableName[0]) + member.VariableName.Substring(1);
         string inputType = member.Type;
@@ -89,6 +96,15 @@ namespace JsonResource.Generator
         int bitCount = member.BitEnd - member.BitBegin + 1;
         ulong mask = (((ulong)1 << bitCount) - 1) << member.BitBegin;
         string maskStr = "0x" + mask.ToString("X");
+        string inputValStr = "val";
+        if(member.TypeSuffix == "*")
+        {
+            if(bitCount != 32)
+            {
+                throw new System.InvalidOperationException("Cannot handle input variable whose size is over 32bit.\n");
+            }
+            inputValStr = "*reinterpret_cast<uint32_t*>(&val)";
+        }
 
             this.Write("    ");
             this.Write(this.ToStringHelper.ToStringWithCulture(Info.Name));
@@ -112,7 +128,9 @@ namespace JsonResource.Generator
             this.Write(this.ToStringHelper.ToStringWithCulture(maskStr));
             this.Write(";\r\n        ");
             this.Write(this.ToStringHelper.ToStringWithCulture(cmdDataVariable));
-            this.Write(" |= static_cast<uint64_t>(val) <<");
+            this.Write(" |= static_cast<uint64_t>(");
+            this.Write(this.ToStringHelper.ToStringWithCulture(inputValStr));
+            this.Write(") << ");
             this.Write(this.ToStringHelper.ToStringWithCulture(member.BitBegin));
             this.Write(";\r\n        return *this;\r\n    }\r\n");
     } 

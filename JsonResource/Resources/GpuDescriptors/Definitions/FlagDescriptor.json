@@ -1,0 +1,32 @@
+{
+    "declaration": {
+        "doxyBrief": "This is FlagDescriptor.",
+        "definitionType": "struct",
+        "definitionName": "FlagDescriptor",
+        "nameAlias": "フラッグデスクリプター"
+    },
+    "memberVariables": [
+        {
+            "variableName": "varyingEnabled",
+            "type": "bool",
+            "defaultValue": "",
+            "nameAlias": "バリングの有効無効",
+            "doxyBrief": "",
+            "requirements": [],
+            "wordOffset": "0",
+            "bitRange": "15",
+            "modifier": ""
+        },
+        {
+            "variableName": "indexEnabled",
+            "type": "bool",
+            "defaultValue": "",
+            "nameAlias": "インデックスの有効無効",
+            "doxyBrief": "",
+            "requirements": [],
+            "wordOffset": "0",
+            "bitRange": "30",
+            "modifier": ""
+        }
+    ]
+}

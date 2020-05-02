@@ -67,9 +67,17 @@ int main()
 	}
 
 	{
-		int value = 0;
-		int index = 0;
-		GpuCommand cmd = my::detail::MakeMove(value, index);
+		const my::detail::FlagDescriptor flagDesc =
+		{
+			0xdead
+		};
+		const int index = 4;
+		CommandData cmd = my::detail::Move( flagDesc, index );
+		CommandData cmdGoldenResult =
+		{
+			{ (static_cast<uint64_t>(my::detail::Opcode::Move) << 56) | ( static_cast< uint64_t >( index ) << 48 ) | 0xdead }
+		};
+		TEST_EQ( cmd.data, cmdGoldenResult.data );
 	}
 
 	return 0;
