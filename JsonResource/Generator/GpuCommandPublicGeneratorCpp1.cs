@@ -98,7 +98,7 @@ namespace JsonResource.Generator
             foreach(var info in member.RequirementInfos) { 
                 if(info.Type != RequirementInfo.RequirementType.NoRequirement) { 
             this.Write("        ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.GetString(inputVariableName)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.GetString(inputVariableName, true)));
             this.Write("\r\n");
                 } 
             } 

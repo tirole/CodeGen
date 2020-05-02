@@ -86,7 +86,7 @@ public:
 <#        if(member.RequirementInfos != null) { #>
 <#            foreach(var info in member.RequirementInfos) { #>
 <#                if(info.Type != RequirementInfo.RequirementType.NoRequirement) { #>
-        <#=                        info.GetString("val") #>
+        <#=                        info.GetString("val", false) #>
 <#                } #>
 <#            } #>
 <#        } #>

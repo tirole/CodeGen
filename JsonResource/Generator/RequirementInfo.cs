@@ -41,7 +41,7 @@ namespace JsonResource.Generator
         public char RequirementValueSeparater = ',';
         public RequirementType Type { get; set; }
         public List<string> Values { get; set; }
-        public abstract string GetString(string variableName);
+        public abstract string GetString(string variableName, bool isRequirement);
 
         public static RequirementType GetRequirementType(string str)
         {

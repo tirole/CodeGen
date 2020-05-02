@@ -72,7 +72,7 @@
 <#        if(member.RequirementInfos != null) { #>
 <#            foreach(var info in member.RequirementInfos) { #>
 <#                if(info.Type != RequirementInfo.RequirementType.NoRequirement) { #>
-        <#=                        info.GetString(inputVariableName) #>
+        <#=                        info.GetString(inputVariableName, true) #>
 <#                } #>
 <#            } #>
 <#        } #>

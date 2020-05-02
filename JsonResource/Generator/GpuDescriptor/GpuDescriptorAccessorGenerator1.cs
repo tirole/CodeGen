@@ -149,7 +149,7 @@ foreach(var member in Info.MemberVariableInfos) {
                 foreach(var info in member.RequirementInfos) { 
                     if(info.Type != RequirementInfo.RequirementType.NoRequirement) { 
             this.Write("    ");
-            this.Write(this.ToStringHelper.ToStringWithCulture(info.GetString(member.VariableName)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(info.GetString(member.VariableName, false)));
             this.Write("\r\n");
                     } 
                 } 

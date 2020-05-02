@@ -8,26 +8,32 @@ namespace JsonResource.Generator
 {
     public class RequirementSdkInfo : RequirementInfo
     {
+        private static string MacroPrefix = "SDK_";
         private string[] MacroNames = new string[(int)RequirementInfo.RequirementType.Count]
         {
             "",
-            "SDK_NOT_NULL",
-            "SDK_LESS",
-            "SDK_LESS_EQUAL",
-            "SDK_MIN_MAX",
-            "SDK_NOT_EQUAL",
+            "NOT_NULL",
+            "LESS",
+            "LESS_EQUAL",
+            "MIN_MAX",
+            "NOT_EQUAL",
             "// ",
-            "SDK_EQUAL",
-            "SDK_ALIGN",
+            "EQUAL",
+            "ALIGN",
         };
         public RequirementSdkInfo()
         {
         }
-        private string GetMacroName()
+        private string GetMacroName(bool isRequirement)
         {
-            return MacroNames[(int)this.Type];
+            string assertTypeName = "";
+            if (isRequirement)
+            {
+                assertTypeName = "REQUIRES_";
+            }
+            return MacroPrefix + assertTypeName + MacroNames[(int)this.Type];
         }
-        public override string GetString(string variableName)
+        public override string GetString(string variableName, bool isRequirement)
         {
             switch (this.Type)
             {
@@ -37,19 +43,19 @@ namespace JsonResource.Generator
                 case RequirementInfo.RequirementType.NotEqual:
                 case RequirementInfo.RequirementType.Equal:
                 case RequirementInfo.RequirementType.Align:
-                    string ret = GetMacroName() + "(" + variableName + ", ";
+                    string ret = GetMacroName(isRequirement) + "(" + variableName + ", ";
                     foreach (var value in this.Values)
                     {
                         ret += value + ", ";
                     }
                     return ret.Remove(ret.Length - ", ".Length, ", ".Length) + ");";
                 case RequirementInfo.RequirementType.NotNull:
-                    return GetMacroName() + "(" + variableName + ");";
+                    return GetMacroName(isRequirement) + "(" + variableName + ");";
                 case RequirementInfo.RequirementType.NoRequirement:
-                    return GetMacroName();
+                    return GetMacroName(isRequirement);
                 case RequirementInfo.RequirementType.Comment:
                     // NOTE: 1 行コメントのみに対応
-                    return GetMacroName() + this.Values[0];
+                    return GetMacroName(isRequirement) + this.Values[0];
             }
             return "Invalid variableName";
         }

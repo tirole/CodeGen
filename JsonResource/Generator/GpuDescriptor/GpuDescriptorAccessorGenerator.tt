@@ -111,7 +111,7 @@ void Set<#=functionNameSuffix#>(<#=Info.Name#>* pDesc, <#=inputType#> <#=inputVa
 <#            if(member.RequirementInfos != null) { #>
 <#                foreach(var info in member.RequirementInfos) { #>
 <#                    if(info.Type != RequirementInfo.RequirementType.NoRequirement) { #>
-    <#=                            info.GetString(member.VariableName) #>
+    <#=                            info.GetString(member.VariableName, false) #>
 <#                    } #>
 <#                } #>
 <#            } #>
